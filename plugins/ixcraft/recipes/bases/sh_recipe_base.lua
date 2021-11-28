@@ -18,6 +18,7 @@ RECIPE:PostHook( "OnCanCraft", function( self, ply )
 			if ( ply.isCrafting == true ) then
 				return false, "You cannot craft multiple items while you are crafting something else!"
 			end
+			ply.benchInUse = v
 			return true
 		end
 	end
@@ -27,15 +28,25 @@ end)
 
 if ( SERVER ) then
 	RECIPE:PostHook( "OnCraft", function( self, ply )
+		local ent = ply.benchInUse
+
+		if ( !ent or !IsValid( ent ) ) then
+			return
+		end
+
 		ply.isCrafting = true
-		ply:Freeze( true )
 		ply:EmitSound( self.craftStartEnd or "" )
-		ply:SetAction( "Crafting "..self.name.."...", self.craftTime or 5, function()
+		ply:SetAction( "Crafting "..self.name.."...", self.craftTime or 5 )
+		ply:DoStaredAction( ent, function()
 			ply.isCrafting = false
 			ply:Notify( "You successfully crafted a "..self.name.."." or "You successfully crafted a item." )
-			ply:Freeze( false )
 			ply:EmitSound( self.craftEndSound or "" )
 			return true
+		end, self.craftTime or 5, function()
+			ply:SetAction( nil )
+			ply.isCrafting = false
 		end )
+
+		ply.benchInUse = nil
 	end )
 end
