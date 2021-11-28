@@ -44,10 +44,11 @@ local hungerIcon = ix.util.GetMaterial("litenetwork/icons/hunger.png")
 local hungerColor = Color(205, 133, 63, 255)
 local xpIcon = ix.util.GetMaterial("litenetwork/icons/salary.png")
 local xpColor = Color(63, 120, 205)
+local surface = surface
 
 local function DrawHud(ply, char) -- Hud inspiration from impulse.
 	-- If anyone like smug comments that this is stolen, it aint, I just remade it so fuck off :)
-	ix.util.DrawBlurAt(10, ScrH() - 200 - 10, 350, 200)
+	ix.util.DrawBlurAt(10, ScrH() - 200 - 10, 350, 200, 1)
 
 	surface.SetDrawColor(ColorAlpha(team.GetColor(ply:Team()), 25))
 	surface.DrawRect(10, ScrH() - 200 - 10, 350, 200)
@@ -56,50 +57,43 @@ local function DrawHud(ply, char) -- Hud inspiration from impulse.
 	surface.DrawRect(10, ScrH() - 200 - 10, 350, 200)
 
 	surface.SetFont("LiteNetworkFont32")
+
+	surface.SetTextColor(team.GetColor(ply:Team()))
+	surface.SetTextPos(20, ScrH() - 200 - 10 + 5)
+	surface.DrawText(team.GetName(ply:Team()))
+
 	surface.SetTextColor(color_white)
 	surface.SetTextPos(20, ScrH() - 50)
 	surface.DrawText(ply:Name())
 
 	surface.SetFont("LiteNetworkFont28")
 	surface.SetTextPos(160, ScrH() - 200 - 10 + 50)
-	surface.SetTextColor(color_white)
 	surface.DrawText("Health: "..ply:Health())
 
 	surface.SetDrawColor(healthColor)
 	surface.SetMaterial(healthIcon)
 	surface.DrawTexturedRect(130, ScrH() - 200 - 10 + 52.5, 25, 25)
 
-	surface.SetFont("LiteNetworkFont28")
 	surface.SetTextPos(160, ScrH() - 200 - 10 + 75)
-	surface.SetTextColor(color_white)
 	surface.DrawText("Tokens: "..char:GetMoney())
 
 	surface.SetDrawColor(tokensColor)
 	surface.SetMaterial(tokensIcon)
 	surface.DrawTexturedRect(130, ScrH() - 200 - 10 + 77.5, 25, 25)
 
-	surface.SetFont("LiteNetworkFont28")
 	surface.SetTextPos(160, ScrH() - 200 - 10 + 100)
-	surface.SetTextColor(color_white)
 	surface.DrawText("Hunger: "..char:GetHunger())
 
 	surface.SetDrawColor(hungerColor)
 	surface.SetMaterial(hungerIcon)
 	surface.DrawTexturedRect(130, ScrH() - 200 - 10 + 102.5, 25, 25)
 
-	surface.SetFont("LiteNetworkFont28")
 	surface.SetTextPos(160, ScrH() - 200 - 10 + 125)
-	surface.SetTextColor(color_white)
 	surface.DrawText("XP: "..ply:GetXP())
 
 	surface.SetDrawColor(xpColor)
 	surface.SetMaterial(xpIcon)
 	surface.DrawTexturedRect(130, ScrH() - 200 - 10 + 125, 25, 25)
-
-	surface.SetFont("LiteNetworkFont32")
-	surface.SetTextColor(team.GetColor(ply:Team()))
-	surface.SetTextPos(20, ScrH() - 200 - 10 + 5)
-	surface.DrawText(team.GetName(ply:Team()))
 end
 
 local lastBodygroups = {}

@@ -108,7 +108,7 @@ function PANEL:Init()
 	end
 
 	self.doneButton.DoClick = function()
-		RunConsoleCommand("ix_selector_cp", self.selectedRankID, self.selectedDivisionID, self.randomUnitID) -- i use console commands since.. backdoorers keep making everything un-fun.
+		RunConsoleCommand("ix_selector_cca", self.selectedRankID, self.selectedDivisionID, self.randomUnitID) -- i use console commands since.. backdoorers keep making everything un-fun.
 
 		self:Remove()
 	end

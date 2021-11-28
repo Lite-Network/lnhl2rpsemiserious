@@ -19,6 +19,10 @@ function Schema:MessageReceived()
 	end
 end
 
+function Schema:ShouldHideBars()
+	return true
+end
+
 function Schema:IsPlayerRecognized()
 	return true
 end
@@ -37,4 +41,12 @@ end
 
 function Schema:PlayerFootstep()
 	return true
+end
+
+function Schema:PopulateCharacterInfo()
+	return false
+end
+
+function Schema:PopulateImportantCharacterInfo()
+	return false
 end

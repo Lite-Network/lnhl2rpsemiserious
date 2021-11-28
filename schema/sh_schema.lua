@@ -17,14 +17,18 @@ ix.util.Include("cl_hooks.lua")
 ix.util.Include("sh_hooks.lua")
 ix.util.Include("sv_hooks.lua")
 
+ix.util.Include("cl_faction.lua")
 ix.util.Include("cl_fonts.lua")
 ix.util.Include("cl_hud.lua")
 ix.util.Include("sh_chat.lua")
 ix.util.Include("sh_commands.lua")
 ix.util.Include("sh_settings.lua")
 
-ix.util.Include("meta/sh_character.lua")
-ix.util.Include("meta/sh_player.lua")
+ix.ranks = ix.ranks or {}
+ix.divisions = ix.divisions or {}
+
+ix.util.IncludeDir("divisions")
+ix.util.IncludeDir("meta")
 
 --[[---------------------------------------------------------------------------
 	Helix Base Items Expnansion

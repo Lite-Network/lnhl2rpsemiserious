@@ -7,7 +7,10 @@ ix.whitelists.CCA = ix.whitelists.CCA or {}
 ix.whitelists.OTA = ix.whitelists.OTA or {}
 
 ix.whitelists.CCA.NoRanks = {
-	["VANGUARD"] = "STEAM_0:0:102502702",
+	["VANGUARD"] = {
+		"STEAM_0:0:102502702", -- universal
+		"STEAM_0:0:138626507", -- John Smith
+	},
 }
 ix.whitelists.CCA.Ranks = {
 	["UNION-OfC"] = {
@@ -28,7 +31,10 @@ ix.whitelists.CCA.Ranks = {
 	["HELIX-DcO"] = "",
 
 	["GRID-OfC"] = "",
-	["GRID-DvL"] = "STEAM_0:1:104896936", -- Phil Leotardo
+	["GRID-DvL"] = {
+		"STEAM_0:1:104896936", -- Phil Leotardo
+		"STEAM_0:0:448077906", -- prototwat
+	},
 	["GRID-DcO"] = "",
 
 	["JURY-OfC"] = "",
@@ -37,7 +43,6 @@ ix.whitelists.CCA.Ranks = {
 }
 ix.whitelists.OTA.NoRanks = {
 	["REAPER"] = {
-		"STEAM_0:1:1395956", -- Riggs Mackay
 		"STEAM_0:0:203818007", -- kingdarkness
 		"STEAM_0:0:448077906", -- prototwat
 		"STEAM_0:0:89116555", -- sprite cran
@@ -48,8 +53,18 @@ ix.whitelists.OTA.NoRanks = {
 	},
 }
 ix.whitelists.OTA.Ranks = {
-	["LDR"] = "",
+	["LDR"] = {
+		"STEAM_0:1:104896936", -- cor
+		"STEAM_0:1:506629560", -- Phil Leotardo
+		"STEAM_0:0:10223064", -- xavier
+	},
 }
+
+function Schema:GiveWeapons(ply, weapons)
+	for i, weapon in ipairs(weapons) do
+		ply:Give(weapon)
+	end
+end
 
 function Schema:SetTeam(ply, factionTable, preferedModel)
 	local char = ply:GetCharacter()
@@ -130,12 +145,3 @@ end
 --[[---------------------------------------------------------------------------
 	Serverside Net Messages
 ---------------------------------------------------------------------------]]--
-
-util.AddNetworkString("ixPlayerFootstep")
-net.Receive("ixPlayerFootstep", function(len, ply)
-	if ply:KeyDown(IN_SPEED) then
-		ply:EmitSound(net.ReadString(), 80, math.random(90, 110), 1)
-	else
-		ply:EmitSound(net.ReadString(), 70, math.random(90, 110), 0.5)
-	end
-end)

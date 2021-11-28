@@ -14,9 +14,36 @@ function Schema:OnReloaded()
 end
 
 function Schema:PlayerFootstep(ply, pos, foot, sound, volume)
-	net.Start("ixPlayerFootstep")
-		net.WriteString(sound)
-	net.Send(ply)
+	if ( ply:Team() == FACTION_CCA ) then
+		sound = "npc/metropolice/gear"..math.random(1,6)..".wav"
+	elseif ( ply:Team() == FACTION_OTA ) then
+		sound = "npc/combine_soldier/gear"..math.random(1,6)..".wav"
+	elseif ( ply:IsRebel() ) then
+		sound = {
+			"npc/footsteps/hardboot_generic1.wav",
+			"npc/footsteps/hardboot_generic2.wav",
+			"npc/footsteps/hardboot_generic3.wav",
+			"npc/footsteps/hardboot_generic4.wav",
+			"npc/footsteps/hardboot_generic5.wav",
+			"npc/footsteps/hardboot_generic6.wav",
+			"npc/footsteps/hardboot_generic8.wav",
+		}
+	end
+
+	if ply:KeyDown(IN_SPEED) then
+		if istable(sound) then
+			ply:EmitSound(table.Random(sound), 80, math.random(90, 110), 1)
+		else
+			ply:EmitSound(sound, 80, math.random(90, 110), 1)
+		end
+	else
+		if istable(sound) then
+			ply:EmitSound(table.Random(sound), 70, math.random(90, 110), 0.2)
+		else
+			ply:EmitSound(sound, 70, math.random(90, 110), 0.2)
+		end
+	end
+	
 	return true
 end
 
@@ -32,25 +59,25 @@ local blacklistedEntities = {
 	["npc_combinedropship"] = true,
 }
 
-function Schema:Tick()
-	for k, v in pairs(ents.GetAll()) do
-		if blacklistedEntities[v:GetClass()] then
-			MsgAll("REMOVED "..blacklistedEntities[v:GetClass()].."\n")
-			if v:GetOwner():IsPlayer() then
-				MsgAll(v:GetOwner():Nick().."\n")
-			else
-				MsgAll("Entity had no owner!\n")
-			end
-			v:Remove()
-		end
-	end
+function Schema:OnEntityCreated(ent)
+    timer.Simple(0, function()
+        if ent:IsValid() then
+            if blacklistedEntities[ent:GetClass()] then
+                MsgAll("REMOVED "..ent:GetClass().."\n")
+                if ent:GetOwner():IsPlayer() then
+                    MsgAll(ent:GetOwner():Nick().."\n")
+                else
+                    MsgAll("Entity had no owner!\n")
+                end
+                ent:Remove()
+            end
 
-	for k, v in pairs(ents.FindByClass("wire_*")) do
-		if v:GetOwner():IsPlayer() and not (v:GetOwner():IsDonator() or v:GetOwner():IsAdmin()) then
-			MsgAll("REMOVED ", tostring(ent), " FROM ", tostring(v:GetOwner()))
-			v:Remove()
-		end
-	end
+            if ent:GetOwner():IsPlayer() and not (ent:GetOwner():IsDonator() or ent:GetOwner():IsAdmin()) then
+                MsgAll("REMOVED ", tostring(ent), " FROM ", tostring(ent:GetOwner()))
+                ent:Remove()
+            end
+        end
+    end)
 end
 
 function Schema:simfphysUse(ent, ply)
@@ -252,7 +279,7 @@ function Schema:PlayerHurt(ply, attacker, health, damage)
 		ply.traumaCooldown = CurTime() + 5
 	end
 
-	ply:ScreenFade(SCREENFADE.IN, Color(200, 0, 0, damage * 10), math.Clamp(damage * math.random(0.05, 0.10), 1, 4), 0)
+	ply:ScreenFade(SCREENFADE.IN, Color(255, 0, 0, damage * 10), math.Clamp(damage * math.random(0.05, 0.10), 1, 4), 0)
 end
 
 -- Prop Cost
@@ -282,4 +309,8 @@ function Schema:PlayerSpawnProp(ply)
 			return false
 		end
 	end
+end
+
+function Schema:PlayerLoadedCharacter(ply, char, oldChar)
+	Schema:SetTeam(ply, ix.faction.teams["01_citizen"])
 end

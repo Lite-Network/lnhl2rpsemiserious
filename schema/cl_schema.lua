@@ -12,6 +12,42 @@ function notification.AddLegacy(text, _, __)
     LocalPlayer():Notify(tostring(text))
 end
 
+-- from scotnay / max
+function LerpColor(time, col, ColorTo)
+	for i, v in pairs(col) do
+		col[i] = Lerp(time, v, ColorTo[i])
+	end
+	return col
+end
+
+local LiteNetworkLogo = ix.util.GetMaterial("litenetwork/logo_white.png")
+local LiteNetworkLogoText = ix.util.GetMaterial("litenetwork/logotext_white.png")
+function ix.gui.GlowingLogo(x, y, w, h, text)
+    if not LogoColor then LogoColor = Color(200, 75, 25) end
+
+    local r, g, b, a = LogoColor:Unpack()
+
+    if math.Round(b, 0) == 255 then
+        glowchange = true
+    elseif math.Round(r, 0) == 200 then
+        glowchange = false
+    end
+
+    if glowchange then
+        LogoColor = LerpColor(0.0075, LogoColor, Color(200, 75, 25))
+    else
+        LogoColor = LerpColor(0.0075, LogoColor, Color(68, 187, 255))
+    end
+
+    if (text == true) then
+	    surface.SetMaterial(LiteNetworkLogoText)
+    else
+	    surface.SetMaterial(LiteNetworkLogo)
+    end
+	surface.SetDrawColor(LogoColor or Color(255, 255, 255))
+	surface.DrawTexturedRect(x, y, w, h)
+end
+
 --[[---------------------------------------------------------------------------
 	Clientside Net Nessages
 ---------------------------------------------------------------------------]]--

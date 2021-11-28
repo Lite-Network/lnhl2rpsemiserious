@@ -19,7 +19,7 @@ end
 
 function ENT:AcceptInput(Name, Activator, Caller)
 	if Name == "Use" and Caller:IsPlayer() then
-		if Caller:Team() == FACTION_CP then
+		if Caller:Team() == FACTION_CCA then
 			self:EmitSound("npc/metropolice/vo/ten4.wav")
 			Caller:OpenVGUI("LiteNetwork.RankMenu.CCA")
 		else
@@ -28,10 +28,10 @@ function ENT:AcceptInput(Name, Activator, Caller)
 	end
 end
 
-concommand.Add("ix_selector_cp", function(ply, cmd, args)
+concommand.Add("ix_selector_cca", function(ply, cmd, args)
 	if not (args[1] and args[2]) then return end
 	if not ply:NearEntity("ix_selector_cp") then ply:Notify("You need to be near the civil protection quartermaster in order to use this!") return end
-	if not (ply:Team() == FACTION_CP) then ply:Notify("You need to become a CP to run this command.") return end
+	if not (ply:Team() == FACTION_CCA) then ply:Notify("You need to become a CP to run this command.") return end
 	if not ((ply.ixCivilProtectionCoolDown or 0) > CurTime()) then
 		local char = ply:GetCharacter()
 
