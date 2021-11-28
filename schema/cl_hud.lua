@@ -53,7 +53,7 @@ local function DrawHud(ply, char) -- Hud inspiration from impulse.
 	surface.SetDrawColor(ColorAlpha(team.GetColor(ply:Team()), 25))
 	surface.DrawRect(10, ScrH() - 200 - 10, 350, 200)
 
-	surface.SetDrawColor(Color(30, 30, 30, 200))
+	surface.SetDrawColor(Color(30, 30, 30, 100))
 	surface.DrawRect(10, ScrH() - 200 - 10, 350, 200)
 
 	surface.SetFont("LiteNetworkFont32")
