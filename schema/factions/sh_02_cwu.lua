@@ -1,9 +1,9 @@
 --[[ Base Config ]]--
 
-FACTION.name = "Citizen"
-FACTION.description = [[Name: Citizen
-Description: The lowest class of Universal Union society. They are forced to follow the Universal Union's dictatorship with absolute obedience, or face punishments and even execution. The Universal Union keeps citizens weak and malnourished, and it is all they can do to try and survive. However, some brave citizens dare to stand against the Combine...]]
-FACTION.color = Color(20, 150, 20)
+FACTION.name = "Civil Worker's Union"
+FACTION.description = [[Name: Civil Worker's Union
+Description: A citizen who has been recruited or signed up to work for the UU. Civil Worker's Union receive many benefits, with access to better food and medical supplies. Most Civil Worker's Union operate business in the city, selling resources to other citizens in return for tokens, and some may be hired by the City Administrator to work for him. Most Civil Worker's Union believe that the goal of the Combine is good and do their best to support it.]]
+FACTION.color = Color(170, 200, 190)
 
 --[[ Helix Base Config ]]--
 
@@ -38,10 +38,10 @@ FACTION.pay = 0
 FACTION.defaultClass = nil
 FACTION.adminOnly = false
 FACTION.donatorOnly = false
-FACTION.requiredXP = nil
-FACTION.command = "ix_faction_become_citizen"
+FACTION.requiredXP = 30
+FACTION.command = "ix_faction_become_cwu"
 FACTION.modelWhitelist = "willardnetworks/citizens"
 
 --[[ Do not change! ]]--
 
-FACTION_CITIZEN = FACTION.index
+FACTION_CWU = FACTION.index
