@@ -182,6 +182,15 @@ function Schema:PlayerLoadout(ply)
 
 	ply:SetCanZoom(true)
     ply:ConCommand("gmod_mcore_test 1")
+
+	if ( ply:Team() == FACTION_CITIZEN ) then
+		char:SetName(char:GetData("ixKnownName"))
+	end
+end
+
+function Schema:PlayerLoadedCharacter(ply, char, oldChar)
+	Schema:SetTeam(ply, ix.faction.teams["01_citizen"])
+	hook.Run("PlayerSpawn", ply)
 end
 
 local dropAbleWeapons = {
@@ -212,7 +221,7 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 
 	if (!char) then return end
 
-	if (ply:Team() == FACTION_OTA) then
+	if ( ply:Team() == FACTION_OTA ) then
 		local randomChance = math.random(1,5)
 
 		if (randomChance == math.random(1,5)) then
@@ -309,8 +318,4 @@ function Schema:PlayerSpawnProp(ply)
 			return false
 		end
 	end
-end
-
-function Schema:PlayerLoadedCharacter(ply, char, oldChar)
-	Schema:SetTeam(ply, ix.faction.teams["01_citizen"])
 end
