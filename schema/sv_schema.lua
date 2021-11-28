@@ -103,7 +103,7 @@ function Schema:SetTeam(ply, factionTable, preferedModel)
 end
 
 for k, v in pairs(ix.faction.teams) do
-	concommand.Add("ix_faction_become_"..v.uniqueID, function(ply, cmd, args)
+	concommand.Add(v.command, function(ply, cmd, args)
 		if (args[1] == nil) then
 			Schema:SetTeam(ply, v, nil)
 		else
