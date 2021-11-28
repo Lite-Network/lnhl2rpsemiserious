@@ -74,7 +74,11 @@ function Schema:SetTeam(ply, factionTable, preferedModel)
 	hook.Run("PlayerLoadout", ply)
 	ply:ScreenFade(SCREENFADE.IN, color_black, 1, 1)
 
-	timer.Simple(0.5, function() ply:SelectWeapon("ix_hands") end)
+	timer.Simple(0.5, function()
+		if ply:IsValid() then
+			ply:SelectWeapon("ix_hands")
+		end
+	end)
 end
 
 for k, v in pairs(ix.faction.teams) do
