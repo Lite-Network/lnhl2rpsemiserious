@@ -84,6 +84,9 @@ if (CLIENT) then
 						return view
 					end
 				end
+			else
+				headPosLerp = head.Pos
+				headAngleLerp = angles
 			end
 		end
 	end
