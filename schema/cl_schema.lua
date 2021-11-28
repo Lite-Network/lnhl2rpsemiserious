@@ -46,6 +46,10 @@ net.Receive("ixCreateVGUI", function(len, ply)
 	vgui.Create(tostring(net.ReadString()))
 end)
 
-net.Receive("ixInspectBodyFinish", function()
-    Derma_Message("test!", "helix", "Close")
+net.Receive("ixInspectBodyFinish", function(len, ply)
+    local usedWeapon = net.ReadString()
+    local attacker = net.ReadString()
+    local message = "You have inspected the body, therefor you revealed the following..\n"
+    
+    Derma_Message(message, "Body Inspection Complete!", "Close")
 end)
