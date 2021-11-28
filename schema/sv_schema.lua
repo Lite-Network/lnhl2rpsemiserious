@@ -14,19 +14,25 @@ ix.whitelists.CCA.Ranks = {
 		"STEAM_0:0:89116555", -- sprite cran
 		"STEAM_0:0:203818007", -- kingdarkness
 	}, 
-	["UNION-DvL"] = "STEAM_0:1:117769029", -- bonk
+	["UNION-DvL"] = {
+		"STEAM_0:1:117769029", -- bonk
+		"STEAM_0:0:10223064", -- xavier
+	},
 	["UNION-DcO"] = "",
 
-	["HELIX-OfC"] = "STEAM_0:0:174143741", -- lee west
+	["HELIX-OfC"] = {
+		"STEAM_0:0:174143741", -- lee west
+		"STEAM_0:0:428839009", -- Yoboyboss76
+	},
 	["HELIX-DvL"] = "STEAM_0:1:506629560", -- cor
 	["HELIX-DcO"] = "",
 
 	["GRID-OfC"] = "",
-	["GRID-DvL"] = "",
+	["GRID-DvL"] = "STEAM_0:1:104896936", -- Phil Leotardo
 	["GRID-DcO"] = "",
 
 	["JURY-OfC"] = "",
-	["JURY-DvL"] = "",
+	["JURY-DvL"] = "STEAM_0:0:203267540", -- Overwatch
 	["JURY-DcO"] = "",
 }
 ix.whitelists.OTA.NoRanks = {
