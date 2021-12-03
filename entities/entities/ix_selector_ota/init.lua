@@ -17,7 +17,7 @@ function ENT:OnTakeDamage()
 end 
 
 function ENT:AcceptInput(Name, Activator, Caller)
-	if Name == "Use" and Caller:IsPlayer() then
+	if ( Name == "Use" ) and Caller:IsPlayer() then
 		if Caller:Team() == FACTION_OTA then
 			self:EmitSound("npc/metropolice/vo/ten4.wav")
 			Caller:OpenVGUI("LiteNetwork.RankMenu.OTA")
@@ -29,8 +29,8 @@ end
 
 concommand.Add("ix_selector_ota", function(ply, cmd, args)
 	if not (args[1] and args[2]) then return end
-	if not ply:NearEntity("ix_selector_ota") then ply:Notify("You need to be near the overwatch transhuman arm quartermaster in order to use this!") return end
-	if not (ply:Team() == FACTION_OTA) then ply:Notify("You need to become a OTA to run this command.") return end
+	if not ply:NearEntity("ix_selector_ota") then ply:Notify("You need to be near the Overwatch Transhuman Arm quartermaster in order to use this!") return end
+	if not (ply:Team() == FACTION_OTA) then ply:Notify("You need to become a Overwatch Transhuman Arm to run this command.") return end
 	if not ((ply.ixOverwatchCoolDown or 0) > CurTime()) then
 		local char = ply:GetCharacter()
 
@@ -50,7 +50,7 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 
 		if not (DivisionInfo.xp == nil) then
 			if not (tonumber(ply:GetXP()) >= DivisionInfo.xp) then
-				ply:Notify("You do not have the correct amount of XP to become that Divsion!")
+				ply:Notify("You do not have the correct amount of XP to become that Division!")
 				return false
 			end
 		end

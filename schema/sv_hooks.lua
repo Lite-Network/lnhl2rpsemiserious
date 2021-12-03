@@ -6,11 +6,15 @@ function Schema:OnReloaded()
 	if ((ix.luaReloaded or 0) < CurTime()) then
 		for k, v in pairs(player.GetAll()) do
 			v:ChatNotify("Lua has been refreshed!")
-			v:PlaySound("vo/k_lab/ba_pushinit.wav")
+			--v:PlaySound("vo/k_lab/ba_pushinit.wav")
 		end
 
 		ix.luaReloaded = CurTime() + 5
 	end
+end
+
+function Schema:PlayerSwitchFlashlight(ply)
+	return true
 end
 
 function Schema:PlayerFootstep(ply, pos, foot, sound, volume)
@@ -62,6 +66,7 @@ local blacklistedEntities = {
 function Schema:OnEntityCreated(ent)
     timer.Simple(0, function()
         if ent:IsValid() then
+			ent:DrawShadow(false)
             if blacklistedEntities[ent:GetClass()] then
                 MsgAll("REMOVED "..ent:GetClass().."\n")
                 if ent:GetOwner():IsPlayer() then
@@ -72,7 +77,7 @@ function Schema:OnEntityCreated(ent)
                 ent:Remove()
             end
 
-            if ent:GetOwner():IsPlayer() and not (ent:GetOwner():IsDonator() or ent:GetOwner():IsAdmin()) then
+            if ent:GetClass():find("wire") and (ent:GetOwner():IsPlayer() and not (ent:GetOwner():IsDonator() or ent:GetOwner():IsAdmin())) then
                 MsgAll("REMOVED ", tostring(ent), " FROM ", tostring(ent:GetOwner()))
                 ent:Remove()
             end
@@ -161,8 +166,19 @@ function Schema:CanPlayerSpawnContainer(ply)
 	end
 end
 
+local cwuCombineDoors = {
+	[4368] = true,
+	[4367] = true,
+	[4366] = true,
+	[4365] = true,
+}
 function Schema:PlayerUseDoor(ply, door)
+	print(door:MapCreationID())
 	if (ply:IsCombine() or ply:IsCA() or ply:IsDispatch()) then
+		if (!door:HasSpawnFlags(256) and !door:HasSpawnFlags(1024)) then
+			door:Fire("open")
+		end
+	elseif ((ply:IsCWU() or ply:IsCombine()) and cwuCombineDoors[door:MapCreationID()]) then
 		if (!door:HasSpawnFlags(256) and !door:HasSpawnFlags(1024)) then
 			door:Fire("open")
 		end
@@ -173,17 +189,17 @@ function Schema:PlayerSpray(ply)
 	return true
 end
 
+local changeNameOriginal = {
+	[FACTION_CITIZEN] = true,
+	[FACTION_CWU] = true,
+}
 function Schema:PlayerLoadout(ply)
 	local char = ply:GetCharacter()
-
-	if not (char) then
-		return
-	end
 
 	ply:SetCanZoom(true)
     ply:ConCommand("gmod_mcore_test 1")
 
-	if ( ply:Team() == FACTION_CITIZEN ) then
+	if ( changeNameOriginal[ply:Team()] ) then
 		char:SetName(char:GetData("ixKnownName"))
 	end
 end
@@ -317,5 +333,59 @@ function Schema:PlayerSpawnProp(ply)
 			ply:ChatNotify("You need 5 tokens to spawn a prop!")
 			return false
 		end
+	end
+end
+
+function Schema:OnPlayerHitGround(ply, inWater, onFloater, speed)
+	if !inWater and ply:IsValid() then
+		local punch = speed * 0.01
+
+		if ( punch * 2 >= 7 ) then
+			ply:EmitSound("npc/combine_soldier/zipline_hitground"..math.random(1,2)..".wav", 60)
+			ply:EmitSound("LiteNetwork/hl2rp/land0"..math.random(1,4)..".ogg", 50, math.random(90, 110), math.random(0.3, 0.4))
+		else
+			ply:EmitSound("LiteNetwork/hl2rp/land0"..math.random(1,4)..".ogg", 50, math.random(90, 110), math.random(0.3, 0.4))
+		end
+
+		if (punch * 2 >= 12) and not (ply:Team() == FACTION_OTA or ply:IsDispatch()) then
+			ply:TakeDamage(math.random(10, 20))
+			ply:EmitSound("player/pl_fallpain1.wav", 80)
+			ply:ChatNotify("You broke your legs!")
+			ply:GetCharacter():SetData("ixbrokenLegs", true)
+
+			if ply:IsCombine() then
+				Schema:AddCombineDisplayMessage("WARNING! UNIT "..string.upper(ply:Nick()).." RECEIVED LEG FRACTURE...", Color(200, 50, 0, 255))
+			end
+		end
+	end
+end
+
+-- Pain Sound
+local painSounds = {
+	[FACTION_CCA] = {sound = function() return "npc/metropolice/pain"..math.random(1,4)..".wav" end},
+	[FACTION_OTA] = {sound = function() return "npc/combine_soldier/pain"..math.random(1,3)..".wav" end},
+}
+function Schema:GetPlayerPainSound(ply)
+	if ( painSounds[ply:Team()] and painSounds[ply:Team()].sound ) then
+		return painSounds[ply:Team()].sound()
+	end
+end
+
+-- Death Sound
+local deathSounds = {
+	[FACTION_CCA] = {sound = function() return "npc/metropolice/die"..math.random(1,4)..".wav" end, globalCombine = true},
+	[FACTION_OTA] = {sound = function() return "npc/combine_soldier/die"..math.random(1,3)..".wav" end, globalCombine = true},
+}
+function Schema:GetPlayerDeathSound(ply)
+	if ( deathSounds[ply:Team()] and deathSounds[ply:Team()].sound ) then
+		local sound = deathSounds[ply:Team()].sound()
+
+		for k, v in ipairs(player.GetAll()) do
+			if (v:IsCombine() and ply:IsCombine()) and ( deathSounds[ply:Team()].globalCombine == true ) then
+				v:EmitSound(sound, 80)
+			end
+		end
+
+		return sound
 	end
 end

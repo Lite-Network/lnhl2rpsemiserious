@@ -23,19 +23,6 @@ function ENT:GetAllStock()
 	return self:GetNetVar("stock", {})
 end
 
-if (CLIENT) then
-	function ENT:OnPopulateEntityInfo(container)
-	   local EntityName = container:AddRow("EntityName")
-	   EntityName:SetImportant()
-	   EntityName:SetText(self.PrintName)
-	   EntityName:SizeToContents()
-
-	   local EntityDescription = container:AddRow("EntityDescription")
-	   EntityDescription:SetText(self.Purpose)
-	   EntityDescription:SizeToContents()
-    end
-end
-
 if (SERVER) then
 	function ENT:Initialize()
 		self:SetModel("models/props_interiors/vendingmachinesoda01a.mdl")

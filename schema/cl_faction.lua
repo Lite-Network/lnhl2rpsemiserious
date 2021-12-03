@@ -44,17 +44,19 @@ function Schema:CreateMenuButtons(tabs)
 		end
 
         for k, v in pairs(ix.faction.teams) do
-            factionButton = factionButtonsPanel:Add("ixMenuButton")
-            factionButton:Dock(TOP)
-            factionButton:SetSize(0, 50)
-            factionButton:SetText(v.name)
-            factionButton:SetFont("LiteNetworkFont32")
-            factionButton:SetTextColor(v.color)
-            factionButton.DoClick = function()
-                selectedFactionTable = v
-                selectedFaction = true
-                factionBecomeButton:SetText("Become "..v.name)
-                factionDescription:SetText(v.description or "")
+            if ( v.dontShowInMenu != true ) then
+                factionButton = factionButtonsPanel:Add("ixMenuButton")
+                factionButton:Dock(TOP)
+                factionButton:SetSize(0, 50)
+                factionButton:SetText(v.name)
+                factionButton:SetFont("LiteNetworkFont32")
+                factionButton:SetTextColor(v.color)
+                factionButton.DoClick = function()
+                    selectedFactionTable = v
+                    selectedFaction = true
+                    factionBecomeButton:SetText("Become "..v.name)
+                    factionDescription:SetText(v.description or "")
+                end
             end
         end
     end

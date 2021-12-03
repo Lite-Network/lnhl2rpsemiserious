@@ -77,8 +77,8 @@ function Schema:SetTeam(ply, factionTable, preferedModel)
 		return
 	end
 	
-	ply:Spawn()
 	char:SetFaction(factionTable.index)
+	ply:Spawn()
 	ply:StripWeapons()
 	ply:ResetBodygroups()
 	char:SetModel(preferedModel or table.Random(factionTable.models))

@@ -9,6 +9,15 @@ ITEM.Volume = 70
 ITEM.functions.Apply = {
 	name = "Heal yourself",
 	icon = "icon16/heart.png",
+	OnCanRun = function(itemTable)
+		local ply = itemTable.player
+
+		if ( ply:IsValid() and ply:Health() < ply:GetMaxHealth() ) then
+			return true
+		else
+			return false
+		end
+	end,
 	OnRun = function(itemTable)
 		local ply = itemTable.player
 		ply:Freeze(true)
@@ -26,6 +35,20 @@ ITEM.functions.Apply = {
 ITEM.functions.ApplyTarget = {
 	name = "Heal target",
 	icon = "icon16/heart_add.png",
+	OnCanRun = function(itemTable)
+		local ply = itemTable.player
+		local data = {}
+			data.start = ply:GetShootPos()
+			data.endpos = data.start + ply:GetAimVector() * 96
+			data.filter = ply
+		local target = util.TraceLine(data).Entity
+
+		if ( target:IsValid() and target:IsPlayer() and ( target:Health() < target:GetMaxHealth() ) ) then
+			return true
+		else
+			return false
+		end
+	end,
     OnCanRun = function(itemTable)
 		local ply = itemTable.player
 		local data = {}

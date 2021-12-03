@@ -36,6 +36,17 @@ function Schema:RenderScreenspaceEffects()
 	end
 end
 
+local crosshairGap = 5
+local crosshairLength = crosshairGap + 5
+local function DrawCrosshair(x, y)
+	surface.SetDrawColor(color_white)
+
+	surface.DrawLine(x - crosshairLength, y, x - crosshairGap, y)
+	surface.DrawLine(x + crosshairLength, y, x + crosshairGap, y)
+	surface.DrawLine(x, y - crosshairLength, x, y - crosshairGap)
+	surface.DrawLine(x, y + crosshairLength, x, y + crosshairGap)
+end
+
 local healthIcon = ix.util.GetMaterial("litenetwork/icons/health.png")
 local healthColor = Color(210, 0, 0, 255)
 local tokensIcon = ix.util.GetMaterial("litenetwork/icons/money.png")
@@ -46,6 +57,14 @@ local xpIcon = ix.util.GetMaterial("litenetwork/icons/salary.png")
 local xpColor = Color(63, 120, 205)
 local surface = surface
 
+local buildingWeapon = {
+	["weapon_physgun"] = true,
+	["gmod_tool"] = true,
+	["swep_construction_kit"] = true,
+}
+
+local text01position = ScrH() - 50
+local text02position = ScrH() - 30
 local function DrawHud(ply, char) -- Hud inspiration from impulse.
 	-- If anyone like smug comments that this is stolen, it aint, I just remade it so fuck off :)
 	ix.util.DrawBlurAt(10, ScrH() - 200 - 10, 350, 200, 1)
@@ -94,6 +113,23 @@ local function DrawHud(ply, char) -- Hud inspiration from impulse.
 	surface.SetDrawColor(xpColor)
 	surface.SetMaterial(xpIcon)
 	surface.DrawTexturedRect(130, ScrH() - 200 - 10 + 125, 25, 25)
+
+	if ( ply:GetActiveWeapon():IsValid() and buildingWeapon[ply:GetActiveWeapon():GetClass()] ) then
+		text01position = Lerp(0.03, text01position, ScrH() - 50)
+		text02position = Lerp(0.03, text02position, ScrH() - 30)
+	else
+		text01position = Lerp(0.03, text01position, ScrH() + 50)
+		text02position = Lerp(0.03, text02position, ScrH() + 30)
+	end
+
+	surface.SetFont("LiteNetworkFont24")
+	surface.SetTextColor(Color(200, 0, 0))
+
+	surface.SetTextPos(370, text01position)
+	surface.DrawText("Don't have this weapon out in RP.")
+
+	surface.SetTextPos(370, text02position)
+	surface.DrawText("You may be punished for this.")
 end
 
 local lastBodygroups = {}
@@ -266,7 +302,7 @@ local function DrawCombineHud(ply, char)
 
 	if (ix.option.Get("showLocalAssets", true) == true) then
 		draw.SimpleTextOutlined("<:: LOCAL ASSETS //", "BudgetLabel", 10, 5 + 16 * 10, team.GetColor(ply:Team()), nil, nil, 1, color_black)
-		for k, v in SortedPairs(player.GetAll()) do
+		for k, v in pairs(player.GetAll()) do
 			if v:IsCombine() then
 				local zone = v:GetPlayerInArea() or "<UNDOCUMENTED ZONE>"
 
@@ -373,11 +409,10 @@ local function DrawPlayerInfo(ply)
 			end
 
 			if v:IsValid() and v:Alive() and v:GetCharacter() and not (v:GetMoveType() == MOVETYPE_NOCLIP) then
-				local HeadBone = v:EyePos() + Vector(0, 0, 10)
-				local HeadPos = HeadBone:ToScreen()
-
-				local headpos_x = HeadPos.x
-				local headpos_y = HeadPos.y
+				local head = v:LookupAttachment("eyes")
+				head = v:GetAttachment(head)
+				local headPos = Vector(head.Pos.x, head.Pos.y, 74)
+				local HeadPos = headPos:ToScreen()
 
 				v.alpha = v.alpha or 0
 				v.alpha2 = v.alpha2 or 0
@@ -393,28 +428,28 @@ local function DrawPlayerInfo(ply)
 				local health = v:Health()
 
 				if talking then
-					draw.DrawText("Talking..", "ixMediumFont", headpos_x, headpos_y - ScreenScale(12), Color(200, 200, 200, v.alpha2), TEXT_ALIGN_CENTER)
+					draw.DrawText("Talking..", "ixMediumFont", HeadPos.x, HeadPos.y - ScreenScale(12), Color(200, 200, 200, v.alpha2), TEXT_ALIGN_CENTER)
 				end
 
 				if v:GetNetVar("IsAFK") then
-					draw.DrawText("AWAY FROM KEYBOARD (AFK)", "ixMediumFont", headpos_x, headpos_y - ScreenScale(24), Color(200, 0, 0, v.alpha2), TEXT_ALIGN_CENTER)
+					draw.DrawText("AWAY FROM KEYBOARD (AFK)", "ixMediumFont", HeadPos.x, HeadPos.y - ScreenScale(24), Color(200, 0, 0, v.alpha2), TEXT_ALIGN_CENTER)
 				end
 
 				if health >= 1 then
-					draw.DrawText(name, "ixMediumFont", headpos_x, headpos_y - ScreenScale(4), Color(teamcol.r, teamcol.g, teamcol.b, v.alpha), TEXT_ALIGN_CENTER)
+					draw.DrawText(name, "ixMediumFont", HeadPos.x, HeadPos.y - ScreenScale(4), Color(teamcol.r, teamcol.g, teamcol.b, v.alpha), TEXT_ALIGN_CENTER)
 
 					if health >= 100 then
-						draw.DrawText("Healthy", "ixSmallFont", headpos_x, headpos_y + ScreenScale(4), Color(0, 255, 0, v.alpha), TEXT_ALIGN_CENTER)
+						draw.DrawText("Healthy", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(0, 255, 0, v.alpha), TEXT_ALIGN_CENTER)
 					elseif health >= 80 then
-						draw.DrawText("Wounded", "ixSmallFont", headpos_x, headpos_y + ScreenScale(4), Color(200, 180, 0, v.alpha), TEXT_ALIGN_CENTER)
+						draw.DrawText("Wounded", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(200, 180, 0, v.alpha), TEXT_ALIGN_CENTER)
 					elseif health >= 60 then
-						draw.DrawText("Injured", "ixSmallFont", headpos_x, headpos_y + ScreenScale(4), Color(210, 150, 0, v.alpha), TEXT_ALIGN_CENTER)
+						draw.DrawText("Injured", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(210, 150, 0, v.alpha), TEXT_ALIGN_CENTER)
 					elseif health >= 40 then
-						draw.DrawText("Looks Injured", "ixSmallFont", headpos_x, headpos_y + ScreenScale(4), Color(230, 100, 0, v.alpha), TEXT_ALIGN_CENTER)
+						draw.DrawText("Looks Injured", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(230, 100, 0, v.alpha), TEXT_ALIGN_CENTER)
 					elseif health >= 20 then
-						draw.DrawText("Looks Seriously Injured", "ixSmallFont", headpos_x, headpos_y + ScreenScale(4), Color(230, 40, 0, v.alpha), TEXT_ALIGN_CENTER)
+						draw.DrawText("Looks Seriously Injured", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(230, 40, 0, v.alpha), TEXT_ALIGN_CENTER)
 					elseif health >= 0 then
-						draw.DrawText("Very close to death", "ixSmallFont", headpos_x, headpos_y + ScreenScale(4), Color(150, 0, 0, v.alpha - math.random(20, 100)), TEXT_ALIGN_CENTER)
+						draw.DrawText("Very close to death", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(150, 0, 0, v.alpha - math.random(20, 100)), TEXT_ALIGN_CENTER)
 					end
 				end
 
@@ -434,6 +469,36 @@ local function DrawPlayerInfo(ply)
 	end
 end
 
+local function DrawEntityInfo(ply)
+	local ply = LocalPlayer()
+
+	for _, v in ipairs(ents.GetAll()) do
+		if (ply:GetPos():Distance(v:GetPos()) < 1024) and (v:IsLineOfSightClear(ply)) then
+			if v:IsValid() and v:GetClass():find("ix_selector") then
+				local headPos = v:GetPos() + Vector(0, 0, 74)
+				local HeadPos = headPos:ToScreen()
+
+				v.alpha = v.alpha or 0
+
+				local teamcol = team.GetColor(v.Faction)
+				local distance = ply:GetPos():Distance(v:GetPos())
+				local lineofsight = v:IsLineOfSightClear(ply)
+				local entitytrace = ply:GetEyeTrace().Entity == v
+				local namecolor = Color(teamcol.r, teamcol.g, teamcol.b, v.alpha)
+
+				draw.DrawText(v.PrintName or "nil", "ixMediumFont", HeadPos.x, HeadPos.y - ScreenScale(10), namecolor, TEXT_ALIGN_CENTER)
+				draw.DrawText(v.Purpose or "nil", "ixSmallFont", HeadPos.x, HeadPos.y - ScreenScale(4), ColorAlpha(color_white, v.alpha), TEXT_ALIGN_CENTER)
+
+				if distance < 256 and lineofsight and entitytrace then
+					v.alpha = Lerp(0.05, v.alpha, 255)
+				else
+					v.alpha = Lerp(0.05, v.alpha, 0)
+				end
+			end
+		end
+	end
+end
+
 function Schema:HUDPaint()
 	local ply = LocalPlayer()
 	local char = ply:GetCharacter()
@@ -446,16 +511,25 @@ function Schema:HUDPaint()
 			return false
 		end
 
+		if ( ix.option.Get("thirdpersonEnabled") == true ) then
+			local lpPosition = LocalPlayer():GetEyeTrace().HitPos:ToScreen()
+			DrawCrosshair(lpPosition.x, lpPosition.y)
+		else
+			DrawCrosshair(ScrW() / 2, ScrH() / 2)
+		end
+
+
 		if ix.option.Get("hudDrawBox", true) then
 			DrawHud(ply, char)
 			DrawPlayerIcon(ply, char)
 		end
 		
 		if ix.option.Get("hudDrawPlayerInformation", true) then
+			DrawEntityInfo(ply)
 			DrawPlayerInfo(ply)
 		end
 
-		if ply:IsCombine() then
+		if ply:IsCombine() and not (ply.adminHud == true) then
 			DrawCombineHud(ply, char)
 		end
 

@@ -49,7 +49,7 @@ if (CLIENT) then
 	local headPosLerp = Vector(0, 0, 0)
 	local headAngleLerp = Angle(0, 90, 0)
 	function PLUGIN:CalcView(ply, origin, angles, fov)
-		local rl = RealTime()
+		local frameTime = RealFrameTime()
 		local view = {
 			origin = origin,
 			angles = angles,
@@ -59,11 +59,11 @@ if (CLIENT) then
 		if (ply and ply:Alive()) and not (ply:GetMoveType() == MOVETYPE_NOCLIP) then
 			local head = ply:LookupAttachment("eyes")
 			head = ply:GetAttachment(head)
-
+			
 			if not head or not head.Pos then return end
 
-			headPosLerp = LerpVector(0.1, headPosLerp, head.Pos)
-			headAngleLerp = LerpAngle(0.1, headAngleLerp, angles)
+			headPosLerp = LerpVector(frameTime / 0.08, headPosLerp, head.Pos)
+			headAngleLerp = LerpAngle(frameTime / 0.08, headAngleLerp, angles)
 
 			local forwardmultiply = view.angles:Forward()
 
@@ -76,6 +76,7 @@ if (CLIENT) then
 			view.origin = headPosLerp - (forwardmultiply * ix.option.Get("thirdpersonDistance", false)) +
 			( view.angles:Right() * ix.option.Get("thirdpersonHorizontal", false) ) +
 			( view.angles:Up() * ix.option.Get("thirdpersonVertical", false) )
+			
 			view.angles = headAngleLerp
 
 			if ix.option.Get("thirdpersonEnabled") then

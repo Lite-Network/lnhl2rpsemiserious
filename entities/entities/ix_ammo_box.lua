@@ -12,8 +12,6 @@ ENT.AutomaticFrameAdvance = true
 ENT.Spawnable = true
 ENT.AdminOnly = true
 
-ENT.Holdable = true -- lul
-
 game.AddAmmoType({
     name = "ixRifleammo",
     dmgtype = DMG_BULLET,
@@ -35,19 +33,6 @@ AmmoCrateAmmunition["SniperRound"] = 50
 AmmoCrateAmmunition["SniperPenetratedRound"] = 50
 AmmoCrateAmmunition["AR2"] = 300
 AmmoCrateAmmunition["ixRifleammo"] = 300
-
-if (CLIENT) then
-	function ENT:OnPopulateEntityInfo(container)
-	   local EntityName = container:AddRow("EntityName")
-	   EntityName:SetImportant()
-	   EntityName:SetText(self.PrintName)
-	   EntityName:SizeToContents()
-
-	   local EntityDescription = container:AddRow("EntityDescription")
-	   EntityDescription:SetText(self.Purpose)
-	   EntityDescription:SizeToContents()
-    end
-end
 
 if (SERVER) then
     function ENT:Initialize()
@@ -80,30 +65,35 @@ if (SERVER) then
         return false
     end 
     
+    util.AddNetworkString("ixAmmoCrateAnimationOpen")
+    util.AddNetworkString("ixAmmoCrateAnimationClose")
     function ENT:AcceptInput(Name, Activator, Caller)
         if (Name == "Use" and Caller:IsPlayer()) then
-            if not self.AlreadyUsed or self.AlreadyUsed <= CurTime() then
+            if not self.alreadyUsed or self.alreadyUsed <= CurTime() then
                 self:SetBodygroup(1, 1)
                 self:EmitSound("items/ammocrate_open.wav")
                 self:ResetSequence("open")
                 timer.Simple(0.5, function()
-                    for k, v in ipairs(Caller:GetWeapons()) do
-                        local AmmoName = game.GetAmmoName(v:GetPrimaryAmmoType())
-                        if AmmoCrateAmmunition[AmmoName] and Caller:GetAmmoCount(AmmoName) and Caller:GetAmmoCount(AmmoName) < AmmoCrateAmmunition[AmmoName] then
-                            local giveAmmo =  AmmoCrateAmmunition[AmmoName] - Caller:GetAmmoCount(AmmoName)
-                            local AmmoName = AmmoCrateAmmunition[AmmoName]
-                            Caller:GiveAmmo(giveAmmo, v:GetPrimaryAmmoType(), true)
+                    if self:IsValid() then
+                        for k, v in ipairs(Caller:GetWeapons()) do
+                            local AmmoName = game.GetAmmoName(v:GetPrimaryAmmoType())
+                            if AmmoCrateAmmunition[AmmoName] and Caller:GetAmmoCount(AmmoName) and Caller:GetAmmoCount(AmmoName) < AmmoCrateAmmunition[AmmoName] then
+                                local giveAmmo =  AmmoCrateAmmunition[AmmoName] - Caller:GetAmmoCount(AmmoName)
+                                local AmmoName = AmmoCrateAmmunition[AmmoName]
+                                Caller:GiveAmmo(giveAmmo, v:GetPrimaryAmmoType(), true)
+                            end
                         end
+                        Caller:ChatNotify("Your ammunition for your weapon has been fully refilled to it's limits.")
+                        self:EmitSound("items/ammo_pickup.wav", 80)
+                        self:SetBodygroup(1, 0)
                     end
-                    Caller:ChatNotify("Your ammunition for your weapon has been fully refilled to it's limits.")
-                    self:EmitSound("items/ammo_pickup.wav", 80)
-                    self:SetBodygroup(1, 0)
                 end)
                 timer.Simple(1, function()
-                    self:ResetSequence("close")
-                    self:EmitSound("items/ammocrate_close.wav")
+                    if self:IsValid() then
+                        self:ResetSequence("close")
+                    end
                 end)
-				self.AlreadyUsed = CurTime() + 1.5
+				self.alreadyUsed = CurTime() + 1.5
             end
         end
     end

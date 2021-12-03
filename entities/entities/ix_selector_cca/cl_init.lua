@@ -1,5 +1,9 @@
 include("shared.lua")
 
+function ENT:Initialize()
+	self.playerFaction = FACTION_CCA
+end
+
 local PANEL = {}
 
 function PANEL:Init()

@@ -18,8 +18,8 @@ local function PlayBeep(time, ent)
 	end)
 end
 
-ITEM.functions.PlaceAPC = {
-	name = "Place on APC",
+ITEM.functions.PlaceVehicle = {
+	name = "Place on Vehicle",
 	OnCanRun = function(item)
 		local ply = item.player
 		local data = {}
@@ -28,7 +28,7 @@ ITEM.functions.PlaceAPC = {
 			data.filter = ply
 		local ent = util.TraceLine(data).Entity
 
-		if ( ent:IsValid() ) and ( ent:GetClass() == "gmod_sent_vehicle_fphysics_base" ) and ( ent:GetModel():find("combine_apc") ) then
+		if ( ent:IsValid() and ent:GetClass() == "gmod_sent_vehicle_fphysics_base" ) then
 			return true
 		else
 			return false
@@ -42,7 +42,8 @@ ITEM.functions.PlaceAPC = {
 			data.filter = ply
 		local ent = util.TraceLine(data).Entity
 
-		if ( ent:IsValid() ) and ( ent:GetClass() == "gmod_sent_vehicle_fphysics_base" ) and ( ent:GetModel():find("combine_apc") ) then
+		if ( ent:IsValid() and ent:GetClass() == "gmod_sent_vehicle_fphysics_base" ) then
+			local entityPosition = ent:GetPos()
 			ent:EmitSound("weapons/c4/c4_plant.wav", 90)
 			PlayBeep(0.5, ent)
 			PlayBeep(1.5, ent)
@@ -52,17 +53,15 @@ ITEM.functions.PlaceAPC = {
 			PlayBeep(3.50, ent)
 			PlayBeep(3.75, ent)
 			timer.Simple(4, function()
-				if ent:IsValid() then
-					local explode = ents.Create("env_explosion")
-					explode:SetPos(ent:GetPos())
-					explode:SetOwner(ply)
-					explode:Spawn()
-					explode:SetKeyValue("iMagnitude", "375")
-					explode:Fire("Explode", 0, 0)
-					explode:EmitSound("weapons/c4/c4_explode1.wav", 120)
-					explode:EmitSound("weapons/c4/c4_exp_deb1.wav", 100)
-					explode:EmitSound("weapons/c4/c4_exp_deb2.wav", 100)
-				end
+				local explode = ents.Create("env_explosion")
+				explode:SetPos(entityPosition)
+				explode:SetOwner(ply)
+				explode:Spawn()
+				explode:SetKeyValue("iMagnitude", "375")
+				explode:Fire("Explode", 0, 0)
+				explode:EmitSound("weapons/c4/c4_explode1.wav", 120)
+				explode:EmitSound("weapons/c4/c4_exp_deb1.wav", 100)
+				explode:EmitSound("weapons/c4/c4_exp_deb2.wav", 100)
 			end)
 		end
 

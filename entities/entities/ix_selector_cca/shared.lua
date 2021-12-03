@@ -1,8 +1,8 @@
 ENT.Base 			= "base_ai"
 ENT.Type 			= "ai"
-ENT.PrintName		= "Overwatch Vendor"
+ENT.PrintName		= "Civil Protection Vendor"
 ENT.Author			= "Riggs Mackay"
-ENT.Purpose			= "Gives out Overwatch Divisions and Ranks, depending on your XP count."
+ENT.Purpose			= "Gives out Civil Protection Divisions and Ranks, depending on your XP count."
 ENT.Instructions	= "Press E"
 ENT.Category 		= "IX:HL2RP"
 

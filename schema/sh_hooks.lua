@@ -32,6 +32,11 @@ function Schema:CanTool(ply, trace, toolname, tool, button)
 	end
 end
 
+function Schema:OnPlayerHitGround(ply)
+    local vel = ply:GetVelocity()
+    ply:SetVelocity( Vector( - ( vel.x * 0.1 ), - ( vel.y * 0.1 ), 0) )
+end
+
 function Schema:CanProperty(ply, property, ent)
 	if (property == "persist") then
 		if (SERVER) then
@@ -59,6 +64,15 @@ function Schema:CanPlayerThrowPunch(ply)
 			return true
 		end
 	end
+end
+
+function Schema:Initialize()
+    timer.Simple(60, function()
+		RunConsoleCommand("sv_skyname", "painted")
+		for k, v in pairs(ents.FindByClass("light_environment")) do
+			v:Fire("TurnOff")
+		end
+	end)
 end
 
 function Schema:CanPlayerJoinClass()

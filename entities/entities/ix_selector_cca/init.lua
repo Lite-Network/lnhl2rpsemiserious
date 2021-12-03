@@ -18,7 +18,7 @@ function ENT:OnTakeDamage()
 end 
 
 function ENT:AcceptInput(Name, Activator, Caller)
-	if Name == "Use" and Caller:IsPlayer() then
+	if ( Name == "Use" ) and Caller:IsPlayer() then
 		if Caller:Team() == FACTION_CCA then
 			self:EmitSound("npc/metropolice/vo/ten4.wav")
 			Caller:OpenVGUI("LiteNetwork.RankMenu.CCA")
@@ -30,9 +30,9 @@ end
 
 concommand.Add("ix_selector_cca", function(ply, cmd, args)
 	if not (args[1] and args[2]) then return end
-	if not ply:NearEntity("ix_selector_cp") then ply:Notify("You need to be near the civil protection quartermaster in order to use this!") return end
-	if not (ply:Team() == FACTION_CCA) then ply:Notify("You need to become a CP to run this command.") return end
-	if not ((ply.ixCivilProtectionCoolDown or 0) > CurTime()) then
+	if not ply:NearEntity("ix_selector_cca") then ply:Notify("You need to be near the Combine Civil Authority quartermaster in order to use this!") return end
+	if not (ply:Team() == FACTION_CCA) then ply:Notify("You need to become a Combine Civil Authority to run this command.") return end
+	if not ((ply.ccaSelectionCoolDown or 0) > CurTime()) then
 		local char = ply:GetCharacter()
 
 		if (!char) then
@@ -44,14 +44,13 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 		local DivisionID = tonumber(args[2])
 		local RankInfo = ix.ranks.cca[RankID]
 		local DivisionInfo = ix.divisions.cca[DivisionID]
-		local RankInfo = ix.ranks.cca[RankID]
-		local CommandingName = "CP:C17-"..DivisionInfo.name.."-"..RandomNumbers
-		local StandardName = "CP:C17-"..DivisionInfo.name.."-"..RankInfo.name.."-"..RandomNumbers
+		local CommandingName = "CCA:C17-"..DivisionInfo.name.."-"..RandomNumbers
+		local StandardName = "CCA:C17-"..DivisionInfo.name.."-"..RankInfo.name.."-"..RandomNumbers
 		local BasicWeapons = {"weapon_physgun", "gmod_tool", "ix_hands", "ix_keys"}
 
 		if not (DivisionInfo.xp == nil) then
 			if not (tonumber(ply:GetXP()) >= DivisionInfo.xp) then
-				ply:Notify("You do not have the correct amount of XP to become that Divsion!")
+				ply:Notify("You do not have the correct amount of XP to become that Division!")
 				return false
 			end
 		end
@@ -206,6 +205,7 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 				Schema:GiveWeapons(ply, DivisionInfo.weapons[RankID])
 			end
 		end
+		ply.ccaSelectionCoolDown = CurTime() + 10
 	else
 		ply:Notify("You need to wait before you can change division and rank again.")
 	end

@@ -42,7 +42,7 @@ SWEP.Secondary.DefaultClip = -1
 
 SWEP.Spread = {}
 SWEP.Spread.Min = 0
-SWEP.Spread.Max = 0.05
+SWEP.Spread.Max = 0.03
 SWEP.Spread.IronsightsMod = 0.7
 SWEP.Spread.CrouchMod = 0.7
 SWEP.Spread.AirMod = 1.4

@@ -12,19 +12,6 @@ ENT.AutomaticFrameAdvance = true
 ENT.Spawnable = true
 ENT.AdminOnly = true
 
-if (CLIENT) then
-	function ENT:OnPopulateEntityInfo(container)
-	   local EntityName = container:AddRow("EntityName")
-	   EntityName:SetImportant()
-	   EntityName:SetText(self.PrintName)
-	   EntityName:SizeToContents()
-
-	   local EntityDescription = container:AddRow("EntityDescription")
-	   EntityDescription:SetText(self.Purpose)
-	   EntityDescription:SizeToContents()
-    end
-end
-
 function ENT:SetupDataTables()
 	self:NetworkVar("Float", 0, "RationTime")
 	self:NetworkVar("Float", 1, "FlashTime")
