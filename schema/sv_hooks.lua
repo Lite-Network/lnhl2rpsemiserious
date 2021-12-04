@@ -23,31 +23,19 @@ function Schema:PlayerFootstep(ply, pos, foot, sound, volume)
 	elseif ( ply:Team() == FACTION_OTA ) then
 		sound = "npc/combine_soldier/gear"..math.random(1,6)..".wav"
 	elseif ( ply:IsRebel() ) then
-		sound = {
-			"npc/footsteps/hardboot_generic1.wav",
-			"npc/footsteps/hardboot_generic2.wav",
-			"npc/footsteps/hardboot_generic3.wav",
-			"npc/footsteps/hardboot_generic4.wav",
-			"npc/footsteps/hardboot_generic5.wav",
-			"npc/footsteps/hardboot_generic6.wav",
-			"npc/footsteps/hardboot_generic8.wav",
-		}
+		local rand = math.random( 1, 8 )
+		if ( rand == 7 ) then
+			rand = 8
+		end
+		sound = "npc/footsteps/hardboo_generic" .. rand .. ".wav"
 	end
 
 	if ply:KeyDown(IN_SPEED) then
-		if istable(sound) then
-			ply:EmitSound(table.Random(sound), 80, math.random(90, 110), 1)
-		else
-			ply:EmitSound(sound, 80, math.random(90, 110), 1)
-		end
+		ply:EmitSound(sound, 80, math.random(90, 110), 1)
 	else
-		if istable(sound) then
-			ply:EmitSound(table.Random(sound), 70, math.random(90, 110), 0.2)
-		else
-			ply:EmitSound(sound, 70, math.random(90, 110), 0.2)
-		end
+		ply:EmitSound(sound, 70, math.random(90, 110), 0.2)
 	end
-	
+
 	return true
 end
 
@@ -127,7 +115,7 @@ function Schema:Move(ply, mv)
 	else
 		runBoost = 0
 	end
-	
+
 	ply:SetDuckSpeed(0.4)
 	ply:SetUnDuckSpeed(0.4)
 	ply:SetSlowWalkSpeed(70)
@@ -311,8 +299,8 @@ end
 function Schema:PlayerSpawnProp(ply)
 	local char = ply:GetCharacter()
 	local amount = char:GetMoney()
-	
-	if ply:IsAdmin() or ply:Nick():find("GRID") then
+
+	if ply:IsAdmin() or ( ply:IsCombine() and ply:Nick():find("GRID") ) then
 		ply:ChatNotify("You did not pay any tokens to spawn this prop.")
 		return true
 	elseif (ply:IsDonator() or ply:IsCombine()) then
