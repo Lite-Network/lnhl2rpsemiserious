@@ -1,3 +1,4 @@
+util.AddNetworkString("ixStartIntro")
 function PLUGIN:StartIntro(ply)
     net.Start("ixStartIntro")
     net.Send(ply)
