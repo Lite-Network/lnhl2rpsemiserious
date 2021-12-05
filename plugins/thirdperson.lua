@@ -39,6 +39,10 @@ if (CLIENT) then
 	end)
 
 	function PLUGIN:ShouldDrawLocalPlayer()
+        if ( LocalPlayer().ixInIntro ) then
+			return false
+		end
+
 		if not (IsValid(ix.gui.characterMenu) or (IsValid(ix.gui.menu) and IsValid(ix.gui.menu.projectedTexture))) then
 			if ix.option.Get("thirdpersonEnabled") then
 				return true
@@ -49,6 +53,10 @@ if (CLIENT) then
 	local headPosLerp = Vector(0, 0, 0)
 	local headAngleLerp = Angle(0, 90, 0)
 	function PLUGIN:CalcView(ply, origin, angles, fov)
+        if ( ply.ixInIntro ) then
+			return false
+		end
+		
 		local frameTime = RealFrameTime()
 		local view = {
 			origin = origin,

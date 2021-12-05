@@ -325,7 +325,7 @@ function Schema:PlayerSpawnProp(ply)
 end
 
 function Schema:OnPlayerHitGround(ply, inWater, onFloater, speed)
-	if !inWater and ply:IsValid() then
+	if not ( inWater or ( ply.ixInIntro == true ) ) and ply:IsValid() then
 		local punch = speed * 0.01
 
 		if ( punch * 2 >= 7 ) then

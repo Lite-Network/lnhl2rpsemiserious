@@ -134,14 +134,14 @@ end
 
 local lastBodygroups = {}
 local function DrawPlayerIcon(ply)
-	if not IsValid(PlayerIcon) then
+	if not ( IsValid(PlayerIcon) ) then
 		PlayerIcon = vgui.Create("ixSpawnIcon")
 		PlayerIcon:SetPos(20, ScrH() - 200 - 10 + 50) -- math go brr
 		PlayerIcon:SetSize(100, 100)
 		PlayerIcon:SetModel(ply:GetModel(), ply:GetSkin())
 
 		timer.Simple(0, function()
-			if not IsValid(PlayerIcon) then
+			if not ( IsValid(PlayerIcon) ) then
 				return
 			end
 
@@ -159,7 +159,7 @@ local function DrawPlayerIcon(ply)
 		end)
 	else
 		timer.Simple(0, function()
-			if not IsValid(PlayerIcon) then
+			if not ( IsValid(PlayerIcon) ) then
 				return
 			end
 
@@ -504,8 +504,8 @@ function Schema:HUDPaint()
 	local char = ply:GetCharacter()
 
 	if (ply:IsValid() and ply:Alive() and char) then
-		if ix.hudEnabled == false or (ix.CinematicIntro and ply:Alive()) or (IsValid(ix.gui.menu) or IsValid(ix.gui.characterMenu)) or (hook.Run("ShouldDrawHUDBox") == false) then
-			if IsValid(PlayerIcon) then
+		if ( ix.hudEnabled == false ) or (ix.CinematicIntro and ply:Alive()) or ( ply.ixInIntro ) or (IsValid(ix.gui.menu) or IsValid(ix.gui.characterMenu)) or (hook.Run("ShouldDrawHUDBox") == false) then
+			if ( IsValid(PlayerIcon) ) then
 				PlayerIcon:Remove()
 			end
 			return false
@@ -519,23 +519,23 @@ function Schema:HUDPaint()
 		end
 
 
-		if ix.option.Get("hudDrawBox", true) then
+		if ( ix.option.Get("hudDrawBox", true) ) or ( not ply.ixInIntro ) then
 			DrawHud(ply, char)
 			DrawPlayerIcon(ply, char)
 		end
 		
-		if ix.option.Get("hudDrawPlayerInformation", true) then
+		if ( ix.option.Get("hudDrawPlayerInformation", true) ) then
 			DrawEntityInfo(ply)
 			DrawPlayerInfo(ply)
 		end
 
-		if ply:IsCombine() and not (ply.adminHud == true) then
+		if ( ply:IsCombine() and not (ply.adminHud == true) ) then
 			DrawCombineHud(ply, char)
 		end
 
 		DrawSpookyHud(ply, char)
 	else
-		if IsValid(PlayerIcon) then
+		if ( IsValid(PlayerIcon) ) then
 			PlayerIcon:Remove()
 		end
 	end

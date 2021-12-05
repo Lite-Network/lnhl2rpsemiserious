@@ -30,6 +30,10 @@ if (CLIENT) then
     end
 
     function PLUGIN:HUDPaint()
+        if ( LocalPlayer().ixInIntro ) then
+            return false
+        end
+        
         local ply = LocalPlayer()
         local char = ply:GetCharacter()
 
