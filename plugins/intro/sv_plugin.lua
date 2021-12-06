@@ -1,8 +1,8 @@
 util.AddNetworkString("ixIntroStarted")
 net.Receive("ixIntroStarted", function(len, ply)
-    local data = net.ReadTable()
+    local position = net.ReadVector()
 
-    ply.ixInIntro = true
+    ply.ixIntroBool = true
 
     if not ( ply:Alive() ) then
         ply:Spawn()
@@ -10,24 +10,25 @@ net.Receive("ixIntroStarted", function(len, ply)
     end
 
     ply:SelectWeapon("ix_keys")
-    ply:SetPos(Vector(data[1], data[2], data[3]))
+    ply:SetPos(position)
     ply:SetGravity(0.1)
+    ply:ConCommand("stopsound")
 end)
 
 util.AddNetworkString("ixIntroUpdate")
 net.Receive("ixIntroUpdate", function(len, ply)
-    local data = net.ReadTable()
+    local position = net.ReadVector()
 
-    ply.ixInIntro = true
+    ply.ixIntroBool = true
     
     ply:SelectWeapon("ix_keys")
-    ply:SetPos(Vector(data[1], data[2], data[3]))
+    ply:SetPos(position)
     ply:SetGravity(0.1)
 end)
 
 util.AddNetworkString("ixIntroComplete")
 net.Receive("ixIntroComplete", function(len, ply)
-    ply.ixInIntro = false
+    ply.ixIntroBool = false
 
     ply:SetNoDraw(false)
     ply:Freeze(false)
@@ -38,11 +39,12 @@ net.Receive("ixIntroComplete", function(len, ply)
     ply:SelectWeapon("ix_hands")
     ply:SetGravity(1)
 
-    ply:ScreenFade(SCREENFADE.OUT, color_black, 1, 2)
+    ply:ScreenFade(SCREENFADE.IN, color_black, 1, 2)
+    ply:ConCommand("stopsound")
 end)
 
 function PLUGIN:PlayerTick(ply)
-    if ( ply.ixInIntro == true ) then
+    if ( ply.ixIntroBool == true ) then
         ply:SetNoDraw(true)
         ply:Freeze(true)
         ply:GodEnable()
@@ -52,7 +54,7 @@ end
 
 util.AddNetworkString("ixIntroStart")
 function PLUGIN:PlayerLoadedCharacter(ply, char, oldChar)
-    ply.ixInIntro = true
+    ply.ixIntroBool = true
     ply:SetGravity(0.1)
 
     net.Start("ixIntroStart")

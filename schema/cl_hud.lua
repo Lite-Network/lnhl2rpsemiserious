@@ -504,7 +504,7 @@ function Schema:HUDPaint()
 	local char = ply:GetCharacter()
 
 	if (ply:IsValid() and ply:Alive() and char) then
-		if ( ix.hudEnabled == false ) or (ix.CinematicIntro and ply:Alive()) or ( ply.ixInIntro ) or (IsValid(ix.gui.menu) or IsValid(ix.gui.characterMenu)) or (hook.Run("ShouldDrawHUDBox") == false) then
+		if ( ix.hudEnabled == false ) or (ix.CinematicIntro and ply:Alive()) or ( ply.ixIntroBool ) or (IsValid(ix.gui.menu) or IsValid(ix.gui.characterMenu)) or (hook.Run("ShouldDrawHUDBox") == false) then
 			if ( IsValid(PlayerIcon) ) then
 				PlayerIcon:Remove()
 			end
@@ -519,7 +519,7 @@ function Schema:HUDPaint()
 		end
 
 
-		if ( ix.option.Get("hudDrawBox", true) ) or ( not ply.ixInIntro ) then
+		if ( ix.option.Get("hudDrawBox", true) ) or ( not ply.ixIntroBool ) then
 			DrawHud(ply, char)
 			DrawPlayerIcon(ply, char)
 		end

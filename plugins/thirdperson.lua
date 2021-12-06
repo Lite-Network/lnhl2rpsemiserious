@@ -39,7 +39,7 @@ if (CLIENT) then
 	end)
 
 	function PLUGIN:ShouldDrawLocalPlayer()
-        if ( LocalPlayer().ixInIntro ) then
+        if ( LocalPlayer().ixIntroBool ) then
 			return false
 		end
 
@@ -53,7 +53,7 @@ if (CLIENT) then
 	local headPosLerp = Vector(0, 0, 0)
 	local headAngleLerp = Angle(0, 90, 0)
 	function PLUGIN:CalcView(ply, origin, angles, fov)
-        if ( ply.ixInIntro ) then
+        if ( ply.ixIntroBool ) then
 			return false
 		end
 		
