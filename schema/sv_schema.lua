@@ -66,7 +66,7 @@ function Schema:GiveWeapons(ply, weapons)
 	end
 end
 
-function Schema:SetTeam(ply, factionTable, preferedModel)
+function Schema:SetTeam(ply, factionTable, dontReSpawn)
 	local char = ply:GetCharacter()
 
 	if not (factionTable) then
@@ -78,19 +78,28 @@ function Schema:SetTeam(ply, factionTable, preferedModel)
 	end
 	
 	char:SetFaction(factionTable.index)
-	ply:Spawn()
+
+	if not ( dontReSpawn ) then
+		ply:Spawn()
+	end
+
 	ply:StripWeapons()
 	ply:ResetBodygroups()
-	char:SetModel(preferedModel or table.Random(factionTable.models))
-	ply:SetModel(preferedModel or table.Random(factionTable.models))
+
+	if not ( factionTable.index == FACTION_CITIZEN or factionTable.index == FACTION_CWU ) then
+		char:SetModel(table.Random(factionTable.models))
+		ply:SetModel(table.Random(factionTable.models))
+	else
+		char:SetName(char:GetData("ixKnownName", "John Doe"))
+		char:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
+		ply:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
+	end
 
 	ply:SetupHands()
 
 	for k, v in pairs(char:GetInventory():GetItems()) do
 		v:Remove()
 	end
-
-	PrintTable(factionTable)
 
 	hook.Run("PlayerLoadout", ply)
 	ply:ScreenFade(SCREENFADE.IN, color_black, 1, 1)

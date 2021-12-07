@@ -13,6 +13,11 @@ function Schema:OnReloaded()
 	end
 end
 
+function Schema:OnCharacterCreated(ply, char)
+	char:GetData("ixKnownName", char:GetName())
+	char:SetData("ixPreferedModel", char:GetModel())
+end
+
 function Schema:PlayerSwitchFlashlight(ply)
 	return true
 end
@@ -187,8 +192,12 @@ function Schema:PlayerLoadout(ply)
 	ply:SetCanZoom(true)
     ply:ConCommand("gmod_mcore_test 1")
 
-	if ( changeNameOriginal[ply:Team()] ) then
-		char:SetName(char:GetData("ixKnownName"))
+	if ( changeNameOriginal[ply:Team()] and char ) then
+		char:SetName(char:GetData("ixKnownName", "John Doe"))
+		char:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
+		ply:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
+		ply:SetBodygroup(2, 1)
+		ply:SetBodygroup(3, 1)
 	end
 end
 
@@ -259,6 +268,8 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 		end
 	end
 
+	Schema:SetTeam(ply, ix.faction.teams["01_citizen"], true)
+
 	if (char:GetMoney() == 0) then return end
 
 	local droppedTokens = ents.Create("ix_money")
@@ -269,6 +280,40 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 	droppedTokens:Spawn()
 
 	char:SetMoney(0)
+end
+
+function Schema:PlayerDeath(ply, inflictor, attacker)
+	if ( attacker:IsNPC() and ( attacker:GetClass() == "npc_headcrab" or attacker:GetClass() == "npc_headcrab_fast" ) ) then
+		local headCrab = ents.Create("npc_zombie")
+		if ( attacker:GetClass() == "npc_headcrab_fast" ) then
+			headCrab = ents.Create("npc_fastzombie")
+		end
+		headCrab:SetPos(ply:GetPos())
+		headCrab:Spawn()
+		attacker:Remove()
+		ply:Notify("A Headcrab has latched on to your body and is now taking control of it!")
+	else
+		local corpse = ents.Create("prop_ragdoll")
+		corpse:SetPos(ply:GetPos())
+		corpse:SetAngles(ply:GetAngles())
+		corpse:SetVelocity(ply:GetVelocity())
+		corpse:SetModel(ply:GetModel())
+		corpse:Spawn()
+
+		timer.Simple(10, function()
+			if ( IsValid(corpse) ) then
+				corpse:Remove()
+			end
+		end)
+	end
+end
+
+function Schema:EntityTakeDamage(target, dmg)
+	if ( target:IsPlayer() ) then
+		if ( dmg:GetAttacker():GetClass() == "npc_headcrab" or dmg:GetAttacker():GetClass() == "npc_headcrab_fast" ) then
+			dmg:ScaleDamage(math.random(3.00,5.00))
+		end
+	end
 end
 
 function Schema:PlayerHurt(ply, attacker, health, damage)
