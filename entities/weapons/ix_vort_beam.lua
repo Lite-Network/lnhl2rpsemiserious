@@ -55,7 +55,13 @@ function SWEP:Initialize()
 	if (SERVER) then
 		self:CreateSounds()
 	end
-end 
+end
+
+function SWEP:Think()
+	if ( self:GetOwner() == FACTION_VORTIGAUNT ) then
+		self:Remove()
+	end
+end
 
 function SWEP:Precache()
 	PrecacheParticleSystem("vortigaunt_beam")
