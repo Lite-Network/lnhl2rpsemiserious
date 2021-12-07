@@ -48,10 +48,14 @@ if (CLIENT) then
                     draw.SimpleText("ADMIN MODE ( OFF DUTY )", "LiteNetworkFont24", 20, 20, PLUGIN.colors["orange"])
                 end
 
-                local y = 60
-                for k, v in pairs(player.GetAll()) do
-                    draw.SimpleText(v:SteamName().." ("..v:Nick()..") - "..team.GetName(v:Team()), "LiteNetworkFont24", 20, y, PLUGIN.colors["white"])
-                    y = y + 20
+                if ( ply:IsSuperAdmin() ) then
+                    local y = 60
+                    for k, v in pairs(player.GetAll()) do
+                        if ( v:IsAdmin() ) then
+                            draw.SimpleText(v:SteamName().." ("..v:Nick()..") - "..team.GetName(v:Team()), "LiteNetworkFont24", 20, y, PLUGIN.colors["white"])
+                            y = y + 20
+                        end
+                    end
                 end
                 
                 for k, v in pairs(player.GetAll()) do
