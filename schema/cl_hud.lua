@@ -409,10 +409,11 @@ local function DrawPlayerInfo(ply)
 			end
 
 			if v:IsValid() and v:Alive() and v:GetCharacter() and not (v:GetMoveType() == MOVETYPE_NOCLIP) then
-				local head = v:LookupAttachment("eyes")
-				head = v:GetAttachment(head)
-				local headPos = Vector(head.Pos.x, head.Pos.y, 74)
-				local HeadPos = headPos:ToScreen()
+				local HeadBone = v:EyePos() + Vector(0, 0, 10)
+				local HeadPos = HeadBone:ToScreen()
+
+				local headpos_x = HeadPos.x
+				local headpos_y = HeadPos.y
 
 				v.alpha = v.alpha or 0
 				v.alpha2 = v.alpha2 or 0
@@ -427,29 +428,29 @@ local function DrawPlayerInfo(ply)
 				local namecolor = Color(teamcol.r, teamcol.g, teamcol.b, v.alpha)
 				local health = v:Health()
 
-				if talking then
-					draw.DrawText("Talking..", "ixMediumFont", HeadPos.x, HeadPos.y - ScreenScale(12), Color(200, 200, 200, v.alpha2), TEXT_ALIGN_CENTER)
+				if ( talking ) then
+					draw.DrawText("Talking..", "ixMediumFont", headpos_x, headpos_y - ScreenScale(12), Color(200, 200, 200, v.alpha2), TEXT_ALIGN_CENTER)
 				end
 
 				if v:GetNetVar("IsAFK") then
-					draw.DrawText("AWAY FROM KEYBOARD (AFK)", "ixMediumFont", HeadPos.x, HeadPos.y - ScreenScale(24), Color(200, 0, 0, v.alpha2), TEXT_ALIGN_CENTER)
+					draw.DrawText("AWAY FROM KEYBOARD (AFK)", "ixMediumFont", headpos_x, headpos_y - ScreenScale(24), Color(200, 0, 0, v.alpha2), TEXT_ALIGN_CENTER)
 				end
 
 				if health >= 1 then
-					draw.DrawText(name, "ixMediumFont", HeadPos.x, HeadPos.y - ScreenScale(4), Color(teamcol.r, teamcol.g, teamcol.b, v.alpha), TEXT_ALIGN_CENTER)
+					draw.DrawText(name, "ixMediumFont", headpos_x, headpos_y - ScreenScale(6), Color(teamcol.r, teamcol.g, teamcol.b, v.alpha), TEXT_ALIGN_CENTER)
 
 					if health >= 100 then
-						draw.DrawText("Healthy", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(0, 255, 0, v.alpha), TEXT_ALIGN_CENTER)
+						draw.DrawText("Healthy", "ixSmallFont", headpos_x, headpos_y, Color(0, 255, 0, v.alpha), TEXT_ALIGN_CENTER)
 					elseif health >= 80 then
-						draw.DrawText("Wounded", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(200, 180, 0, v.alpha), TEXT_ALIGN_CENTER)
+						draw.DrawText("Wounded", "ixSmallFont", headpos_x, headpos_y, Color(200, 180, 0, v.alpha), TEXT_ALIGN_CENTER)
 					elseif health >= 60 then
-						draw.DrawText("Injured", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(210, 150, 0, v.alpha), TEXT_ALIGN_CENTER)
+						draw.DrawText("Injured", "ixSmallFont", headpos_x, headpos_y, Color(210, 150, 0, v.alpha), TEXT_ALIGN_CENTER)
 					elseif health >= 40 then
-						draw.DrawText("Looks Injured", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(230, 100, 0, v.alpha), TEXT_ALIGN_CENTER)
+						draw.DrawText("Looks Injured", "ixSmallFont", headpos_x, headpos_y, Color(230, 100, 0, v.alpha), TEXT_ALIGN_CENTER)
 					elseif health >= 20 then
-						draw.DrawText("Looks Seriously Injured", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(230, 40, 0, v.alpha), TEXT_ALIGN_CENTER)
-					elseif health >= 0 then
-						draw.DrawText("Very close to death", "ixSmallFont", HeadPos.x, HeadPos.y + ScreenScale(4), Color(150, 0, 0, v.alpha - math.random(20, 100)), TEXT_ALIGN_CENTER)
+						draw.DrawText("Looks Seriously Injured", "ixSmallFont", headpos_x, headpos_y, Color(230, 40, 0, v.alpha), TEXT_ALIGN_CENTER)
+					else
+						draw.DrawText("Very close to death", "ixSmallFont", headpos_x, headpos_y, Color(150, 0, 0, v.alpha - math.random(20, 100)), TEXT_ALIGN_CENTER)
 					end
 				end
 
