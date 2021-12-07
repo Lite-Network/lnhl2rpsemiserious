@@ -1,6 +1,6 @@
 local PLUGIN = PLUGIN
 
-PLUGIN.name = "Hunger System"
+PLUGIN.name = "Lite Network Hunger System"
 PLUGIN.author = "Riggs Mackay"
 PLUGIN.description = "Implements hunger."
 
