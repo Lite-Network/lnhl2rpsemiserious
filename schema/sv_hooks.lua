@@ -14,7 +14,7 @@ function Schema:OnReloaded()
 end
 
 function Schema:OnCharacterCreated(ply, char)
-	char:GetData("ixKnownName", char:GetName())
+	char:SetData("ixKnownName", char:GetName())
 	char:SetData("ixPreferedModel", char:GetModel())
 end
 
@@ -32,7 +32,7 @@ function Schema:PlayerFootstep(ply, pos, foot, sound, volume)
 		if ( rand == 7 ) then
 			rand = 8
 		end
-		sound = "npc/footsteps/hardboo_generic" .. rand .. ".wav"
+		sound = "npc/footsteps/hardboot_generic" .. rand .. ".wav"
 	end
 
 	if ply:KeyDown(IN_SPEED) then
@@ -193,7 +193,7 @@ function Schema:PlayerLoadout(ply)
     ply:ConCommand("gmod_mcore_test 1")
 
 	if ( changeNameOriginal[ply:Team()] and char ) then
-		char:SetName(char:GetData("ixKnownName", "John Doe"))
+		char:SetName(char:GetData("ixKnownName", "Not Saved Name, Contact Staff"))
 		char:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
 		ply:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
 		ply:SetBodygroup(2, 1)
