@@ -1,18 +1,26 @@
+function PLUGIN:SetupPlayerVisibility( client, viewEnt )
+	if ( !client.ixIntroBool ) then
+		return
+	end
+
+	if ( !client.ixIntroPosition ) then
+		return
+	end
+
+	AddOriginToPVS( client.ixIntroPosition )
+end
+
 util.AddNetworkString("ixIntroStarted")
 net.Receive("ixIntroStarted", function(len, ply)
     local position = net.ReadVector()
 
     ply.ixIntroBool = true
+	ply.ixIntroPosition = position
 
     if not ( ply:Alive() ) then
         ply:Spawn()
         hook.Run("PlayerLoadout", ply)
     end
-
-    ply:SelectWeapon("ix_keys")
-    ply:SetPos(position)
-    ply:SetGravity(0.1)
-    ply:ConCommand("stopsound")
 
     ply:ScreenFade(SCREENFADE.IN, color_black, 1, 2)
 end)
@@ -22,42 +30,21 @@ net.Receive("ixIntroUpdate", function(len, ply)
     local position = net.ReadVector()
 
     ply.ixIntroBool = true
-    
-    ply:SelectWeapon("ix_keys")
-    ply:SetPos(position)
-    ply:SetGravity(0.1)
+	ply.ixIntroPosition = position
 end)
 
 util.AddNetworkString("ixIntroComplete")
 net.Receive("ixIntroComplete", function(len, ply)
     ply.ixIntroBool = false
-
-    ply:SetNoDraw(false)
-    ply:Freeze(false)
-    ply:GodDisable()
-
-    ply:Spawn()
-    hook.Run("PlayerLoadout", ply)
-    ply:SelectWeapon("ix_hands")
-    ply:SetGravity(1)
+	ply.ixIntroPosition = nil
 
     ply:ScreenFade(SCREENFADE.IN, color_black, 1, 2)
 end)
-
-function PLUGIN:PlayerTick(ply)
-    if ( ply.ixIntroBool == true ) then
-        ply:SetNoDraw(true)
-        ply:Freeze(true)
-        ply:GodEnable()
-        ply:SetGravity(0.1)
-    end
-end
 
 util.AddNetworkString("ixIntroStart")
 function PLUGIN:PlayerLoadedCharacter(ply, char, oldChar)
     if not ( ply:GetPData("ixIntroHistory") ) then
         ply.ixIntroBool = true
-        ply:SetGravity(0.1)
 
         net.Start("ixIntroStart")
         net.Send(ply)
