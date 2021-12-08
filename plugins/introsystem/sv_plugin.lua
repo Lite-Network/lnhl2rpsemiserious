@@ -13,6 +13,8 @@ net.Receive("ixIntroStarted", function(len, ply)
     ply:SetPos(position)
     ply:SetGravity(0.1)
     ply:ConCommand("stopsound")
+
+    ply:ScreenFade(SCREENFADE.IN, color_black, 1, 2)
 end)
 
 util.AddNetworkString("ixIntroUpdate")
@@ -40,7 +42,6 @@ net.Receive("ixIntroComplete", function(len, ply)
     ply:SetGravity(1)
 
     ply:ScreenFade(SCREENFADE.IN, color_black, 1, 2)
-    ply:ConCommand("stopsound")
 end)
 
 function PLUGIN:PlayerTick(ply)
@@ -54,9 +55,13 @@ end
 
 util.AddNetworkString("ixIntroStart")
 function PLUGIN:PlayerLoadedCharacter(ply, char, oldChar)
-    ply.ixIntroBool = true
-    ply:SetGravity(0.1)
+    if not ( ply:GetPData("ixIntroHistory") ) then
+        ply.ixIntroBool = true
+        ply:SetGravity(0.1)
 
-    net.Start("ixIntroStart")
-    net.Send(ply)
+        net.Start("ixIntroStart")
+        net.Send(ply)
+
+        ply:SetPData("ixIntroHistory", true)
+    end
 end
