@@ -2,22 +2,37 @@ local PLUGIN = PLUGIN
 
 PLUGIN.name = "Lite Network Intro System"
 PLUGIN.author = "Riggs Mackay"
-PLUGIN.description = "A Intro that loads after creating your character."
+PLUGIN.description = "An Intro system that starts once you load your character for the first time."
 
 if ( CLIENT ) then
-    PLUGIN.IntroMusic = "LiteNetwork/hl2rp/music/trailer.ogg"
-    PLUGIN.IntroInformation = {
-        [1] = {{Vector(-891, -1999, 228), Angle(9, -164, 0)}, {Vector(566, -2299, 71), Angle(-0, 174, 0)}, "Welcome to Lite Network! We are a Half-Life 2 Semi-Serious, Roleplay Community."},
-        [2] = {{Vector(-3507, 2042, 433), Angle(-6, 131, 0)}, {Vector(-7036, 2024, 449), Angle(-4, 52, 0)}, "You earn 5 XP every 10 Minutes, Which will be used for Factions and ranks within."},
-        [3] = {{Vector(-694, 889, 434), Angle(4, -0, 0)}, {Vector(2092, 917, 334), Angle(-9, -18, 0)}, "Roleplay opportunities are present on many factions. Combine, Citizen and Resistance. Which can immerse you within the Half life universe."},
-        [4] = {{Vector(-783, -203, 421), Angle(0, 5, 0)}, {Vector(-101, -194, 471), Angle(8, 11, 0)}, "Every hour, you gain the ability to retrieve your ration in one of these stations. Where of course you get fed by the Benefactors."},
-        [5] = {{Vector(3221, 1332, 403), Angle(7, 61, 0)}, {Vector(3965, 1341, 400), Angle(5, 123, 0)}, "You may open up bars, stores, factories.. whatever you like as a Civil Worker's Union. Due to their loyalty to the Universal Union."},
-        [6] = {{Vector(-5140, 4485, 803), Angle(17, 119, 0)}, {Vector(-5902, 4541, 810), Angle(13, 44, 0)}, "The Benefactors, called the Universal Union which are also referred to as; 'The Combine' have taken over earth in a matter of only seven hours!"},
-        [7] = {{Vector(-6191, 823, 429), Angle(-3, -15, 0)}, {Vector(-5589, 503, 604), Angle(-42, 65, 0)}, "You may resist and seek shelter in the sewers, try to build a revolution, Take back what humanity has lost. But it will certainly be no easy task."},
-        [8] = {{Vector(-9141, 2934, 403), Angle(0, 14, 0)}, {Vector(-8060, 2942, 437), Angle(-22, 35, 0)}, "If you resist against the Benefactors, you may end up stirring the hornet's nest and face the full might of the Combine. So watch yourself."},
-        [9] = {{Vector(3519, -3009, 581), Angle(8, 162, 0)}, {Vector(-336, -2108, 288), Angle(8, -178, 0)}, "It is up to you to make decisions that depend on your characters life. What they do, What they're like. All up to you."},
-        [10] = {{Vector(-5184, 3410, 426), Angle(-6, -75, 0)}, {Vector(-5835, 3180, 949), Angle(-30, -75, 0)}, "Welcome to Lite Network. We hope you enjoy your stay and have a good time!"},
-    }
+    PLUGIN.IntroMusic = "LiteNetwork/hl2rp/music/teaser.ogg"
+    if ( game.GetMap("rp_city17_district47_litenetwork") ) then
+        PLUGIN.IntroInformation = {
+            [1] = {{Vector(-891, -1999, 228), Angle(9, -164, 0)}, {Vector(566, -2299, 71), Angle(-0, 174, 0)}, "Welcome to Lite Network! We are a Half-Life 2 Semi-Serious, Roleplay Community."},
+            [2] = {{Vector(-3507, 2042, 433), Angle(-6, 131, 0)}, {Vector(-7036, 2024, 449), Angle(-4, 52, 0)}, "You earn 5 XP every 10 Minutes, Which will be used for Factions and ranks within."},
+            [3] = {{Vector(-694, 889, 434), Angle(4, -0, 0)}, {Vector(2092, 917, 334), Angle(-9, -18, 0)}, "Roleplay opportunities are present on many factions. Combine, Citizen and Resistance. Which can immerse you within the Half life universe."},
+            [4] = {{Vector(-783, -203, 421), Angle(0, 5, 0)}, {Vector(-101, -194, 471), Angle(8, 11, 0)}, "Every hour, you gain the ability to retrieve your ration in one of these stations. Where of course you get fed by the Benefactors."},
+            [5] = {{Vector(3221, 1332, 403), Angle(7, 61, 0)}, {Vector(3965, 1341, 400), Angle(5, 123, 0)}, "You may open up bars, stores, factories.. whatever you like as a Civil Worker's Union. Due to their loyalty to the Universal Union."},
+            [6] = {{Vector(-5140, 4485, 803), Angle(17, 119, 0)}, {Vector(-5902, 4541, 810), Angle(13, 44, 0)}, "The Benefactors, called the Universal Union which are also referred to as; 'The Combine' have taken over earth in a matter of only seven hours!"},
+            [7] = {{Vector(-6191, 823, 429), Angle(-3, -15, 0)}, {Vector(-5589, 503, 604), Angle(-42, 65, 0)}, "You may resist and seek shelter in the sewers, try to build a revolution, Take back what humanity has lost. But it will certainly be no easy task."},
+            [8] = {{Vector(-9141, 2934, 403), Angle(0, 14, 0)}, {Vector(-8060, 2942, 437), Angle(-22, 35, 0)}, "If you resist against the Benefactors, you may end up stirring the hornet's nest and face the full might of the Combine. So watch yourself."},
+            [9] = {{Vector(3519, -3009, 581), Angle(8, 162, 0)}, {Vector(-336, -2108, 288), Angle(8, -178, 0)}, "It is up to you to make decisions that depend on your characters life. What they do, What they're like. All up to you."},
+            [10] = {{Vector(-5184, 3410, 426), Angle(-6, -75, 0)}, {Vector(-5835, 3180, 949), Angle(-30, -75, 0)}, "Welcome to Lite Network. We hope you enjoy your stay and have a good time!"},
+        }
+    elseif ( game.GetMap("rp_city17__litenetwork") ) then
+        PLUGIN.IntroInformation = {
+            [1] = {{Vector(-891, -1999, 228), Angle(9, -164, 0)}, {Vector(566, -2299, 71), Angle(-0, 174, 0)}, "Welcome to Lite Network! We are a Half-Life 2 Semi-Serious, Roleplay Community."},
+            [2] = {{Vector(-3507, 2042, 433), Angle(-6, 131, 0)}, {Vector(-7036, 2024, 449), Angle(-4, 52, 0)}, "You earn 5 XP every 10 Minutes, Which will be used for Factions and ranks within."},
+            [3] = {{Vector(-694, 889, 434), Angle(4, -0, 0)}, {Vector(2092, 917, 334), Angle(-9, -18, 0)}, "Roleplay opportunities are present on many factions. Combine, Citizen and Resistance. Which can immerse you within the Half life universe."},
+            [4] = {{Vector(-783, -203, 421), Angle(0, 5, 0)}, {Vector(-101, -194, 471), Angle(8, 11, 0)}, "Every hour, you gain the ability to retrieve your ration in one of these stations. Where of course you get fed by the Benefactors."},
+            [5] = {{Vector(3221, 1332, 403), Angle(7, 61, 0)}, {Vector(3965, 1341, 400), Angle(5, 123, 0)}, "You may open up bars, stores, factories.. whatever you like as a Civil Worker's Union. Due to their loyalty to the Universal Union."},
+            [6] = {{Vector(-5140, 4485, 803), Angle(17, 119, 0)}, {Vector(-5902, 4541, 810), Angle(13, 44, 0)}, "The Benefactors, called the Universal Union which are also referred to as; 'The Combine' have taken over earth in a matter of only seven hours!"},
+            [7] = {{Vector(-6191, 823, 429), Angle(-3, -15, 0)}, {Vector(-5589, 503, 604), Angle(-42, 65, 0)}, "You may resist and seek shelter in the sewers, try to build a revolution, Take back what humanity has lost. But it will certainly be no easy task."},
+            [8] = {{Vector(-9141, 2934, 403), Angle(0, 14, 0)}, {Vector(-8060, 2942, 437), Angle(-22, 35, 0)}, "If you resist against the Benefactors, you may end up stirring the hornet's nest and face the full might of the Combine. So watch yourself."},
+            [9] = {{Vector(3519, -3009, 581), Angle(8, 162, 0)}, {Vector(-336, -2108, 288), Angle(8, -178, 0)}, "It is up to you to make decisions that depend on your characters life. What they do, What they're like. All up to you."},
+            [10] = {{Vector(-5184, 3410, 426), Angle(-6, -75, 0)}, {Vector(-5835, 3180, 949), Angle(-30, -75, 0)}, "Welcome to Lite Network. We hope you enjoy your stay and have a good time!"},
+        }
+    end
 
     local function ixIntroStart(ply)
         ply.ixIntroBool = true
@@ -155,6 +170,8 @@ if ( CLIENT ) then
 
         net.Start("ixIntroComplete")
         net.SendToServer()
+
+        LocalPlayer():ConCommand("play music/hl2_song2.mp3")
     end)
 end
 
