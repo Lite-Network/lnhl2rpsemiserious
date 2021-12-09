@@ -18,6 +18,12 @@ ix.currency.singular = "token"
 ix.currency.plural = "tokens"
 ix.currency.model = "models/props/cs_assault/Money.mdl"
 
+ix.vendingItems = {
+	{"REGULAR", "water", 15},
+	{"SPARKLING", "water_sparkling", 25},
+	{"SPECIAL", "water_special", 35}
+}
+
 --[[---------------------------------------------------------------------------
 	Helix Base Settings
 ---------------------------------------------------------------------------]]--

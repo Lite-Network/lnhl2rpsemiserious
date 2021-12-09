@@ -177,7 +177,7 @@ else
 			local halfHeight = height / 2
 	
 			for i = 1, 8 do
-				local itemInfo = Schema.VendingItems[i]
+				local itemInfo = ix.vendingItems[i]
 				local x = 0
 				local y = (i - 1) * 34
 	
