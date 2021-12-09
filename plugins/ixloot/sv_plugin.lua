@@ -1,7 +1,7 @@
 local PLUGIN = PLUGIN
 
 function PLUGIN:SearchLootContainer(ent, ply)
-    if not (ply:IsCombine() or ply:IsCA() or ply:IsDispatch() or ply:IsZombie()) then
+    if not (ply:IsCombine() or ply:IsCA() or ply:IsDispatch()) then
         if not ent.containerAlreadyUsed or ent.containerAlreadyUsed <= CurTime() then
             local randomLootItem = table.Random(PLUGIN.randomLoot.common)
             local randomChance = math.random(1,20)

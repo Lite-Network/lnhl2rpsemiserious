@@ -32,7 +32,7 @@ ix.util.Include("sv_plugin.lua")
 if (CLIENT) then
 	function PLUGIN:PreDrawHalos()
 		local ply = LocalPlayer()
-		if not (ply:IsCombine() or ply:IsCA()) then
+		if not (ply:IsCombine() or ply:IsCA() or ply:IsDispatch()) then
 			for k, v in pairs(ents.GetAll()) do
 				if v and v:GetClass():find("ix_loot") and (EyePos():Distance(v:GetPos()) < 512) then
 					halo.Add({v}, ix.config.Get("color"), 2, 2, 1)
