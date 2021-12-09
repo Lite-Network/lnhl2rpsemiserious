@@ -54,8 +54,8 @@ ix.whitelists.OTA.NoRanks = {
 }
 ix.whitelists.OTA.Ranks = {
 	["LDR"] = {
-		"STEAM_0:1:104896936", -- cor
-		"STEAM_0:1:506629560", -- Phil Leotardo
+		"STEAM_0:1:104896936", -- Phil Leotardo
+		"STEAM_0:1:506629560", -- cor
 		"STEAM_0:0:10223064", -- xavier
 	},
 }
@@ -66,7 +66,7 @@ function Schema:GiveWeapons(ply, weapons)
 	end
 end
 
-function Schema:SetTeam(ply, factionTable, dontReSpawn)
+function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn)
 	local char = ply:GetCharacter()
 
 	if not (factionTable) then
@@ -86,13 +86,11 @@ function Schema:SetTeam(ply, factionTable, dontReSpawn)
 	ply:StripWeapons()
 	ply:ResetBodygroups()
 
-	if not ( factionTable.index == FACTION_CITIZEN or factionTable.index == FACTION_CWU ) then
-		char:SetModel(table.Random(factionTable.models))
-		ply:SetModel(table.Random(factionTable.models))
-	else
+	if ( factionTable.index == FACTION_CITIZEN or factionTable.index == FACTION_CWU ) then
 		char:SetName(char:GetData("ixKnownName", "John Doe"))
 		char:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
-		ply:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
+	else
+		char:SetModel(preferedModel or table.Random(factionTable.models))
 	end
 
 	ply:SetupHands()
