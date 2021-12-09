@@ -38,6 +38,7 @@ FACTION.pay = 0
 FACTION.defaultClass = nil
 FACTION.adminOnly = false
 FACTION.donatorOnly = false
+FACTION.noModelSelection = true
 FACTION.requiredXP = 30
 FACTION.command = "ix_faction_become_cwu"
 FACTION.modelWhitelist = "willardnetworks/citizens"
