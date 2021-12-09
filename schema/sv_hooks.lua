@@ -124,8 +124,6 @@ function Schema:Move(ply, mv)
 	ply:SetDuckSpeed(0.4)
 	ply:SetUnDuckSpeed(0.4)
 	ply:SetSlowWalkSpeed(70)
-	ply:SetWalkSpeed(90 - walkPenalty)
-	ply:SetRunSpeed(180 - runPenalty)
 	ply:SetCrouchedWalkSpeed(0.7)
 
 	if (ply:KeyDown(IN_FORWARD) and ply:KeyDown(IN_MOVELEFT)) then
@@ -144,6 +142,33 @@ function Schema:Move(ply, mv)
 		ply:SetWalkSpeed(60 - walkPenalty)
 		ply:SetRunSpeed(130 + runBoost - runPenalty)
 	end
+
+	local target = ply.ixDraggedTarget
+	if IsValid(target) and ( ply == target.ixDraggedBy ) then
+		local DraggerPos = ply:GetPos()
+		local DraggedPos = target:GetPos()
+		local Distance = DraggerPos:Distance(DraggedPos)
+
+		local DragPosNormal = DraggerPos:GetNormal()
+		local Difx = math.abs(DragPosNormal.x)
+		local Dify = math.abs(DragPosNormal.y)	
+
+		local Speed = (Difx + Dify) * 0.1
+
+		local ang = mv:GetMoveAngles()
+		local pos = mv:GetOrigin()
+		local vel = mv:GetVelocity()
+
+		vel.x = vel.x * Speed
+		vel.y = vel.y * Speed
+		vel.z = 15
+
+		pos = pos + vel + ang:Right() + ang:Forward() + ang:Up()
+
+		if ( vel ) then
+			target:SetVelocity(vel)
+		end
+	end
 end
 
 local allowedPlayersContainers = {
@@ -156,6 +181,32 @@ function Schema:CanPlayerSpawnContainer(ply)
 		return true
 	else
 		return false
+	end
+end
+
+function Schema:PlayerUse(ply, entity)
+	if (!ply:IsRestricted() and entity:IsPlayer() and entity:IsRestricted() and !entity:GetNetVar("untying")) then
+		entity:SetAction("You are being untied by "..ply:Nick(), 3)
+		entity:SetNetVar("untying", true)
+
+		ply:SetAction("You are untying "..entity:Nick(), 3)
+
+		ply:DoStaredAction(entity, function()
+			ply.ixDraggedTarget = nil
+			entity.ixDraggedBy = nil
+			entity:SetRestricted(false)
+			entity:SetNetVar("untying")
+			entity:Freeze(false) 
+		end, 3, function()
+			if (IsValid(entity)) then
+				entity:SetNetVar("untying")
+				entity:SetAction()
+			end
+
+			if (IsValid(ply)) then
+				ply:SetAction()
+			end
+		end)
 	end
 end
 
@@ -196,6 +247,8 @@ function Schema:PlayerLoadout(ply)
 		ply:SetBodygroup(2, 1)
 		ply:SetBodygroup(3, 1)
 	end
+
+	ply:SetNetVar("restricted")
 end
 
 function Schema:PlayerLoadedCharacter(ply, char, oldChar)
@@ -288,7 +341,7 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 		end
 	end
 
-	Schema:SetTeam(ply, ix.faction.teams["01_citizen"], true)
+	Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, true)
 
 	if (char:GetMoney() == 0) then return end
 

@@ -29,3 +29,4 @@ SWEP.Primary.HitDelay = 0.1
 SWEP.Primary.Delay = 0.4
 SWEP.Primary.Range = 96
 SWEP.Primary.StunTime = 0.1
+SWEP.Primary.Automatic = true

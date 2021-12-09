@@ -87,6 +87,10 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn)
 	ply:ResetBodygroups()
 
 	if ( factionTable.index == FACTION_CITIZEN or factionTable.index == FACTION_CWU ) then
+		if not (char) then
+			return
+		end
+
 		char:SetName(char:GetData("ixKnownName", "John Doe"))
 		char:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
 	else
@@ -110,17 +114,19 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn)
 end
 
 for k, v in pairs(ix.faction.teams) do
-	concommand.Add(v.command, function(ply, cmd, args)
-		if (args[1] == nil) then
-			Schema:SetTeam(ply, v, nil)
-		else
-			if tostring(args[1]):find(v.modelWhitelist) then
-				Schema:SetTeam(ply, v, args[1] or nil)
+	if not ( v.command == nil ) then
+		concommand.Add(v.command, function(ply, cmd, args)
+			if (args[1] == nil) then
+				Schema:SetTeam(ply, v, nil)
 			else
-				ply:Notify("You specified a invalid model!")
+				if tostring(args[1]):find(v.modelWhitelist) then
+					Schema:SetTeam(ply, v, args[1] or nil)
+				else
+					ply:Notify("You specified a invalid model!")
+				end
 			end
-		end
-	end)
+		end)
+	end
 end
 
 function Schema:PlayEventSound(sound)

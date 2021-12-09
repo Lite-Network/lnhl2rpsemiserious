@@ -46,7 +46,7 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 		local RankInfo = ix.ranks.ota[RankID]
 		local CommandingName = "OTA:C17-"..DivisionInfo.name.."-"..RandomNumbers
 		local StandardName = "OTA:C17-"..DivisionInfo.name.."-"..RankInfo.name.."-"..RandomNumbers
-		local BasicWeapons = {"weapon_physgun", "gmod_tool", "ix_hands", "ix_keys", "weapon_frag"}
+		local BasicWeapons = {"weapon_physgun", "gmod_tool", "ix_hands", "ix_keys"}
 
 		if not (DivisionInfo.xp == nil) then
 			if not (tonumber(ply:GetXP()) >= DivisionInfo.xp) then

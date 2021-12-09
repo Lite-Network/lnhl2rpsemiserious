@@ -25,14 +25,14 @@ net.Receive("ixRadio", function(_)
 	frame:AlphaTo(255, 0.4, 0)
     frame.Paint = function( self, w, h )
         ix.util.DrawBlur(self, 4)
-        surface.SetDrawColor(ix.option.Get('color').r, ix.option.Get('color').g, ix.option.Get('color').b, 155)
+        surface.SetDrawColor(ColorAlpha(ix.config.Get("color"), 155))
         surface.DrawOutlinedRect(0, 0, w, h)
     end
 
     local scrollPanel = vgui.Create( "DScrollPanel", frame )
     scrollPanel:Dock( FILL )
 
-    for key, value in pairs(PLUGIN.songs) do -- will be reworked soon
+    for key, value in SortedPairs(PLUGIN.songs) do -- will be reworked soon
 	local songpath = key
         key = vgui.Create('DButton', scrollPanel)
         key:SetSize(ScrW()*.225, ScrH()*.05)
@@ -63,7 +63,7 @@ net.Receive("ixRadio", function(_)
             end
 
             draw.RoundedBox(0, 0, 0, w, h, self.Color)
-            surface.SetDrawColor(5, 5, 5, 155)
+            surface.SetDrawColor(ColorAlpha(ix.config.Get("color"), 155))
             surface.DrawOutlinedRect(0, 0, w, h)
         end
     end

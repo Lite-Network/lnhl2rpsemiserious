@@ -16,9 +16,10 @@ ix.command.Add("Tie", {
 
 		if (IsValid(target) and target:IsPlayer() and target:GetCharacter()
 		and !target:GetNetVar("tying") and !target:IsRestricted()) then
-			ply:SetAction("@tying", 3)
+			ply:SetAction("You are tying "..target:Nick(), 3)
 
 			ply:DoStaredAction(target, function()
+				if ( SERVER ) then target:Freeze(true) end
 				target:SetRestricted(true)
 				target:SetNetVar("tying")
 				target:NotifyLocalized("fTiedUp")
@@ -29,7 +30,7 @@ ix.command.Add("Tie", {
 					Schema:AddCombineDisplayMessage("Downloading lost radio contact information...")
 					Schema:AddCombineDisplayMessage("WARNING! Radio contact lost for unit at "..location.."...", Color(255, 0, 0, 255), true)
 				end
-			end, 5, function()
+			end, 3, function()
 				ply:SetAction()
 
 				target:SetAction()
@@ -37,7 +38,10 @@ ix.command.Add("Tie", {
 			end)
 
 			target:SetNetVar("tying", true)
-			target:SetAction("@fBeingTied", 5)
+			target:SetAction("You are being tied by "..ply:Nick(), 3)
+
+			ply.ixDraggedTarget = target
+			target.ixDraggedBy = ply
 		else
 			ply:NotifyLocalized("plyNotValid")
 		end

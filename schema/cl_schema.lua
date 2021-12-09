@@ -23,7 +23,7 @@ end
 local LiteNetworkLogo = ix.util.GetMaterial("litenetwork/logo_white.png")
 local LiteNetworkLogoText = ix.util.GetMaterial("litenetwork/logotext_white.png")
 function ix.gui.GlowingLogo(x, y, w, h, text)
-    if not LogoColor then LogoColor = Color(200, 75, 25) end
+    if not LogoColor then LogoColor = ix.config.Get("color") end
 
     local r, g, b, a = LogoColor:Unpack()
 

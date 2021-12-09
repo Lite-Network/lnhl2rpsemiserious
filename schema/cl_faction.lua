@@ -111,7 +111,7 @@ function Schema:CreateMenuButtons(tabs)
 		end
 
         for k, v in SortedPairs(ix.faction.teams) do
-            if ( v.dontShowInMenu != true ) then
+            if not ( v.command == nil ) then
                 factionButton = factionButtonsPanel:Add("ixMenuButton")
                 factionButton:Dock(TOP)
                 factionButton:SetSize(0, 50)
@@ -132,6 +132,22 @@ function Schema:CreateMenuButtons(tabs)
                         PopulateModelSelection(v.models, v)
                     else
                         if ( factionModelsPanel ) then factionModelsPanel:Remove() end
+                    end
+                end
+
+                if not ( v.requiredXP == nil ) then
+                    factionXPRequirement = factionButton:Add("ixLabel")
+                    factionXPRequirement:Dock(RIGHT)
+                    factionXPRequirement:DockMargin(0, 0, 20, 0)
+                    factionXPRequirement:SetText("XP: "..tostring(v.requiredXP) or "")
+                    factionXPRequirement:SetFont("LiteNetworkFont24")
+                    factionXPRequirement:SetContentAlignment(6)
+                    factionXPRequirement:SizeToContents()
+    
+                    if not (tonumber(LocalPlayer():GetXP()) < v.requiredXP) then
+                        factionXPRequirement:SetTextColor(Color(20, 200, 20))
+                    else
+                        factionXPRequirement:SetTextColor(Color(200, 20, 20))
                     end
                 end
             end
