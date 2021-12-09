@@ -32,6 +32,30 @@ function Schema:CanTool(ply, trace, toolname, tool, button)
 	end
 end
 
+if ( SERVER ) then
+	function Schema:CanPlayerUseBusiness(ply, uniqueID)
+		if (ply:IsCWU()) then
+			local itemTable = ix.item.list[uniqueID]
+
+			if (itemTable) then
+				if (ply.ixCWUClass == 2) and (itemTable.category == "Consumeables") then
+					ply.ixbusinessAllow = true
+					return true
+				elseif (ply.ixCWUClass == 3) and (itemTable.category == "Medical Items") then
+					ply.ixbusinessAllow = true
+					return true
+				else
+					ply.ixbusinessAllow = false
+					return false
+				end
+			end
+		else
+			ply.ixbusinessAllow = false
+			return false
+		end
+	end
+end
+
 function Schema:OnPlayerHitGround(ply)
     local vel = ply:GetVelocity()
     ply:SetVelocity( Vector( - ( vel.x * 0.1 ), - ( vel.y * 0.1 ), 0) )

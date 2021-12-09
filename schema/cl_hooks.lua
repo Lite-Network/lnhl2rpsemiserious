@@ -13,6 +13,22 @@ function Schema:OnReloaded()
 	end
 end
 
+function Schema:BuildBusinessMenu()
+	if not LocalPlayer():IsCWU() then return false end
+
+	local bHasItems = false
+
+	for k, _ in pairs(ix.item.list) do
+		if (hook.Run("CanPlayerUseBusiness", LocalPlayer(), k) != false) then
+			bHasItems = true
+
+			break
+		end
+	end
+
+	return bHasItems
+end
+
 function Schema:MessageReceived()
 	if (system.IsWindows() and !system.HasFocus()) then
 		system.FlashWindow()

@@ -87,6 +87,7 @@ concommand.Add("ix_selector_cwu", function(ply, cmd, args)
 
 		ply:SetupHands()
 
+		ply.ixCWUClass = JobInfo.id
 		ply.cwuSelectionCoolDown = CurTime() + 10
 	else
 		ply:Notify("You need to wait before you can your Job again.")
