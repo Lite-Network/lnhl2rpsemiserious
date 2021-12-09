@@ -82,10 +82,14 @@ function PANEL:Init()
 	self.rankBox:Dock(TOP)
 
 	for k, v in pairs(ix.ranks.ota) do
-		if (xp >= v.xp) then
-			self.rankBox:AddChoice(ix.ranks.ota[k].name.." - "..ix.ranks.ota[k].description.." - "..ix.ranks.ota[k].xp.." XP", k, false, "icon16/tick.png")
+		if not (v.xp == nil) then
+			if (xp >= v.xp) then
+				self.rankBox:AddChoice(ix.ranks.ota[k].name.." - "..ix.ranks.ota[k].description.." - "..ix.ranks.ota[k].xp.." XP", k, false, "icon16/tick.png")
+			else
+				self.rankBox:AddChoice(ix.ranks.ota[k].name.." - "..ix.ranks.ota[k].description.." - "..ix.ranks.ota[k].xp.." XP", k, false, "icon16/cross.png")
+			end
 		else
-			self.rankBox:AddChoice(ix.ranks.ota[k].name.." - "..ix.ranks.ota[k].description.." - "..ix.ranks.ota[k].xp.." XP", k, false, "icon16/cross.png")
+			self.rankBox:AddChoice(ix.ranks.ota[k].name.." - "..ix.ranks.ota[k].description.." - WHITELISTED", k, false, "icon16/lock.png")
 		end
 	end
 
