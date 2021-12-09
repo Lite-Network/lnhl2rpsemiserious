@@ -193,9 +193,6 @@ function Schema:PlayerLoadout(ply)
     ply:ConCommand("gmod_mcore_test 1")
 
 	if ( changeNameOriginal[ply:Team()] and char ) then
-		char:SetName(char:GetData("ixKnownName", "Not Saved Name, Contact Staff"))
-		char:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
-		ply:SetModel(char:GetData("ixPreferedModel", nil) or table.Random(ix.faction.teams[FACTION_CITIZEN].models) or "models/error.mdl")
 		ply:SetBodygroup(2, 1)
 		ply:SetBodygroup(3, 1)
 	end
@@ -204,6 +201,28 @@ end
 function Schema:PlayerLoadedCharacter(ply, char, oldChar)
 	Schema:SetTeam(ply, ix.faction.teams["01_citizen"])
 	hook.Run("PlayerSpawn", ply)
+end
+
+function Schema:CanPlayerUseBusiness(ply, uniqueID)
+	if (ply:IsCWU()) then
+		local itemTable = ix.item.list[uniqueID]
+
+		if (itemTable) then
+			if (ply.ixCWUClass == 2) and (itemTable.category == "Consumeables") then
+				ply.ixbusinessAllow = true
+				return true
+			elseif (ply.ixCWUClass == 3) and (itemTable.category == "Medical Items") then
+				ply.ixbusinessAllow = true
+				return true
+			else
+				ply.ixbusinessAllow = false
+				return false
+			end
+		end
+	else
+		ply.ixbusinessAllow = false
+		return false
+	end
 end
 
 local dropAbleWeapons = {
@@ -225,6 +244,7 @@ local dropAbleWeapons = {
 function Schema:DoPlayerDeath(ply, inflicter, attacker)
 	ply.deathPos = ply:GetPos()
 	ply.deathAngles = ply:GetAngles()
+	ply.ixCWUClass = 0
 
 	if ply:IsBot() then
 		return false
@@ -420,5 +440,65 @@ function Schema:GetPlayerDeathSound(ply)
 		end
 
 		return sound
+	end
+end
+
+function Schema:PlayerMessageSend(speaker, chatType, text, anonymous, receivers, rawText)
+	if (chatType == "ic" or chatType == "w" or chatType == "y" or chatType == "commandradio" or chatType == "radio" or chatType == "dispatch" or chatType == "dispatchradio") then
+		local class = self.voices.GetClass(speaker)
+
+		for k, v in ipairs(class) do
+			local info = self.voices.Get(v, rawText)
+
+			if v:find("citizen") and not (speaker:IsDonator() or speaker:IsAdmin()) then
+				return text
+			end
+
+			if (info) then
+				local volume = 80
+
+				if (chatType == "w") then
+					volume = 60
+				elseif (chatType == "y") then
+					volume = 150
+				end
+
+				if (info.sound) then
+					if (info.global) and (chatType == "dispatch") then
+						netstream.Start(nil, "PlaySound", info.sound)
+					else
+						local sounds = {info.sound}
+
+						if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio")) then
+							for k2, v2 in pairs(player.GetAll()) do
+								if v2:IsCombine() then
+									ix.util.EmitQueuedSounds(v, sounds, nil, nil, 40)
+								end
+							end
+						else
+							ix.util.EmitQueuedSounds(speaker, sounds, nil, nil, volume)
+						end
+					end
+				end
+
+				if (speaker:IsCombine()) then
+					if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio")) then
+						return info.text
+					else
+						return "<:: "..info.text.." ::>"
+					end
+				else
+					return info.text
+				end
+			end
+		end
+
+		if (speaker:IsCombine()) then
+			if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio")) then
+				return text
+			else
+				return "<:: "..text.." ::>"
+			end
+		end
 	end
 end
