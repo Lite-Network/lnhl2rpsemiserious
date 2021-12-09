@@ -10,6 +10,9 @@ function Schema:CreateMenuButtons(tabs)
         factionDescriptionPanel.Paint = function(self, w, h)
             surface.SetDrawColor(Color(30, 30, 30, 100))
             surface.DrawRect(0, 0, w, h)
+
+            surface.SetDrawColor(ix.config.Get("color"))
+            surface.DrawOutlinedRect(0, 0, w, h, 1)
         end
 
         factionButtonsPanel = container:Add("DPanel")
@@ -18,6 +21,9 @@ function Schema:CreateMenuButtons(tabs)
         factionButtonsPanel.Paint = function(self, w, h)
             surface.SetDrawColor(Color(30, 30, 30, 100))
             surface.DrawRect(0, 0, w, h)
+
+            surface.SetDrawColor(ix.config.Get("color"))
+            surface.DrawOutlinedRect(0, 0, w, h, 1)
         end
 
         factionBecomeButton = factionButtonsPanel:Add("ixMenuButton")
@@ -30,7 +36,68 @@ function Schema:CreateMenuButtons(tabs)
             if (selectedFaction == false) then
                 ix.util.Notify("Select a Faction first!")
             else
-                RunConsoleCommand(selectedFactionTable.command)
+                RunConsoleCommand(selectedFactionTable.command, factionModel:GetModel())
+            end
+        end
+
+        factionModel = container:Add("ixModelPanel")
+        factionModel:SetModel(LocalPlayer():GetModel(), 0)
+        factionModel:Dock(LEFT)
+        factionModel:SetWide(container:GetWide() / 3)
+        factionModel:SetFOV(ScreenScale(19))
+
+		local function PopulateModelSelection(modelSelectionTable, teamTable)
+			if ( factionModelsPanel ) then factionModelsPanel:Remove() end
+
+            factionModelsPanel = container:Add("DScrollPanel")
+            factionModelsPanel:Dock(LEFT)
+            factionModelsPanel:SetSize(container:GetWide() / 3, 0)
+            factionModelsPanel.Paint = function(self, w, h)
+                surface.SetDrawColor(Color(30, 30, 30, 100))
+                surface.DrawRect(0, 0, w, h)
+
+                surface.SetDrawColor(ix.config.Get("color"))
+                surface.DrawOutlinedRect(0, 0, w, h, 1)
+            end
+
+            modelLayout = factionModelsPanel:Add("DIconLayout")
+            modelLayout:Dock(FILL)
+            modelLayout:DockMargin(1, 1, 1, 1)
+            modelLayout:SetSpaceX(1)
+            modelLayout:SetSpaceY(1)
+
+			if ( modelSelectionTable == nil ) then return end
+
+            for k, v in pairs(modelSelectionTable) do
+                modelSelect = modelLayout:Add("ixSpawnIcon")
+                modelSelect:SetModel(v)
+                modelSelect:SetSize(ScreenScale(50) / 2, ScreenScale(50))
+				modelSelect:InvalidateLayout(true)
+				modelSelect.PaintOver = function(this, w, h)
+					if (teamTable.model == k) then
+						local color = ix.config.Get("color", color_white)
+
+						surface.SetDrawColor(color.r, color.g, color.b, 200)
+
+						for i = 1, 3 do
+							local i2 = i * 2
+							surface.DrawOutlinedRect(i, i, w - i2, h - i2)
+						end
+					end
+				end
+                modelSelect.DoClick = function()
+                    factionModel:SetModel(v)
+                
+                    if ( teamTable.index == FACTION_CITIZEN ) or ( teamTable.index == FACTION_CWU ) then
+                        factionModel.Entity:SetBodygroup(2, 1)
+                        factionModel.Entity:SetBodygroup(3, 1)
+                    end
+                end
+                
+                if ( teamTable.index == FACTION_CITIZEN ) or ( teamTable.index == FACTION_CWU ) then
+                    modelSelect.Entity:SetBodygroup(2, 1)
+                    modelSelect.Entity:SetBodygroup(3, 1)
+                end
             end
         end
 
@@ -43,7 +110,7 @@ function Schema:CreateMenuButtons(tabs)
 			factionDescription:SetFontInternal("LiteNetworkFont32")
 		end
 
-        for k, v in pairs(ix.faction.teams) do
+        for k, v in SortedPairs(ix.faction.teams) do
             if ( v.dontShowInMenu != true ) then
                 factionButton = factionButtonsPanel:Add("ixMenuButton")
                 factionButton:Dock(TOP)
@@ -55,7 +122,17 @@ function Schema:CreateMenuButtons(tabs)
                     selectedFactionTable = v
                     selectedFaction = true
                     factionBecomeButton:SetText("Become "..v.name)
+                    factionBecomeButton:SetTextColor(v.color or color_white)
                     factionDescription:SetText(v.description or "")
+
+                    factionModel:SetModel(table.Random(v.models))
+                    factionModel.Entity:SetSkin(0)
+
+                    if not ( v.noModelSelection == true ) then
+                        PopulateModelSelection(v.models, v)
+                    else
+                        if ( factionModelsPanel ) then factionModelsPanel:Remove() end
+                    end
                 end
             end
         end
