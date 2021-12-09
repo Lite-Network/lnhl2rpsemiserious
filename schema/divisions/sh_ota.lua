@@ -3,7 +3,7 @@ ix.ranks.ota[1] = {
 	id = 1,
 	name = "OWS",
 	description = "Overwatch Soldier",
-	xp = 600,
+	xp = 800,
 	health = 10,
 	armor = 10,
 }
@@ -12,7 +12,7 @@ ix.ranks.ota[2] = {
 	id = 2,
 	name = "EOW",
 	description = "Elite Overwatch Soldier",
-	xp = 1000,
+	xp = 1200,
 	health = 10,
 	armor = 20,
 }
@@ -21,7 +21,7 @@ ix.ranks.ota[3] = {
 	id = 3,
 	name = "LDR",
 	description = "Leader",
-	xp = 2200,
+	xp = nil,
 	health = 20,
 	armor = 30,
 }
@@ -40,7 +40,7 @@ ix.divisions.ota[1] = {
 	health = 100,
 	armor = 120,
 	max = 10,
-	xp = 600,
+	xp = 800,
 	class = CLASS_OTA_ECHO,
 }
 ix.divisions.ota[1].weapons[1] = {"ix_mp7"}
@@ -60,7 +60,7 @@ ix.divisions.ota[2] = {
 	health = 130,
 	armor = 160,
 	max = 10,
-	xp = 1000,
+	xp = 1200,
 	class = CLASS_OTA_MACE,
 }
 ix.divisions.ota[2].weapons[1] = {"ix_spas12"}
@@ -80,7 +80,7 @@ ix.divisions.ota[3] = {
 	health = 100,
 	armor = 100,
 	max = 10,
-	xp = 1200,
+	xp = 1400,
 	class = CLASS_OTA_XRAY,
 }
 ix.divisions.ota[3].weapons[1] = {"weapon_medkit", "ix_mp7"}
@@ -100,7 +100,7 @@ ix.divisions.ota[4] = {
 	health = 120,
 	armor = 140,
 	max = 10,
-	xp = 1300,
+	xp = 1500,
 	class = CLASS_OTA_RANGER,
 }
 ix.divisions.ota[4].weapons[1] = {"ix_cmb_sniper", "ix_usp"}
