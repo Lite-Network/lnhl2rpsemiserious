@@ -85,7 +85,14 @@ function Schema:simfphysUse(ent, ply)
 				ply:ChatNotify("You can not enter the Combine APC due to it being biolocked!")
 				ent:EmitSound("buttons/combine_button_locked.wav", 80)
 				ent:EmitSound("ambient/alarms/apc_alarm_loop1.wav", 90)
-				timer.Simple(15, function() ent:EmitSound("ambient/alarms/klaxon1.wav", 90, 80) ent:StopSound("ambient/alarms/apc_alarm_loop1.wav") end)
+
+				timer.Simple(15, function()
+					if ( IsValid(ent) ) then
+						ent:EmitSound("ambient/alarms/klaxon1.wav", 90, 80)
+						ent:StopSound("ambient/alarms/apc_alarm_loop1.wav")
+					end
+				end)
+				
 				Schema:AddCombineDisplayMessage("attempted biolock bypass detected!", Color(255, 0, 0), true, "npc/roller/mine/rmine_blip3.wav")
 				Schema:AddWaypoint(ent:GetPos(), "Attempted Biolock bypass detected!", Color(255, 0, 0), 120)
 
@@ -141,33 +148,6 @@ function Schema:Move(ply, mv)
 	elseif ply:KeyDown(IN_BACK) then
 		ply:SetWalkSpeed(60 - walkPenalty)
 		ply:SetRunSpeed(130 + runBoost - runPenalty)
-	end
-
-	local target = ply.ixDraggedTarget
-	if IsValid(target) and ( ply == target.ixDraggedBy ) then
-		local DraggerPos = ply:GetPos()
-		local DraggedPos = target:GetPos()
-		local Distance = DraggerPos:Distance(DraggedPos)
-
-		local DragPosNormal = DraggerPos:GetNormal()
-		local Difx = math.abs(DragPosNormal.x)
-		local Dify = math.abs(DragPosNormal.y)	
-
-		local Speed = (Difx + Dify) * 0.1
-
-		local ang = mv:GetMoveAngles()
-		local pos = mv:GetOrigin()
-		local vel = mv:GetVelocity()
-
-		vel.x = vel.x * Speed
-		vel.y = vel.y * Speed
-		vel.z = 15
-
-		pos = pos + vel + ang:Right() + ang:Forward() + ang:Up()
-
-		if ( vel ) then
-			target:SetVelocity(vel)
-		end
 	end
 end
 
@@ -233,9 +213,10 @@ function Schema:PlayerSpray(ply)
 	return true
 end
 
-local changeNameOriginal = {
+local civilianTeam = {
 	[FACTION_CITIZEN] = true,
 	[FACTION_CWU] = true,
+	[FACTION_PRISONER] = true,
 }
 function Schema:PlayerLoadout(ply)
 	local char = ply:GetCharacter()
@@ -243,21 +224,33 @@ function Schema:PlayerLoadout(ply)
 	ply:SetCanZoom(true)
     ply:ConCommand("gmod_mcore_test 1")
 
-	if ( changeNameOriginal[ply:Team()] and char ) then
+	if ( civilianTeam[ply:Team()] and char ) then
 		ply:SetBodygroup(2, 1)
 		ply:SetBodygroup(3, 1)
+	elseif ( ply:Team() == FACTION_VORTIGAUNT ) then
+		ply:SetBodygroup(7, 1)
+		ply:SetBodygroup(8, 1)
+		ply:SetBodygroup(9, 1)
 	end
 
 	ply:SetNetVar("restricted")
+	ply.ixRebelState = nil
+
+	if ( ply.ixJailState and ( ply:Team() == FACTION_CITIZEN or ply:Team() == FACTION_CWU ) ) then
+		ply.ixDraggedBy = nil
+		Schema:SetTeam(ply, ix.faction.Get(FACTION_PRISONER))
+		ply:StripWeapons()
+	end
 end
 
 function Schema:PlayerLoadedCharacter(ply, char, oldChar)
-	Schema:SetTeam(ply, ix.faction.teams["01_citizen"])
+	Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, false)
 	hook.Run("PlayerSpawn", ply)
 end
 
 function Schema:CanPlayerUseBusiness(ply, uniqueID)
-	if (ply:IsCWU()) then
+	return false
+	--[[if (ply:IsCWU()) then
 		local itemTable = ix.item.list[uniqueID]
 
 		if (itemTable) then
@@ -275,7 +268,7 @@ function Schema:CanPlayerUseBusiness(ply, uniqueID)
 	else
 		ply.ixbusinessAllow = false
 		return false
-	end
+	end]]
 end
 
 local dropAbleWeapons = {
@@ -298,6 +291,10 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 	ply.deathPos = ply:GetPos()
 	ply.deathAngles = ply:GetAngles()
 	ply.ixCWUClass = 0
+
+	if ply:IsRestricted() then
+		ply:Freeze(false)
+	end
 
 	if ply:IsBot() then
 		return false
@@ -341,8 +338,6 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 		end
 	end
 
-	Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, true)
-
 	if (char:GetMoney() == 0) then return end
 
 	local droppedTokens = ents.Create("ix_money")
@@ -373,12 +368,35 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 		corpse:SetModel(ply:GetModel())
 		corpse:Spawn()
 
-		timer.Simple(10, function()
+		timer.Simple(300, function()
 			if ( IsValid(corpse) ) then
 				corpse:Remove()
 			end
 		end)
 	end
+
+	timer.Simple(0, function() Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, true) end)
+end
+
+local allowedPlayersContainers = {
+	[ "STEAM_0:1:65213148" ] = true,
+	[ "STEAM_0:0:206764368" ] = true,
+}
+function Schema:CanPlayerSpawnContainer(ply)
+	if allowedPlayersContainers[ ply:SteamID() ] then
+		print(ply:Nick(), " allowed to spawn container!")
+		return true
+	else
+		return false
+	end
+end
+
+function Schema:ShouldSpawnClientRagdoll()
+	return false
+end
+
+function Schema:ShouldRemoveRagdollOnDeath()
+	return false
 end
 
 function Schema:EntityTakeDamage(target, dmg)
@@ -470,6 +488,12 @@ end
 local painSounds = {
 	[FACTION_CCA] = {sound = function() return "npc/metropolice/pain"..math.random(1,4)..".wav" end},
 	[FACTION_OTA] = {sound = function() return "npc/combine_soldier/pain"..math.random(1,3)..".wav" end},
+	[FACTION_VORTIGAUNT] = {sound = function() return table.Random({
+		"vo/npc/vortigaunt/vortigese02.wav",
+		"vo/npc/vortigaunt/vortigese03.wav",
+		"vo/npc/vortigaunt/vortigese04.wav",
+		"vo/npc/vortigaunt/vortigese07.wav",
+	}) end},
 }
 function Schema:GetPlayerPainSound(ply)
 	if ( painSounds[ply:Team()] and painSounds[ply:Team()].sound ) then
@@ -481,18 +505,24 @@ end
 local deathSounds = {
 	[FACTION_CCA] = {sound = function() return "npc/metropolice/die"..math.random(1,4)..".wav" end, globalCombine = true},
 	[FACTION_OTA] = {sound = function() return "npc/combine_soldier/die"..math.random(1,3)..".wav" end, globalCombine = true},
+	[FACTION_VORTIGAUNT] = {sound = function() return table.Random({
+		"vo/npc/vortigaunt/vortigese02.wav",
+		"vo/npc/vortigaunt/vortigese03.wav",
+		"vo/npc/vortigaunt/vortigese04.wav",
+		"vo/npc/vortigaunt/vortigese07.wav",
+	}) end},
 }
 function Schema:GetPlayerDeathSound(ply)
 	if ( deathSounds[ply:Team()] and deathSounds[ply:Team()].sound ) then
-		local sound = deathSounds[ply:Team()].sound()
+		local deathSound = deathSounds[ply:Team()].sound()
 
 		for k, v in ipairs(player.GetAll()) do
 			if (v:IsCombine() and ply:IsCombine()) and ( deathSounds[ply:Team()].globalCombine == true ) then
-				v:EmitSound(sound, 80)
+				v:EmitSound(deathSound, 80)
 			end
 		end
 
-		return sound
+		return deathSound
 	end
 end
 

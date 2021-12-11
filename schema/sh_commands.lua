@@ -51,7 +51,7 @@ ix.command.Add("Tie", {
 ix.command.Add("Apply", {
 	description = "Prints your Name and Team.",
 	OnRun = function(_, ply)
-		if (SERVER) then
+		if ( SERVER ) then
 			ix.chat.Send(ply, "me", "shows their identification card showing: (Name: "..ply:Nick().." | Affiliation: "..team.GetName(ply:Team())..") ", false)
 		end
 	end

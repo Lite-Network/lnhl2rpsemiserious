@@ -87,16 +87,24 @@ function Schema:CreateMenuButtons(tabs)
 				end
                 modelSelect.DoClick = function()
                     factionModel:SetModel(v)
-                
+                    
                     if ( teamTable.index == FACTION_CITIZEN ) or ( teamTable.index == FACTION_CWU ) then
                         factionModel.Entity:SetBodygroup(2, 1)
                         factionModel.Entity:SetBodygroup(3, 1)
+                    elseif ( teamTable.index == FACTION_VORTIGAUNT ) then
+                        factionModel.Entity:SetBodygroup(7, 1)
+                        factionModel.Entity:SetBodygroup(8, 1)
+                        factionModel.Entity:SetBodygroup(9, 1)
                     end
                 end
                 
                 if ( teamTable.index == FACTION_CITIZEN ) or ( teamTable.index == FACTION_CWU ) then
                     modelSelect.Entity:SetBodygroup(2, 1)
                     modelSelect.Entity:SetBodygroup(3, 1)
+                elseif ( teamTable.index == FACTION_VORTIGAUNT ) then
+                    modelSelect.Entity:SetBodygroup(7, 1)
+                    modelSelect.Entity:SetBodygroup(8, 1)
+                    modelSelect.Entity:SetBodygroup(9, 1)
                 end
             end
         end
@@ -127,6 +135,15 @@ function Schema:CreateMenuButtons(tabs)
 
                     factionModel:SetModel(table.Random(v.models))
                     factionModel.Entity:SetSkin(0)
+                    
+                    if ( selectedFactionTable.index == FACTION_CITIZEN ) or ( selectedFactionTable.index == FACTION_CWU ) then
+                        factionModel.Entity:SetBodygroup(2, 1)
+                        factionModel.Entity:SetBodygroup(3, 1)
+                    elseif ( selectedFactionTable.index == FACTION_VORTIGAUNT ) then
+                        factionModel.Entity:SetBodygroup(7, 1)
+                        factionModel.Entity:SetBodygroup(8, 1)
+                        factionModel.Entity:SetBodygroup(9, 1)
+                    end
 
                     if not ( v.noModelSelection == true ) then
                         PopulateModelSelection(v.models, v)

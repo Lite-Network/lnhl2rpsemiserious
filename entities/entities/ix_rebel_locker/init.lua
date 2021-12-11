@@ -62,7 +62,7 @@ net.Receive("LiteNetworkRebelLockerChange.Citizen", function( len, ply )
 		ply:SetBodygroup(3, 1)
 		ply:SetBodygroup(4, 0)
 		ply:EmitSound("doors/door_metal_thin_close2.wav")
-		char:SetClass(CLASS_CITIZEN)
+		ply.ixRebelState = nil
 
 		ply:Notify("You have changed to your Citizen Outfit.")
 	else
@@ -83,7 +83,7 @@ net.Receive("LiteNetworkRebelLockerChange.Rebel", function( len, ply )
 		ply:SetBodygroup(3, math.random(6,8))
 		ply:SetBodygroup(4, 6)
 		ply:EmitSound("doors/door_metal_thin_close2.wav")
-		char:SetClass(CLASS_CITIZEN_REBEL)
+		ply.ixRebelState = true
 
 		ply:Notify("You have changed to a Rebel Outfit.")
 	else
@@ -104,7 +104,7 @@ net.Receive("LiteNetworkRebelLockerChange.RebelMedic", function( len, ply )
 		ply:SetBodygroup(3, math.random(6,8))
 		ply:SetBodygroup(4, 6)
 		ply:EmitSound("doors/door_metal_thin_close2.wav")
-		char:SetClass(CLASS_CITIZEN_MEDIC)
+		ply.ixRebelState = true
 
 		ply:Notify("You have changed to a Rebel Medic Outfit.")
 	else

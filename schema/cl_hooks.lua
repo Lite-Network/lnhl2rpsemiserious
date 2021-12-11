@@ -11,6 +11,25 @@ function Schema:OnReloaded()
 
 		ix.luaReloaded = CurTime() + 5
 	end
+	
+	ix.option.Set("disableAnimations", false, true)
+	ix.option.Set("cheapBlur", false, true)
+	ix.option.Set("language", "english", true)
+	ix.option.Set("observerTeleportBack", false, true)
+	ix.option.Set("observerESP", false, true)
+
+	ix.option.stored["minimalTooltips"].hidden = function() return true end
+	ix.option.stored["alwaysShowBars"].hidden = function() return true end
+	ix.option.stored["animationScale"].hidden = function() return true end
+	ix.option.stored["24hourTime"].hidden = function() return true end
+	ix.option.stored["openBags"].hidden = function() return true end
+	ix.option.stored["disableAnimations"].hidden = function() return true end
+	ix.option.stored["cheapBlur"].hidden = function() return true end
+	ix.option.stored["language"].hidden = function() return true end
+	ix.option.stored["observerTeleportBack"].hidden = function() return true end
+	ix.option.stored["observerESP"].hidden = function() return true end
+	ix.option.stored["altLower"].hidden = function() return true end
+	ix.option.stored["showIntro"].hidden = function() return true end
 end
 
 function Schema:BuildBusinessMenu()
@@ -33,6 +52,10 @@ function Schema:MessageReceived()
 	if (system.IsWindows() and !system.HasFocus()) then
 		system.FlashWindow()
 	end
+end
+
+function Schema:CreateClientsideRagdoll()
+	return false
 end
 
 function Schema:OnAchievementAchieved()

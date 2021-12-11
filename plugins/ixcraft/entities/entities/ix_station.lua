@@ -9,12 +9,12 @@ ENT.Spawnable = false
 function ENT:SetupDataTables()
 	self:NetworkVar("String", 0, "StationID")
 
-	if (SERVER) then
+	if ( SERVER ) then
 		self:NetworkVarNotify("StationID", self.OnVarChanged)
 	end
 end
 
-if (SERVER) then
+if ( SERVER ) then
 	function ENT:Initialize()
 		if (!self.uniqueID) then
 			self:Remove()

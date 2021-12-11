@@ -34,7 +34,7 @@ AmmoCrateAmmunition["SniperPenetratedRound"] = 50
 AmmoCrateAmmunition["AR2"] = 300
 AmmoCrateAmmunition["ixRifleammo"] = 300
 
-if (SERVER) then
+if ( SERVER ) then
     function ENT:Initialize()
         self:SetModel("models/items/ammocrate_ar2.mdl")
         self:PhysicsInit(SOLID_VPHYSICS) 

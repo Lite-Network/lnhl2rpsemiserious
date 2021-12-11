@@ -128,7 +128,7 @@ SWEP.Primary.Sound = "ixAKM.Fire"
 SWEP.Primary.Recoil = 0.7
 SWEP.Primary.Damage = 13
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Cone = 0.03
+SWEP.Primary.Cone = 0.05
 SWEP.Primary.Delay = RPM(575)
 
 SWEP.Primary.Ammo = "ixRifleAmmo"
@@ -143,9 +143,9 @@ SWEP.Secondary.DefaultClip = -1
 
 SWEP.Spread = {}
 SWEP.Spread.Min = 0
-SWEP.Spread.Max = 5
-SWEP.Spread.IronsightsMod = 0.6
-SWEP.Spread.CrouchMod = 0.7
+SWEP.Spread.Max = 1
+SWEP.Spread.IronsightsMod = 0.8
+SWEP.Spread.CrouchMod = 0.8
 SWEP.Spread.AirMod = 1.4
 SWEP.Spread.RecoilMod = 0
 SWEP.Spread.VelocityMod = 0.5

@@ -152,7 +152,7 @@ function SWEP:PrimaryAttack()
 	end
 
 	if (self.Owner:KeyDown(IN_WALK)) then
-		if (SERVER) then
+		if ( SERVER ) then
 			self:SetActivated(!self:GetActivated())
 
 			local state = self:GetActivated()

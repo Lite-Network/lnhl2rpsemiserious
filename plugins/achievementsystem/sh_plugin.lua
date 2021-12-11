@@ -1,6 +1,6 @@
 local PLUGIN = PLUGIN
 
-PLUGIN.name = "Lite Network Achievemnt System"
+PLUGIN.name = "Lite Network Achievement System"
 PLUGIN.author = "Riggs Mackay"
 PLUGIN.description = "Allows players to get achievements by doing random things."
 
@@ -30,8 +30,6 @@ if ( SERVER ) then
                     net.Send(v)
                 end
             end
-        else
-            print("Already Achievement Got!")
         end
     end
 

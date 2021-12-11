@@ -22,7 +22,7 @@ function ENT:IsLocked()
 	return self:GetLocked()
 end
 
-if (SERVER) then
+if ( SERVER ) then
 	function ENT:Initialize()
 		self:SetModel("models/props_junk/watermelon01.mdl")
 	

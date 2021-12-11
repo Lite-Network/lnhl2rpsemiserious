@@ -153,7 +153,7 @@ function RECIPE:OnCanCraft(client)
 	return true
 end
 
-if (SERVER) then
+if ( SERVER ) then
 	function RECIPE:OnCraft(client)
 		local bCanCraft, failString, c, d, e, f = self:OnCanCraft(client)
 

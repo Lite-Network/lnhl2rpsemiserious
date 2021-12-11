@@ -13,6 +13,14 @@ ix.config.SetDefault("genericFont", "Segoe Ui")
 ix.config.SetDefault("music", "LiteNetwork/hl2rp/music/teaser.ogg")
 ix.config.SetDefault("scoreboardRecognition", true)
 
+ix.config.Add("cityCode", 0, "The Current City Code of the City.", nil, {
+	data = {
+		min = 0,
+		max = 4
+	},
+	category = "Miscellaneous",
+})
+
 ix.currency.symbol = "T"
 ix.currency.singular = "token"
 ix.currency.plural = "tokens"
@@ -31,3 +39,9 @@ ix.vendingItems = {
 ix.option.Add("hudScreenEffect", ix.type.bool, true)
 ix.option.Add("hudDrawBox", ix.type.bool, true)
 ix.option.Add("hudDrawPlayerInformation", ix.type.bool, true)
+
+ix.option.Add("showLocalAssets", ix.type.bool, true, {
+	phrase = "Show Local Assets",
+	description = "Should the local assets on your Combine Hud show?",
+	category = "Appearance",
+})

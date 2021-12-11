@@ -11,24 +11,6 @@ if (CLIENT) then
         ["white"] = Color(230, 230, 230),
     }
 
-    function PLUGIN:PreDrawHalos()
-        local ply = LocalPlayer()
-        local char = ply:GetCharacter()
-
-        if not ( char ) then
-            return
-        end
-
-        if ( char ) and ( ply:IsAdmin() ) and ( ply:GetMoveType() == MOVETYPE_NOCLIP ) then
-            for k, v in pairs(player.GetAll()) do
-                if not ( v:IsValid() and v:Alive() and v:GetCharacter() ) then
-                    return
-                end
-                halo.Add({v}, ix.config.Get("color"), 2, 2, 1, true, true)
-            end
-        end
-    end
-
     function PLUGIN:HUDPaint()
         if not ( LocalPlayer().ixIntroBool ) then
             local ply = LocalPlayer()
@@ -38,7 +20,7 @@ if (CLIENT) then
                 return
             end
 
-            if ( char ) and ( ply:IsAdmin() ) and ( ply:GetMoveType() == MOVETYPE_NOCLIP ) then
+            if ( char ) and ( ply:IsAdmin() ) and ( ply:GetMoveType() == MOVETYPE_NOCLIP ) and not ( ply:InVehicle() ) then
                 ply.adminHud = true
                 local onDuty = ix.option.Get("adminOnDuty") or false
 
@@ -59,22 +41,23 @@ if (CLIENT) then
                 end
                 
                 for k, v in pairs(player.GetAll()) do
-                    if ( v:IsValid() and v:GetCharacter() ) then
+                    local targetedPlayer = v
+                    if ( targetedPlayer:IsValid() and targetedPlayer:GetCharacter() ) then
                         local pos = (v:GetPos() + Vector(0, 0, 40)):ToScreen()
-                        local teamColor = team.GetColor(v:Team())
+                        local teamColor = team.GetColor(targetedPlayer:Team())
 
-                        draw.SimpleText(v:Nick(), "LiteNetworkFont24", pos.x, pos.y, teamColor, TEXT_ALIGN_CENTER)
-                        draw.SimpleText(v:SteamName(), "LiteNetworkFont24", pos.x, pos.y + 20, PLUGIN.colors["white"], TEXT_ALIGN_CENTER)
+                        draw.SimpleText(targetedPlayer:Nick(), "LiteNetworkFont24", pos.x, pos.y, teamColor, TEXT_ALIGN_CENTER)
+                        draw.SimpleText(targetedPlayer:SteamName(), "LiteNetworkFont24", pos.x, pos.y + 20, PLUGIN.colors["white"], TEXT_ALIGN_CENTER)
 
-                        if ( v:GetActiveWeapon():IsValid() ) then
-                            draw.SimpleText(v:GetActiveWeapon():GetClass() or "Unknown Weapon!", "LiteNetworkFont24", pos.x, pos.y + 40, PLUGIN.colors["red"], TEXT_ALIGN_CENTER)
+                        if ( targetedPlayer:GetActiveWeapon():IsValid() ) then
+                            draw.SimpleText(targetedPlayer:GetActiveWeapon():GetClass() or "Unknown Weapon!", "LiteNetworkFont24", pos.x, pos.y + 40, PLUGIN.colors["red"], TEXT_ALIGN_CENTER)
                         else
                             draw.SimpleText("No Weapon!", "LiteNetworkFont24", pos.x, pos.y + 40, PLUGIN.colors["red"], TEXT_ALIGN_CENTER)
                         end
                     end
                 end
 
-                for k, v in pairs(Schema.cityCodes) do
+                for k, v in pairs(ix.cityCodes) do
                     local value = ix.config.Get("cityCode", 0)
             
                     if (value == k) then

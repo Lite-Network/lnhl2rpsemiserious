@@ -19,7 +19,7 @@ local MODE_ALLOW_ALL = 1
 local MODE_ALLOW_CID = 2
 local MODE_ALLOW_NONE = 3
 
-if (SERVER) then
+if ( SERVER ) then
 	function ENT:SpawnFunction(ply, trace)
 		local angles = (ply:GetPos() - trace.HitPos):Angle()
 		angles.p = 0

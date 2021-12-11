@@ -5,7 +5,7 @@ ENT.Spawnable = true
 ENT.AdminOnly = true
 ENT.bNoPersist = true
 
-if (SERVER) then
+if ( SERVER ) then
 	function ENT:Initialize()
 		self:SetModel("models/props_forest/footlocker01_closed.mdl")
 		self:PhysicsInit(SOLID_VPHYSICS)

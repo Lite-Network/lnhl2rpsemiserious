@@ -12,10 +12,15 @@ function PANEL:Init()
         playerBox:Dock(TOP)
         playerBox:DockMargin(0, 0, 0, 5)
         playerBox.Paint = function(this)
-            draw.RoundedBox(5, 0, 0, playerBox:GetWide(), playerBox:GetTall(), ColorAlpha(team.GetColor(v:Team()), 100))
+            local teamColor = team.GetColor(v:Team()) or color_white
+            draw.RoundedBox(5, 0, 0, playerBox:GetWide(), playerBox:GetTall(), ColorAlpha(teamColor, 100))
 
             draw.SimpleText(v:SteamName(), "LiteNetworkFont32", 80, playerBox:GetTall() / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
             draw.SimpleText(team.GetName(v:Team()), "LiteNetworkFont32", playerBox:GetWide() / 2, playerBox:GetTall() / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+            if ( LocalPlayer():IsAdmin() ) then
+                draw.SimpleText(v:Nick(), "LiteNetworkFont32", playerBox:GetWide() - 80, playerBox:GetTall() / 2, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+            end
         end
 
         local playerIcon = playerBox:Add("ixSpawnIcon")

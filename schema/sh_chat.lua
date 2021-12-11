@@ -202,7 +202,7 @@ ix.chat.Register("adminchat", {
 		end
 	end,
 	OnChatAdd = function(self, speaker, text)
-		chat.AddText(Schema.MainColor, "[Admin Chat] ", Schema.MainColorLight, speaker:SteamName(), color_white, ": "..text)
+		chat.AddText(ix.config.Get("color"), "[Admin Chat] ", Color(201, 125, 75), speaker:SteamName(), color_white, ": "..text)
 	end,
 	prefix = {"/AdminChat", "/AC"},
 	description = "Talk to staff members :3",

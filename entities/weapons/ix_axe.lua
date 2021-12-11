@@ -40,7 +40,7 @@ function SWEP:MeleeHitFallback(trace)
         local randomchance = math.random(1,10)
         
         if (randomchance == math.random(1,10)) then
-            if (SERVER) then
+            if ( SERVER ) then
                 self:GetOwner():GetCharacter():GetInventory():Add("wood")
             end
             self:GetOwner():ChatNotify("You have gained 1 piece of wood.")

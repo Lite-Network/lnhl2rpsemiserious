@@ -133,7 +133,7 @@ function PLUGIN.craft.FindByName(recipe)
 	return uniqueID
 end
 
-if (SERVER) then
+if ( SERVER ) then
 	util.AddNetworkString("ixCraftRecipe")
 	util.AddNetworkString("ixCraftRefresh")
 

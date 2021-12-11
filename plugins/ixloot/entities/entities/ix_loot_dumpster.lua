@@ -14,7 +14,7 @@ ENT.AutomaticFrameAdvance = true
 ENT.Spawnable = true
 ENT.AdminOnly = true
 
-if (SERVER) then
+if ( SERVER ) then
     function ENT:Initialize()
         self:SetModel("models/props_junk/TrashDumpster01a.mdl")
         self:PhysicsInit(SOLID_VPHYSICS) 

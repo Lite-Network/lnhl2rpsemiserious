@@ -282,7 +282,7 @@ local function DrawCombineHud(ply, char)
 
 	-- City Codes
 	draw.SimpleTextOutlined([[<:: // LOCAL INFORMATION ASSET \\ ::>]], "BudgetLabel", ScrW() / 2, 5, team.GetColor(ply:Team()), TEXT_ALIGN_CENTER, nil, 1, color_black)
-	for k, v in pairs(Schema.cityCodes) do
+	for k, v in pairs(ix.cityCodes) do
 		local value = ix.config.Get("cityCode", 0)
 
 		if (value == k) then
@@ -303,17 +303,30 @@ local function DrawCombineHud(ply, char)
 	if (ix.option.Get("showLocalAssets", true) == true) then
 		draw.SimpleTextOutlined("<:: LOCAL ASSETS //", "BudgetLabel", 10, 5 + 16 * 10, team.GetColor(ply:Team()), nil, nil, 1, color_black)
 		for k, v in pairs(player.GetAll()) do
-			if v:IsCombine() then
-				local zone = v:GetPlayerInArea() or "<UNDOCUMENTED ZONE>"
+			if ( v:IsCombine() ) then
+				if ( v:Team() == FACTION_CCA ) then
+					local zone = v:GetPlayerInArea() or "<UNDOCUMENTED ZONE>"
 
-				local health = v:Health().."%"
-				if not v:Alive() then
-					health = "<BIOSIGNAL LOST>"
+					local health = v:Health().."%"
+					if not v:Alive() then
+						health = "<BIOSIGNAL LOST>"
+					end
+					draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+					draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+					draw.SimpleTextOutlined(" | ZONE: "..string.upper(zone), "BudgetLabel", 350, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+					y = y + 16
+				elseif ( v:Team() == FACTION_OTA )
+					local zone = v:GetPlayerInArea() or "<UNDOCUMENTED ZONE>"
+
+					local health = v:Health().."%"
+					if not v:Alive() then
+						health = "<BIOSIGNAL LOST>"
+					end
+					draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+					draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+					draw.SimpleTextOutlined(" | ZONE: "..string.upper(zone), "BudgetLabel", 350, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+					y = y + 16
 				end
-				draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-				draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-				draw.SimpleTextOutlined(" | ZONE: "..string.upper(zone), "BudgetLabel", 350, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-				y = y + 16
 			end
 		end
 	end

@@ -19,7 +19,7 @@ end
 function PLUGIN:XPGain(ply)
 	if not IsValid(ply) then return end
 
-	if ply:IsDonator() or ply:IsAdmin() then
+	if not ( ply:IsDonator() or ply:IsAdmin() ) then
 		ply:SetXP(PLUGIN.xpSystem.GainAmountUser + ply:GetNWInt("ixXP"))
 		ply:Notify("For playing on our server for ten minutes, you have gained "..PLUGIN.xpSystem.GainAmountUser.." XP.")
 	else

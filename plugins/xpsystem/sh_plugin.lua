@@ -1,13 +1,13 @@
 local PLUGIN = PLUGIN
 
-PLUGIN.name = "XP System"
+PLUGIN.name = "Lite Network XP System"
 PLUGIN.author = "Riggs Mackay & Scotnay"
 PLUGIN.description = "Apex Gamemode & Impulse like based XP System made from the ground up."
 
 PLUGIN.xpSystem = PLUGIN.xpSystem or {}
 PLUGIN.xpSystem.Time = 600
-PLUGIN.xpSystem.GainAmountUser = 5
-PLUGIN.xpSystem.GainAmountDonator = 10
+PLUGIN.xpSystem.GainAmountUser = 10
+PLUGIN.xpSystem.GainAmountDonator = 20
 
 ix.util.Include("sv_plugin.lua")
 

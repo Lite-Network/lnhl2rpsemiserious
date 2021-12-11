@@ -53,15 +53,18 @@ ITEM.functions.PlaceVehicle = {
 			PlayBeep(3.50, ent)
 			PlayBeep(3.75, ent)
 			timer.Simple(4, function()
-				local explode = ents.Create("env_explosion")
-				explode:SetPos(entityPosition)
-				explode:SetOwner(ply)
-				explode:Spawn()
-				explode:SetKeyValue("iMagnitude", "375")
-				explode:Fire("Explode", 0, 0)
-				explode:EmitSound("weapons/c4/c4_explode1.wav", 120)
-				explode:EmitSound("weapons/c4/c4_exp_deb1.wav", 100)
-				explode:EmitSound("weapons/c4/c4_exp_deb2.wav", 100)
+				if ( IsValid(ent) ) then
+					entityPosition = ent:GetPos()
+					local explode = ents.Create("env_explosion")
+					explode:SetPos(entityPosition)
+					explode:SetOwner(ply)
+					explode:Spawn()
+					explode:SetKeyValue("iMagnitude", "375")
+					explode:Fire("Explode", 0, 0)
+					explode:EmitSound("weapons/c4/c4_explode1.wav", 120)
+					explode:EmitSound("weapons/c4/c4_exp_deb1.wav", 100)
+					explode:EmitSound("weapons/c4/c4_exp_deb2.wav", 100)
+				end
 			end)
 		end
 

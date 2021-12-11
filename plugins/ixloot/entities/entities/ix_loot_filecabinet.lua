@@ -14,7 +14,7 @@ ENT.AutomaticFrameAdvance = true
 ENT.Spawnable = true
 ENT.AdminOnly = true
 
-if (SERVER) then
+if ( SERVER ) then
     function ENT:Initialize()
         self:SetModel("models/props_wasteland/controlroom_filecabinet001a.mdl")
         self:PhysicsInit(SOLID_VPHYSICS) 

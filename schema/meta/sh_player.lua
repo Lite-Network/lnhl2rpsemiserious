@@ -9,7 +9,7 @@ function PLAYER:IsCitizen()
 end
 
 function PLAYER:IsRebel()
-	return (self:Team() == FACTION_CITIZEN and (self:GetCharacter():GetClass() == CLASS_CITIZEN_REBEL))
+	return (self:Team() == FACTION_CITIZEN and self.ixRebelState)
 end
 
 function PLAYER:IsCWU()
@@ -44,7 +44,7 @@ function PLAYER:IsDonator()
 	return (self:GetUserGroup() == "donator")
 end
 
-if (SERVER) then
+if ( SERVER ) then
 	local PLAYER = FindMetaTable("Player")
 	
 	util.AddNetworkString("ixAddCombineDisplayMessage")

@@ -28,7 +28,7 @@ ITEM.functions.Apply = {
 		local ply = itemTable.player
 		local char = ply:GetCharacter()
 
-		if (SERVER) then
+		if ( SERVER ) then
 			if char:GetData("brokenLegs", false) == true then
 				ply:Freeze(true)
 				ply:SetAction("Applying splint...", 5, function()

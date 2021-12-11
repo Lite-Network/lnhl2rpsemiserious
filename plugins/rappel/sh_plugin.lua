@@ -4,7 +4,7 @@ PLUGIN.name = "Rappel"
 PLUGIN.author = "Riggs Mackay"
 PLUGIN.description = "Allows Combine to rappel down from ledges."
 
-if (SERVER) then
+if ( SERVER ) then
 	function PLUGIN:BeginRappel(ply, char)
 		local movetype = ply:GetMoveType()
 		local pos = ply:GetPos() + (ply:GetForward() * 30)
@@ -88,7 +88,7 @@ ix.command.Add("Rappel", {
     OnRun = function(self, ply)
 		if (ply:IsCombine()) then
 			if ply:OnGround() then
-				if (SERVER) and PLUGIN.BeginRappel then
+				if ( SERVER ) and PLUGIN.BeginRappel then
 					PLUGIN:BeginRappel(ply)
 				end
 			else

@@ -52,7 +52,7 @@ function SWEP:Initialize()
 	self.ChargeTime = CurTime()
 	self:SetWeaponHoldType("beam")
 
-	if (SERVER) then
+	if ( SERVER ) then
 		self:CreateSounds()
 	end
 end
@@ -137,7 +137,7 @@ function SWEP:ImpactEffect(traceHit)
 	self:CreateBlast(rand, traceHit.HitPos)
 	self:CreateBlast(rand, traceHit.HitPos)			
 
-	if (SERVER) and traceHit.Entity and IsValid(traceHit.Entity) and string.find(traceHit.Entity:GetClass(), "ragdoll") then
+	if ( SERVER ) and traceHit.Entity and IsValid(traceHit.Entity) and string.find(traceHit.Entity:GetClass(), "ragdoll") then
 		traceHit.Entity:Fire("StartRagdollBoogie")
 	end
 end
@@ -168,7 +168,7 @@ function SWEP:Shoot(dmg, effect)
 	local traceres = util.QuickTrace(self.Owner:EyePos(), self.Owner:GetAimVector() * self.Range, self.Owner)
 	self:ShootEffect(effect or "vortigaunt_beam",ply:EyePos(), traceres.HitPos)
 
-	if (SERVER) then
+	if ( SERVER ) then
 		if IsValid(traceres.Entity) then
 			local DMG = DamageInfo()
 			DMG:SetDamageType(DMG_SHOCK)
@@ -198,13 +198,13 @@ end
 function SWEP:StopEveryThing()
 	self.Charging = false
 
-	if (SERVER) and self.ChargeSound then
+	if ( SERVER ) and self.ChargeSound then
 		self.ChargeSound:Stop()
 	end
 
 	self.Healing = false
 
-	if (SERVER) and self.HealingSound then
+	if ( SERVER ) and self.HealingSound then
 		self.HealingSound:Stop()
 	end
 
@@ -230,7 +230,7 @@ end
 
 function SWEP:PrimaryAttack()
 	if self.Owner:Health() <= 30 then 
-		if (SERVER) then
+		if ( SERVER ) then
 			self.Owner:Notify("You are too weak to perfom a zap attack!")
 		end
 		self.Weapon:SetNextPrimaryFire(CurTime() + 2)
@@ -263,13 +263,13 @@ function SWEP:PrimaryAttack()
 			self.Weapon:SendWeaponAnim(ACT_VM_IDLE)
 		end)
 
-		if (SERVER) and self.ChargeSound then	
+		if ( SERVER ) and self.ChargeSound then	
 			self.ChargeSound:Stop()
 			self.Weapon:EmitSound(self.AttackSound)
 		end
 	end)
 
-	if (SERVER) and self.ChargeSound then
+	if ( SERVER ) and self.ChargeSound then
 		self.ChargeSound:PlayEx(100, 150)
 	end
 
@@ -288,7 +288,7 @@ function SWEP:SecondaryAttack()
 	end
 
 	if self.Owner:Health() <= 30 then
-		if (SERVER) then
+		if ( SERVER ) then
 			self.Owner:Notify("You are too weak to heal someone!")
 			self:SetNextSecondaryFire(CurTime() + 2)
 		end
@@ -301,7 +301,7 @@ function SWEP:SecondaryAttack()
 	end
 
 	if target:Health() >= target:GetMaxHealth() then 
-		if (SERVER) then
+		if ( SERVER ) then
 			self.Owner:Notify(target:Nick().." is perfectly healthy!")
 			self:SetNextSecondaryFire(CurTime() + 2)
 		end
@@ -311,14 +311,14 @@ function SWEP:SecondaryAttack()
 
 	self:DispatchEffect("vortigaunt_charge_token")
 
-	if (SERVER) then
+	if ( SERVER ) then
 		self.Owner:ForceSequence("vort_chantloop", nil, 2)
 
 		self.Owner:EmitSound("npc/vort/health_charge.wav", 100, 150, 1, CHAN_AUTO)
 		self.Owner:Freeze(true)
 	end
 
-	if (SERVER) then
+	if ( SERVER ) then
 		self.Owner:SetAction("Healing "..target:Nick().."..", 2, function()
 			self.Owner:StopParticles()
 

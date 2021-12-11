@@ -110,7 +110,7 @@ if (CLIENT) then
 	end
 end
 
-if (SERVER) then
+if ( SERVER ) then
 	function ITEM:OnEquipped()
 		if (self.player) then
 			local ply = self.player
