@@ -21,11 +21,11 @@ function PLAYER:IsCombine()
 end
 
 function PLAYER:IsCombineCommand()
-	return (self:IsCombine() and (self:Nick():find("LDR") or self:Nick():find("DvL") or self:Nick():find("DcO") or self:Nick():find("COMMANDER")))
+	return (self:IsCombine() and ((self.ixOTARank == 3) or (self.ixCCARank == 8) or (self.ixCCARank == 9) or (self.ixCCADivision == 6)))
 end
 
 function PLAYER:IsCombineLeader()
-	return (self:IsCombine() and self:Nick():find("COMMANDER"))
+	return (self:IsCombine() and (self.ixCCADivision == 6))
 end
 
 function PLAYER:IsCA()
