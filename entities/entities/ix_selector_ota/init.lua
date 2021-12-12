@@ -100,6 +100,9 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 					end
 				end
 			end
+			
+			ply.ixOTARank = nil
+			ply.ixOTADivision = DivisionID
 
 			ply:StripWeapons()
 
@@ -150,6 +153,9 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 					end
 				end
 			end
+			
+			ply.ixOTARank = RankID
+			ply.ixOTADivision = DivisionID
 			
 			ply:StripWeapons()
 

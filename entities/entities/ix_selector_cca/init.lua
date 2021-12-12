@@ -100,6 +100,9 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 					end
 				end
 			end
+			
+			ply.ixCCARank = nil
+			ply.ixCCADivision = DivisionID
 
 			ply:StripWeapons()
 
@@ -165,6 +168,9 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 					end
 				end
 			end
+
+			ply.ixCCARank = RankID
+			ply.ixCCADivision = DivisionID
 			
 			ply:StripWeapons()
 
