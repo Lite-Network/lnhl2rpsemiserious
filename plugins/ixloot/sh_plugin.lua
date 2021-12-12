@@ -7,9 +7,15 @@ PLUGIN.description = "Allows you to loot certin crates to obtain loot items."
 PLUGIN.randomLoot = {}
 PLUGIN.randomLoot.common = {
 	"wood",
+	"wood",
+	"metalplate",
+	"metalplate",
 	"metalplate",
 	"plastic",
+	"plastic",
 	"cloth",
+	"cloth",
+	"glue",
 	"glue",
 	"gunpowder",
 }
@@ -17,9 +23,14 @@ PLUGIN.randomLoot.common = {
 PLUGIN.randomLoot.rare = {
 	"usp",
 	"bulletcasing",
+	"bulletcasing",
+	"gear",
 	"gear",
 	"pipe",
+	"pipe",
 	"refinedmetal",
+	"refinedmetal",
+	"splint",
 	"splint",
 	"bandage",
 	"electronics",
