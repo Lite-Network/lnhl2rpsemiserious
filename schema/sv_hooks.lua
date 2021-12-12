@@ -54,6 +54,8 @@ local blacklistedEntities = {
 	["npc_helicopter"] = true,
 	["npc_combinegunship"] = true,
 	["npc_combinedropship"] = true,
+	[ "gmod_wire_explosive" ] = true,
+	[ "gmod_wire_detonator" ] = true
 }
 
 function Schema:OnEntityCreated(ent)
@@ -70,10 +72,15 @@ function Schema:OnEntityCreated(ent)
                 ent:Remove()
             end
 
-            if ent:GetClass():find("wire") and (ent:GetOwner():IsPlayer() and not (ent:GetOwner():IsDonator() or ent:GetOwner():IsAdmin())) then
-                MsgAll("REMOVED ", tostring(ent), " FROM ", tostring(ent:GetOwner()))
-                ent:Remove()
-            end
+			if ( ent:GetClass():find( "wire" ) ) then
+				local client = ent:GetOwner()
+
+				local bCanUse = IsValid( client ) and ( client:IsDonator() or client:IsAdmin() )
+
+				if ( !bCanUse ) then
+					ent:Remove()
+				end
+			end
         end
     end)
 end
@@ -92,7 +99,7 @@ function Schema:simfphysUse(ent, ply)
 						ent:StopSound("ambient/alarms/apc_alarm_loop1.wav")
 					end
 				end)
-				
+
 				Schema:AddCombineDisplayMessage("attempted biolock bypass detected!", Color(255, 0, 0), true, "npc/roller/mine/rmine_blip3.wav")
 				Schema:AddWaypoint(ent:GetPos(), "Attempted Biolock bypass detected!", Color(255, 0, 0), 120)
 
@@ -176,7 +183,7 @@ function Schema:PlayerUse(ply, entity)
 			entity.ixDraggedBy = nil
 			entity:SetRestricted(false)
 			entity:SetNetVar("untying")
-			entity:Freeze(false) 
+			entity:Freeze(false)
 		end, 3, function()
 			if (IsValid(entity)) then
 				entity:SetNetVar("untying")
