@@ -4,6 +4,11 @@ PLUGIN.name = "Lite Network Admin System"
 PLUGIN.author = "Riggs Mackay"
 PLUGIN.description = "Tools for Moderators and Admins."
 
+
+function Schema:PlayerConnect(name, ip)
+	print(name, " ip: ", ip)
+end
+
 if (CLIENT) then
     PLUGIN.colors = {
         ["red"] = Color(230, 0, 0),
@@ -40,7 +45,7 @@ if (CLIENT) then
                     end
                 end
                 
-                for k, v in pairs(player.GetAll()) do
+                for k, v in SortedPairs(player.GetAll()) do
                     local targetedPlayer = v
                     if ( targetedPlayer:IsValid() and targetedPlayer:GetCharacter() ) then
                         local pos = (v:GetPos() + Vector(0, 0, 40)):ToScreen()

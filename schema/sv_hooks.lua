@@ -238,7 +238,7 @@ function Schema:PlayerLoadout(ply)
 
 	if ( ply.ixJailState and ( ply:Team() == FACTION_CITIZEN or ply:Team() == FACTION_CWU ) ) then
 		ply.ixDraggedBy = nil
-		Schema:SetTeam(ply, ix.faction.Get(FACTION_PRISONER))
+		Schema:SetTeam(ply, ix.faction.teams["07_prisoner"])
 		ply:StripWeapons()
 	end
 end

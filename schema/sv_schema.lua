@@ -22,7 +22,7 @@ ix.whitelists.CCA.Ranks = {
 	["UNION-DvL"] = {
 		"STEAM_0:1:117769029", -- bonk
 	},
-	["UNION-DcO"] = "",
+	["UNION-DcO"] = "STEAM_0:0:460056698", -- wheat
 
 	["HELIX-OfC"] = {
 		"STEAM_0:0:174143741", -- lee west
@@ -33,6 +33,7 @@ ix.whitelists.CCA.Ranks = {
 
 	["GRID-OfC"] = {
 		"STEAM_0:1:157305669", -- haja
+		"STEAM_0:1:580525463", -- Creek
 		"STEAM_0:0:226903802", --Fawful
 	},
 	["GRID-DvL"] = {
