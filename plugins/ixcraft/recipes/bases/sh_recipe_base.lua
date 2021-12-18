@@ -34,18 +34,22 @@ if ( SERVER ) then
 			return
 		end
 
-		ply.isCrafting = true
-		ply:EmitSound( self.craftStartEnd or "" )
-		ply:SetAction( "Crafting "..self.name.."...", self.craftTime or 5 )
-		ply:DoStaredAction( ent, function()
-			ply.isCrafting = false
-			ply:Notify( "You successfully crafted a "..self.name.."." or "You successfully crafted a item." )
-			ply:EmitSound( self.craftEndSound or "" )
-			return true
-		end, self.craftTime or 5, function()
-			ply:SetAction( nil )
-			ply.isCrafting = false
-		end )
+		if ( ply.isCrafting == true ) then
+			ply.isCrafting = true
+			ply:EmitSound( self.craftStartEnd or "" )
+			ply:SetAction( "Crafting "..self.name.."...", self.craftTime or 5 )
+			ply:DoStaredAction( ent, function()
+				ply.isCrafting = nil
+				ply:Notify( "You successfully crafted a "..self.name.."." or "You successfully crafted a item." )
+				ply:EmitSound( self.craftEndSound or "" )
+				return true
+			end, self.craftTime or 5, function()
+				ply:SetAction( nil )
+				ply.isCrafting = nil
+			end )
+		else
+			ply:Notify("You can't craft multiple items at once!")
+		end
 
 		ply.benchInUse = nil
 	end )

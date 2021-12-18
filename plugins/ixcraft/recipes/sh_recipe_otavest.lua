@@ -1,5 +1,5 @@
 RECIPE.name = "Overwatch Soldier Vest"
-RECIPE.description = "Craft a Overwatch Transgender Arm Vest."
+RECIPE.description = "Craft a Overwatch Vest."
 RECIPE.model = "models/nemez/combine_soldiers/combine_soldier_prop_vest.mdl"
 RECIPE.category = "Armor Items"
 

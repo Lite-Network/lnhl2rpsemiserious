@@ -13,9 +13,18 @@ function Schema:OnReloaded()
 	end
 end
 
+function Schema:PlayerSpawnSENT(ply, class)
+	if ( class:find("ix_") and not class == "ix_radio" ) and not ( ply:IsSuperAdmin() ) then
+		ply:Notify("Spawning Helix Entities has been disabled.")
+		return false
+	end
+end
+
 function Schema:OnCharacterCreated(ply, char)
 	char:SetData("ixKnownName", char:GetName())
 	char:SetData("ixPreferedModel", char:GetModel())
+
+	print(ply:IPAddress(), " ", ply:SteamName(), " [", ply:Nick(), "] - ", ply:SteamID(), " | OnCharacterCreated")
 end
 
 function Schema:PlayerSwitchFlashlight(ply)
@@ -23,22 +32,33 @@ function Schema:PlayerSwitchFlashlight(ply)
 end
 
 function Schema:PlayerFootstep(ply, pos, foot, sound, volume)
+	local newSound = sound
 	if ( ply:Team() == FACTION_CCA ) then
-		sound = "npc/metropolice/gear"..math.random(1,6)..".wav"
+		newSound = "npc/metropolice/gear"..math.random(1,6)..".wav"
 	elseif ( ply:Team() == FACTION_OTA ) then
-		sound = "npc/combine_soldier/gear"..math.random(1,6)..".wav"
+		newSound = "npc/combine_soldier/gear"..math.random(1,6)..".wav"
 	elseif ( ply:IsRebel() ) then
 		local rand = math.random( 1, 8 )
 		if ( rand == 7 ) then
 			rand = 8
 		end
-		sound = "npc/footsteps/hardboot_generic" .. rand .. ".wav"
+		newSound = "npc/footsteps/hardboot_generic" .. rand .. ".wav"
 	end
 
-	if ply:KeyDown(IN_SPEED) then
-		ply:EmitSound(sound, 80, math.random(90, 110), 1)
+	if ( ply:KeyDown(IN_SPEED) ) then
+		ply:EmitSound(newSound, 80, math.random(90, 110), 1)
+
+		if not ( newSound == sound ) then
+			ply:EmitSound(sound, 80, math.random(90, 110), 1)
+		end
 	else
-		ply:EmitSound(sound, 70, math.random(90, 110), 0.2)
+		if not ( ply:KeyDown(IN_DUCK) ) then
+			ply:EmitSound(newSound, 70, math.random(90, 110), 0.2)
+
+			if not ( newSound == sound ) then
+				ply:EmitSound(sound, 70, math.random(90, 110), 0.2)
+			end
+		end
 	end
 
 	return true
@@ -47,15 +67,15 @@ end
 -- Temporary Code to Fix Backdoors
 local blacklistedEntities = {
 	["grenade_helicopter"] = true,
-	["npc_grenade_frag"] = true,
+	--["npc_grenade_frag"] = true,
 	["npc_handgrenade"] = true,
 	["obj_vj_grenade"] = true,
 	["grenade_ar2"] = true,
 	["npc_helicopter"] = true,
 	["npc_combinegunship"] = true,
 	["npc_combinedropship"] = true,
-	[ "gmod_wire_explosive" ] = true,
-	[ "gmod_wire_detonator" ] = true
+	["gmod_wire_explosive"] = true,
+	["gmod_wire_detonator"] = true
 }
 
 function Schema:OnEntityCreated(ent)
@@ -72,15 +92,10 @@ function Schema:OnEntityCreated(ent)
                 ent:Remove()
             end
 
-			if ( ent:GetClass():find( "wire" ) ) then
-				local client = ent:GetOwner()
-
-				local bCanUse = IsValid( client ) and ( client:IsDonator() or client:IsAdmin() )
-
-				if ( !bCanUse ) then
-					ent:Remove()
-				end
-			end
+            if ent:GetClass():find("wire") and (ent:GetOwner():IsPlayer() and not (ent:GetOwner():IsDonator() or ent:GetOwner():IsAdmin())) then
+                MsgAll("REMOVED ", tostring(ent), " FROM ", tostring(ent:GetOwner()))
+                ent:Remove()
+            end
         end
     end)
 end
@@ -116,7 +131,7 @@ function Schema:simfphysUse(ent, ply)
 end
 
 function Schema:PlayerDisconnected(ply)
-	Schema:SetTeam(ply, ix.faction.teams["01_citizen"])
+	Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, true, true)
 end
 
 function Schema:ShowSpare2(ply)
@@ -126,13 +141,18 @@ end
 local walkPenalty = 0
 local runPenalty = 0
 function Schema:Move(ply, mv)
-	walkPenalty = 0
-	runPenalty = 0
-
-	if ply:IsCombine() then
+	if ( ply:IsCombine() ) then
 		runBoost = 20
 	else
 		runBoost = 0
+	end
+
+	if ( ply:GetCharacter() ) and ( ply:GetCharacter():GetData("ixBrokenLegs") ) then
+		walkPenalty = 10
+		runPenalty = 80
+	else
+		walkPenalty = 0
+		runPenalty = 0
 	end
 
 	ply:SetDuckSpeed(0.4)
@@ -204,7 +224,7 @@ local cwuCombineDoors = {
 	[4365] = true,
 }
 function Schema:PlayerUseDoor(ply, door)
-	print(door:MapCreationID())
+	--print(door:MapCreationID())
 	if (ply:IsCombine() or ply:IsCA() or ply:IsDispatch()) then
 		if (!door:HasSpawnFlags(256) and !door:HasSpawnFlags(1024)) then
 			door:Fire("open")
@@ -225,57 +245,48 @@ local civilianTeam = {
 	[FACTION_CWU] = true,
 	[FACTION_PRISONER] = true,
 }
+util.AddNetworkString("ixCustomSettings")
 function Schema:PlayerLoadout(ply)
 	local char = ply:GetCharacter()
 
-	ply:SetCanZoom(true)
-    ply:ConCommand("gmod_mcore_test 1")
+	if ( char ) then
+		ply:SetCanZoom(true)
+		ply:ConCommand("gmod_mcore_test 1")
 
-	if ( civilianTeam[ply:Team()] and char ) then
-		ply:SetBodygroup(2, 1)
-		ply:SetBodygroup(3, 1)
-	elseif ( ply:Team() == FACTION_VORTIGAUNT ) then
-		ply:SetBodygroup(7, 1)
-		ply:SetBodygroup(8, 1)
-		ply:SetBodygroup(9, 1)
+		if ( civilianTeam[ply:Team()] and char ) then
+			ply:SetBodygroup(2, 1)
+			ply:SetBodygroup(3, 1)
+		elseif ( ply:Team() == FACTION_VORTIGAUNT ) then
+			ply:SetBodygroup(7, 1)
+			ply:SetBodygroup(8, 1)
+			ply:SetBodygroup(9, 1)
+		end
+
+		char:SetData("ixBrokenLegs", nil)
+		ply:SetNetVar("restricted")
+		ply.ixRebelState = nil
+		ply.ixCWUClass = nil
+
+		if ( ply.ixJailState and ( ply:Team() == FACTION_CITIZEN or ply:Team() == FACTION_CWU ) ) then
+			ply.ixDraggedBy = nil
+			Schema:SetTeam(ply, ix.faction.teams["07_prisoner"])
+			ply:StripWeapons()
+		end
 	end
 
-	ply:SetNetVar("restricted")
-	ply.ixRebelState = nil
+	net.Start("ixCustomSettings")
+	net.Send(ply)
 
-	if ( ply.ixJailState and ( ply:Team() == FACTION_CITIZEN or ply:Team() == FACTION_CWU ) ) then
-		ply.ixDraggedBy = nil
-		Schema:SetTeam(ply, ix.faction.teams["07_prisoner"])
-		ply:StripWeapons()
-	end
+	print(ply:IPAddress(), " ", ply:SteamName(), " [", ply:Nick(), "] - ", ply:SteamID(), " | PlayerLoadout")
 end
 
 function Schema:PlayerLoadedCharacter(ply, char, oldChar)
-	Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, false)
-	hook.Run("PlayerSpawn", ply)
-end
-
-function Schema:CanPlayerUseBusiness(ply, uniqueID)
-	return false
-	--[[if (ply:IsCWU()) then
-		local itemTable = ix.item.list[uniqueID]
-
-		if (itemTable) then
-			if (ply.ixCWUClass == 2) and (itemTable.category == "Consumeables") then
-				ply.ixbusinessAllow = true
-				return true
-			elseif (ply.ixCWUClass == 3) and (itemTable.category == "Medical Items") then
-				ply.ixbusinessAllow = true
-				return true
-			else
-				ply.ixbusinessAllow = false
-				return false
-			end
-		end
+	if ( ply:IsCombine() ) then
+		Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, false, false)
 	else
-		ply.ixbusinessAllow = false
-		return false
-	end]]
+		Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, false, true)
+	end
+	hook.Run("PlayerSpawn", ply)
 end
 
 local dropAbleWeapons = {
@@ -358,6 +369,47 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 end
 
 function Schema:PlayerDeath(ply, inflictor, attacker)
+	local char = ply:GetCharacter()
+	if (ply:IsCombine()) then
+		local location = ply:GetArea()
+		if location == "" then
+			location = "unknown location"
+		end
+
+		local combineName = ply:Nick() or "unknown unit"
+
+		local sounds = {
+			"npc/overwatch/radiovoice/on3.wav",
+			"npc/overwatch/radiovoice/attention.wav",
+			"npc/overwatch/radiovoice/lostbiosignalforunit.wav",
+			"npc/overwatch/radiovoice/off4.wav",
+			"hl1/fvox/_comma.wav",
+			"npc/overwatch/radiovoice/on1.wav",
+			"npc/overwatch/radiovoice/unitdownat.wav",
+			"npc/overwatch/radiovoice/404zone.wav",
+			"npc/overwatch/radiovoice/reinforcementteamscode3.wav",
+			"npc/overwatch/radiovoice/investigateandreport.wav",
+			"npc/overwatch/radiovoice/off2.wav",
+		}
+
+		for k, v in ipairs(player.GetAll()) do
+			if (v:IsCombine()) then
+				ix.util.EmitQueuedSounds(v, sounds, 3, 0.2, 70)
+			end
+		end
+
+		timer.Simple(math.random(4.00,5.00), function()
+			ix.chat.Send(ply, "dispatchradioforce", "Attention, lost biosignal for protection team unit "..combineName..".", false)
+			Schema:AddCombineDisplayMessage("Downloading lost biosignal...")
+
+			timer.Simple(math.random(4.00,5.00), function()
+				ix.chat.Send(ply, "dispatchradioforce", "Unit down at, "..location.." reinforcement teams code 3. Investigate and report.", false)
+				Schema:AddCombineDisplayMessage("WARNING! Biosignal lost for protection team unit "..combineName.." at "..location.."...", Color(255, 0, 0, 255))
+				Schema:AddWaypoint(ply.deathPos + Vector(0, 0, 30), "lost biosignal for "..combineName, Color(200, 0, 0), 120, ply)
+			end)
+		end)
+	end
+	
 	if ( attacker:IsNPC() and ( attacker:GetClass() == "npc_headcrab" or attacker:GetClass() == "npc_headcrab_fast" ) ) then
 		local headCrab = ents.Create("npc_zombie")
 		if ( attacker:GetClass() == "npc_headcrab_fast" ) then
@@ -374,6 +426,14 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 		corpse:SetVelocity(ply:GetVelocity())
 		corpse:SetModel(ply:GetModel())
 		corpse:Spawn()
+		corpse:SetCollisionGroup(COLLISION_GROUP_WORLD)
+		corpse.player = ply
+		corpse.attacker = attacker or nil
+		corpse.weaponUsed = attacker:GetActiveWeapon():GetClass() or nil
+
+		for k, v in pairs(ply:GetBodyGroups()) do
+			corpse:SetBodygroup(v.id, ply:GetBodygroup(v.id))
+		end
 
 		timer.Simple(300, function()
 			if ( IsValid(corpse) ) then
@@ -383,6 +443,12 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 	end
 
 	timer.Simple(0, function() Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, true) end)
+end
+
+function Schema:PlayerInteractItem(ply, action, item)
+	if ( action == "drop" ) then
+		timer.Simple(0.1, function() item:GetEntity():SetCollisionGroup(COLLISION_GROUP_WORLD) end)
+	end
 end
 
 local allowedPlayersContainers = {
@@ -406,20 +472,12 @@ function Schema:ShouldRemoveRagdollOnDeath()
 	return false
 end
 
-function Schema:EntityTakeDamage(target, dmg)
-	if ( target:IsPlayer() ) then
-		if ( dmg:GetAttacker():GetClass() == "npc_headcrab" or dmg:GetAttacker():GetClass() == "npc_headcrab_fast" ) then
-			dmg:ScaleDamage(math.random(3.00,5.00))
-		end
-	end
-end
-
 function Schema:PlayerHurt(ply, attacker, health, damage)
 	if (health <= 0) then
 		return
 	end
 
-	if (ply:IsCombine() and (ply.traumaCooldown or 0) < CurTime()) then
+	if (ply:IsCombine() and (ply.ixTraumaCooldown or 0) < CurTime()) then
 		local text = "External"
 
 		if (damage > 20) then
@@ -432,10 +490,10 @@ function Schema:PlayerHurt(ply, attacker, health, damage)
 			ply:AddCombineDisplayMessage("WARNING! VITAL SIGNS DROPPING, SEEK IMMEDIATE MEDICAL ATTENTION", Color(255, 0, 0, 255))
 		end
 
-		ply.traumaCooldown = CurTime() + 5
+		ply.ixTraumaCooldown = CurTime() + 15
 	end
 
-	ply:ScreenFade(SCREENFADE.IN, Color(255, 0, 0, damage * 10), math.Clamp(damage * math.random(0.05, 0.10), 1, 4), 0)
+	ply:ScreenFade(SCREENFADE.IN, Color(220, 20, 20, damage * 10), math.Clamp(damage * math.random(0.05, 0.10), 1, 4), 0)
 end
 
 -- Prop Cost
@@ -467,8 +525,17 @@ function Schema:PlayerSpawnProp(ply)
 	end
 end
 
+function Schema:KeyPress(ply, key)
+	if ( key == IN_JUMP ) and ( ply:IsOnGround() ) then
+		ply:ViewPunch(Angle(-1, 0, 0))
+	end
+end
+
 function Schema:OnPlayerHitGround(ply, inWater, onFloater, speed)
-	if not ( inWater or ( ply.ixIntroBool == true ) ) and ply:IsValid() then
+	if not ( inWater ) and ply:IsValid() and ( ply:GetCharacter() ) then
+		local vel = ply:GetVelocity()
+		ply:SetVelocity( Vector( - ( vel.x * 0.4 ), - ( vel.y * 0.4 ), 0) )
+
 		local punch = speed * 0.01
 
 		if ( punch * 2 >= 7 ) then
@@ -478,14 +545,19 @@ function Schema:OnPlayerHitGround(ply, inWater, onFloater, speed)
 			ply:EmitSound("LiteNetwork/hl2rp/land0"..math.random(1,4)..".ogg", 50, math.random(90, 110), math.random(0.3, 0.4))
 		end
 
-		if (punch * 2 >= 12) and not (ply:Team() == FACTION_OTA or ply:IsDispatch()) then
+		ply:ViewPunch(Angle(punch, 0, 0))
+
+		if (punch * 2 >= 10) and not (ply:Team() == FACTION_OTA or ply:IsDispatch()) then
 			ply:TakeDamage(math.random(10, 20))
 			ply:EmitSound("player/pl_fallpain1.wav", 80)
-			ply:ChatNotify("You broke your legs!")
-			ply:GetCharacter():SetData("ixbrokenLegs", true)
 
-			if ply:IsCombine() then
-				Schema:AddCombineDisplayMessage("WARNING! UNIT "..string.upper(ply:Nick()).." RECEIVED LEG FRACTURE...", Color(200, 50, 0, 255))
+			if ( ply:GetCharacter():GetData("ixBrokenLegs") ) then
+				ply:ChatNotify("You broke your legs!")
+				ply:GetCharacter():SetData("ixBrokenLegs", true)
+
+				if ( ply:IsCombine() ) then
+					Schema:AddCombineDisplayMessage("WARNING! UNIT "..string.upper(ply:Nick()).." RECEIVED LEG FRACTURE...", Color(200, 50, 0, 255))
+				end
 			end
 		end
 	end
@@ -555,14 +627,14 @@ function Schema:PlayerMessageSend(speaker, chatType, text, anonymous, receivers,
 
 				if (info.sound) then
 					if (info.global) and (chatType == "dispatch") then
-						netstream.Start(nil, "PlaySound", info.sound)
+						PlayEventSound(info.sound)
 					else
 						local sounds = {info.sound}
 
 						if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio")) then
 							for k2, v2 in pairs(player.GetAll()) do
 								if v2:IsCombine() then
-									ix.util.EmitQueuedSounds(v, sounds, nil, nil, 40)
+									v2:PlaySound(info.sound)
 								end
 							end
 						else

@@ -1,7 +1,7 @@
 RECIPE.name = "MP7"
 RECIPE.description = "Craft a submachine gun."
 RECIPE.model = "models/weapons/w_smg1.mdl"
-RECIPE.category = "Weapons (Primary)"
+RECIPE.category = "Weapons (Ranged)"
 
 RECIPE.base = "recipe_base"
 

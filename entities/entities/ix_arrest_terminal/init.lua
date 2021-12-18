@@ -112,9 +112,9 @@ net.Receive("ixCombineTerminalCharge", function(len, ply)
 	end)
 
 	timer.Simple(chargesTime, function()
+		target.ixJailState = nil
+
 		Schema:SetTeam(target, ix.faction.teams["01_citizen"])
 		hook.Run("PlayerLoadout", target)
-
-		target.ixJailState = nil
 	end)
 end)

@@ -194,15 +194,15 @@ ix.divisions.cca[2] = {
 	-- Bodygroups
 	bg_body = 4,
 }
-ix.divisions.cca[2].weapons[1] = {"ix_stunstick"}
-ix.divisions.cca[2].weapons[2] = {"ix_stunstick"}
-ix.divisions.cca[2].weapons[3] = {"ix_stunstick", "ix_usp"}
-ix.divisions.cca[2].weapons[4] = {"ix_stunstick", "ix_usp"}
-ix.divisions.cca[2].weapons[5] = {"ix_stunstick", "ix_usp"}
-ix.divisions.cca[2].weapons[6] = {"ix_stunstick", "ix_usp"}
-ix.divisions.cca[2].weapons[7] = {"ix_stunstick", "ix_usp", "ix_mp7"}
-ix.divisions.cca[2].weapons[8] = {"ix_stunstick", "ix_usp", "ix_mp7"}
-ix.divisions.cca[2].weapons[9] = {"ix_stunstick", "ix_357", "ix_spas12"}
+ix.divisions.cca[2].weapons[1] = {"ix_medkit", "ix_stunstick"}
+ix.divisions.cca[2].weapons[2] = {"ix_medkit", "ix_stunstick"}
+ix.divisions.cca[2].weapons[3] = {"ix_medkit", "ix_stunstick", "ix_usp"}
+ix.divisions.cca[2].weapons[4] = {"ix_medkit", "ix_stunstick", "ix_usp"}
+ix.divisions.cca[2].weapons[5] = {"ix_medkit", "ix_stunstick", "ix_usp"}
+ix.divisions.cca[2].weapons[6] = {"ix_medkit", "ix_stunstick", "ix_usp"}
+ix.divisions.cca[2].weapons[7] = {"ix_medkit", "ix_stunstick", "ix_usp", "ix_mp7"}
+ix.divisions.cca[2].weapons[8] = {"ix_medkit", "ix_stunstick", "ix_usp", "ix_mp7"}
+ix.divisions.cca[2].weapons[9] = {"ix_medkit", "ix_stunstick", "ix_357", "ix_spas12"}
 
 ix.divisions.cca[3] = {
 	id = 3,

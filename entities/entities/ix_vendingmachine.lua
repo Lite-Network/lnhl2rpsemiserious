@@ -58,7 +58,7 @@ if ( SERVER ) then
 		local tracePosition = trace.HitPos
 	
 		if (tracePosition) then
-			for k, v in ipairs(Schema.VendingItems) do
+			for k, v in ipairs(ix.vendingItems) do
 				local position = self:GetPos() + self:GetForward() * 17.5 + self:GetRight() * -24.4 + (self:GetUp() * 5.3 - Vector(0, 0, (k - 1) * 2.1))
 	
 				if (position:DistToSqr(tracePosition) <= 1) then
@@ -86,7 +86,7 @@ if ( SERVER ) then
 		if (id) then
 			stock[id] = self.MaxStock
 		else
-			for k, v in ipairs(Schema.VendingItems) do
+			for k, v in ipairs(ix.vendingItems) do
 				stock[k] = self.MaxStock
 			end
 		end
@@ -113,7 +113,7 @@ if ( SERVER ) then
 	
 		local character = ply:GetCharacter()
 	
-		local itemInfo = Schema.VendingItems[buttonID]
+		local itemInfo = ix.vendingItems[buttonID]
 		local price = itemInfo[3]
 
 		if (!character:HasMoney(price)) then

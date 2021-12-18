@@ -232,3 +232,120 @@ ix.command.Add("ToggleAPCGate", {
 		end
 	end
 })
+
+ix.command.Add("FixLegs", {
+	description = "Fixes broken legs.",
+	adminOnly = true,
+	arguments = {bit.bor(ix.type.character, ix.type.optional)},
+	OnRun = function(_, ply, target)
+		if not (ply:IsAdmin()) then
+			ply:Notify("You need to be a staff member in order to use this command.")
+			return false
+		end
+		local char = ply:GetCharacter()
+
+		if target then
+			ply:Notify("Your legs have been healed, by a staff member.")
+			target:SetData("brokenLegs", false)
+		else
+			ply:Notify("Your legs have been healed.")
+			char:SetData("brokenLegs", false)
+		end
+	end
+})
+
+properties.Add("ixGetSteamID", {
+	MenuLabel = "Copy SteamID",
+	Order = 999,
+	MenuIcon = "icon16/user_add.png",
+
+	Filter = function(self, ent, ply)
+		if ( !IsValid( ent ) ) then return false end
+		if not ( ent:IsPlayer() ) then return false end
+		if not ( ply:IsAdmin() ) then return false end
+
+		return true
+	end,
+	Action = function(self, ent)
+		SetClipboardText(ent:IsBot() and ent:EntIndex() or ent:SteamID())
+	end
+})
+
+properties.Add("ixShowProfile", {
+	MenuLabel = "Show Profile",
+	Order = 999,
+	MenuIcon = "icon16/user_add.png",
+
+	Filter = function(self, ent, ply)
+		if ( !IsValid( ent ) ) then return false end
+		if not ( ent:IsPlayer() ) then return false end
+		if not ( ply:IsAdmin() ) then return false end
+
+		return true
+	end,
+	Action = function(self, ent)
+		self:MsgStart()
+			net.WriteEntity(ent)
+		self:MsgEnd()
+	end,
+	Receive = function(self, length, ply)
+		local target = net.ReadEntity()
+
+		if ( !properties.CanBeTargeted(target, ply) ) then return end
+
+		target:ShowProfile()
+	end 
+})
+
+properties.Add("ixOpenInventory", {
+	MenuLabel = "Open Inventory",
+	Order = 999,
+	MenuIcon = "icon16/box.png",
+
+	Filter = function(self, ent, ply)
+		if ( !IsValid( ent ) ) then return false end
+		if not ( ent:IsPlayer() ) then return false end
+		if not ( ply:IsAdmin() ) then return false end
+
+		return true
+	end,
+	Action = function(self, ent)
+		self:MsgStart()
+			net.WriteEntity(ent)
+		self:MsgEnd()
+	end,
+	Receive = function(self, length, ply)
+		local target = net.ReadEntity()
+
+		if ( !properties.CanBeTargeted(target, ply) ) then return end
+
+		Schema:SearchPlayer(ply, target)
+	end 
+})
+
+properties.Add("ixFixLegs", {
+	MenuLabel = "Fix Legs",
+	Order = 999,
+	MenuIcon = "icon16/user.png",
+
+	Filter = function(self, ent, ply)
+		if ( !IsValid( ent ) ) then return false end
+		if not ( ent:IsPlayer() and ent:GetCharacter() ) then return false end
+		if not ( ply:IsAdmin() ) then return false end
+		if not ( ply:GetCharacter():GetData("ixBrokenLegs") ) then return false end
+
+		return true
+	end,
+	Action = function(self, ent)
+		self:MsgStart()
+			net.WriteEntity(ent)
+		self:MsgEnd()
+	end,
+	Receive = function(self, length, ply)
+		local target = net.ReadEntity()
+
+		if ( !properties.CanBeTargeted(target, ply) ) then return end
+
+		ply:GetCharacter():SetData("ixBrokenLegs", true)
+	end 
+})

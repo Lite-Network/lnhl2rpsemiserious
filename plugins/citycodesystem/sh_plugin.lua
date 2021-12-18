@@ -7,11 +7,11 @@ PLUGIN.description = "City Codes for Lite Network, used from Overlord Community.
 ix.util.Include("sv_plugin.lua")
 
 ix.cityCodes = {
-    [0] = {"GREEN - CIVIL / PRESERVED", Color(46, 112, 37)},
-    [1] = {"YELLOW - CIVIL UNREST / MARGINAL", Color(223, 195, 33)},
-    [2] = {"ORANGE - CITY TURMOIL / LOCKDOWN", Color(211, 124, 42)},
-    [3] = {"RED - JUDGEMENT WAIVER / FRACTURED", Color(224, 58, 36)},
-    [4] = {"GRAY - AUTONOMOUS JUDGEMENT / LOST", Color(50, 50, 50)},
+    [0] = {"GREEN - CIVIL / PRESERVED", Color(46, 112, 37), "Civil"},
+    [1] = {"YELLOW - CIVIL UNREST / MARGINAL", Color(223, 195, 33), "Civil Unrest"},
+    [2] = {"ORANGE - CITY TURMOIL / LOCKDOWN", Color(211, 124, 42), "City Turmoil"},
+    [3] = {"RED - JUDGEMENT WAIVER / FRACTURED", Color(224, 58, 36), "Judgement Waiver"},
+    [4] = {"GRAY - AUTONOMOUS JUDGEMENT / LOST", Color(50, 50, 50), "Autonomous Judgement"},
 }
 
 local cityCodes = {
@@ -40,6 +40,10 @@ ix.command.Add("ChangeCityCode", {
 		if (status[1] == "red") then -- Judgement Waiver
 			if not ( GetGlobalBool("ixJWStatus") == true ) then
 				PLUGIN:JudgementWaiverStart()
+
+				if ( GetGlobalBool("ixCTStatus") == true ) then
+					PLUGIN:CityTurmoilStop()
+				end
 				
 				if ( GetGlobalBool("ixAJStatus") == true ) then
 					timer.Simple(10, function()
@@ -50,6 +54,10 @@ ix.command.Add("ChangeCityCode", {
 		elseif (status[1] == "gray") then -- Autonomous Judgement
 			if ( GetGlobalBool("ixJWStatus") == true ) then
 				PLUGIN:JudgementWaiverStopSilent()
+			end
+
+			if ( GetGlobalBool("ixCTStatus") == true ) then
+				PLUGIN:CityTurmoilStop()
 			end
 
 			if not ( GetGlobalBool("ixAJStatus") == true ) then

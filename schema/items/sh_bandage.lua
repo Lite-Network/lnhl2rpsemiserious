@@ -1,10 +1,26 @@
+-- Item Statistics
+
 ITEM.name = "Bandage"
-ITEM.model = "models/willardnetworks/skills/bandaid.mdl"
 ITEM.description = "A Cloth, can be used to cover wounds to stop bleeding."
 ITEM.category = "Medical Items"
-ITEM.price = 20
-ITEM.HealAmount = 10
+
+-- Item Configuration
+
+ITEM.model = "models/willardnetworks/skills/bandaid.mdl"
+ITEM.skin = 0
+
+-- Item Inventory Size Configuration
+
+ITEM.width = 1
+ITEM.height = 1
+
+-- Item Custom Configuration
+
+ITEM.HealAmount = 15
 ITEM.Volume = 70
+ITEM.price = 20
+
+-- Item Functions
 
 ITEM.functions.Apply = {
 	name = "Heal yourself",
@@ -49,18 +65,6 @@ ITEM.functions.ApplyTarget = {
 			return false
 		end
 	end,
-    OnCanRun = function(itemTable)
-		local ply = itemTable.player
-		local data = {}
-			data.start = ply:GetShootPos()
-			data.endpos = data.start + ply:GetAimVector() * 96
-			data.filter = ply
-		local target = util.TraceLine(data).Entity
-
-		if IsValid(target) and target:IsPlayer() then
-			return false
-		end
-    end,
 	OnRun = function(itemTable)
 		local ply = itemTable.player
 		local data = {}

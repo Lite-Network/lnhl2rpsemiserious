@@ -41,7 +41,12 @@ ix.option.Add("hudDrawBox", ix.type.bool, true)
 ix.option.Add("hudDrawPlayerInformation", ix.type.bool, true)
 
 ix.option.Add("showLocalAssets", ix.type.bool, true, {
-	phrase = "Show Local Assets",
 	description = "Should the local assets on your Combine Hud show?",
-	category = "Appearance",
+})
+
+ix.lang.AddTable("english", {
+	optshowLocalAssets = "Show local Assets?",
+    opthudScreenEffect = "Toggle Screen Effect",
+    opthudDrawBox = "Toggle Hud Box",
+    opthudDrawPlayerInformation = "Toggle Hud Player Information",
 })

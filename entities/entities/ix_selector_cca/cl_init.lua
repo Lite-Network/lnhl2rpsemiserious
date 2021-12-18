@@ -16,7 +16,7 @@ function PANEL:Init()
 	self.selectedDivisionID = nil
 	self.selectedRank = nil
 	self.selectedRankID = nil
-	self.randomUnitID = tostring(math.random(1000,9999))
+	self.randomUnitID = Schema:ZeroNumber(math.random(1, 99999), 5)
 
 	self.modelPreview = self:Add("ixModelPanel")
 	self.modelPreview:SetSize(self:GetWide() / 2, 0)

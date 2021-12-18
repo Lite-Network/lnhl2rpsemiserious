@@ -60,8 +60,7 @@ function PANEL:Init()
 			table.insert(charges, k)
 			-- probably the worst way but fuck you :)
 			chargestimeoriginal = chargestimeoriginal + ix.combineterminal.charges[k].severity
-			chargestime = chargestime + ix.combineterminal.charges[k].severity
-			chargestime = math.Clamp(chargestime, 60, 900)
+			chargestime = ix.combineterminal.charges[k].severity * 60
 			chargecount = chargecount + 1
 		end
 

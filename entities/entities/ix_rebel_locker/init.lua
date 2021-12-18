@@ -34,7 +34,7 @@ end
 
 function ENT:AcceptInput(Name, Activator, Caller)
 	if (Name == "Use" and Caller:IsPlayer()) then
-		if (Caller:IsCitizen() or Caller:IsVort()) then
+		if (Caller:IsCitizen() or Caller:IsVortigaunt()) then
 			self:EmitSound("doors/door_metal_thin_open1.wav")
 			Caller:OpenVGUI("LiteNetworkRebelOutfitLocker")
 		else
@@ -79,7 +79,7 @@ net.Receive("LiteNetworkRebelLockerChange.Rebel", function( len, ply )
 		end
 
 		ply:SetBodygroup(1, table.Random({2, 3, 6}))
-		ply:SetBodygroup(2, math.random(11,12))
+		ply:SetBodygroup(2, math.random(8,9))
 		ply:SetBodygroup(3, math.random(6,8))
 		ply:SetBodygroup(4, 6)
 		ply:EmitSound("doors/door_metal_thin_close2.wav")
@@ -100,7 +100,7 @@ net.Receive("LiteNetworkRebelLockerChange.RebelMedic", function( len, ply )
 		end
 
 		ply:SetBodygroup(1, table.Random({6, 7, 8}))
-		ply:SetBodygroup(2, 13)
+		ply:SetBodygroup(2, 10)
 		ply:SetBodygroup(3, math.random(6,8))
 		ply:SetBodygroup(4, 6)
 		ply:EmitSound("doors/door_metal_thin_close2.wav")
@@ -114,7 +114,7 @@ end)
 
 net.Receive("LiteNetworkRebelLockerChange.VortigauntShackled", function( len, ply )
 	local char = ply:GetCharacter()
-	if (char and ply:IsVort()) then
+	if (char and ply:IsVortigaunt()) then
 		if (!ply:NearEntity("ix_rebel_locker", 128)) then
 			ply:Notify("You have to be near the Rebel Outift Locker.")
 			return false
@@ -137,7 +137,7 @@ end)
 
 net.Receive("LiteNetworkRebelLockerChange.VortigauntFreed", function( len, ply )
 	local char = ply:GetCharacter()
-	if (char and ply:IsVort()) then
+	if (char and ply:IsVortigaunt()) then
 		if (!ply:NearEntity("ix_rebel_locker", 128)) then
 			ply:Notify("You have to be near the Rebel Outift Locker.")
 			return false

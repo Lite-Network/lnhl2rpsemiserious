@@ -10,11 +10,11 @@ function Schema:CanTool(ply, trace, toolname, tool, button)
 			return false
 		end
 
-		--[[if (toolname == "advdupe2") and not (ply:IsDonator() or ply:IsAdmin()) then
+		if (toolname == "advdupe2") and not (ply:IsDonator() or ply:IsAdmin()) then
 			ply:Notify("Advanced Duplicator is restricted to Donators only!")
 			MsgAll(tostring(ply), " ", tostring(ply:SteamID()), " tried to use the ", toolname, " tool.\n")
 			return false
-		end]]
+		end
 
 		if (toolname == "rb655_easy_bodygroup") and not (ply:IsDonator() or ply:IsAdmin()) then
 			ply:Notify("Easy Bodygroup Tool is restricted to Donators only!")
@@ -22,7 +22,7 @@ function Schema:CanTool(ply, trace, toolname, tool, button)
 			return false
 		end
 
-		if (toolname:find("wire")) and not (ply:IsDonator() or ply:IsAdmin()) then
+		if (toolname:find("wire")) and not (ply:IsDonator() or ply:IsAdmin()) and not (toolname:find("wire_textscreen")) then
 			ply:Notify("Wiremod is restricted to Donators only!")
 			MsgAll(tostring(ply), " ", tostring(ply:SteamID()), " tried to use the ", toolname, " tool.\n")
 			return false
@@ -30,11 +30,6 @@ function Schema:CanTool(ply, trace, toolname, tool, button)
 
 		MsgAll(tostring(ply), " ", tostring(ply:SteamID()), " used the ", toolname, " tool.\n")
 	end
-end
-
-function Schema:OnPlayerHitGround(ply)
-    local vel = ply:GetVelocity()
-    ply:SetVelocity( Vector( - ( vel.x * 0.1 ), - ( vel.y * 0.1 ), 0) )
 end
 
 function Schema:CanProperty(ply, property, ent)
@@ -55,7 +50,7 @@ end
 
 function Schema:CanPlayerThrowPunch(ply)
 	if ply:IsWepRaised() then
-		if not ply:IsRebel() then
+		if not ( ply:IsRebel() or ply:IsCombine() ) then
 			if ( SERVER ) then
 				ply:ChatNotify("Don't try to minge.")
 			end
@@ -64,15 +59,6 @@ function Schema:CanPlayerThrowPunch(ply)
 			return true
 		end
 	end
-end
-
-function Schema:Initialize()
-    timer.Simple(60, function()
-		RunConsoleCommand("sv_skyname", "painted")
-		for k, v in pairs(ents.FindByClass("light_environment")) do
-			v:Fire("TurnOff")
-		end
-	end)
 end
 
 function Schema:CanPlayerJoinClass()
@@ -100,6 +86,29 @@ end
 function Schema:EntityTakeDamage(target, dmginfo)
 	if target:IsPlayer() and (dmginfo:GetDamageType() == DMG_CRUSH) then
 		dmginfo:ScaleDamage(0)
+	end
+
+	if ( target:IsPlayer() ) then
+		if ( dmginfo:GetAttacker():GetClass() == "npc_headcrab" or dmginfo:GetAttacker():GetClass() == "npc_headcrab_fast" ) then
+			dmginfo:ScaleDamage(math.random(3.00,5.00))
+		end
+	end
+end
+
+function Schema:CanPlayerUseBusiness(ply, uniqueID)
+	local itemTable = ix.item.list[uniqueID]
+
+	if (itemTable) then
+		if (ply.ixCWUClass == 2) and (itemTable.category == "Consumeables") then
+			ply.noBusinessAllow = true
+			return true
+		elseif (ply.ixCWUClass == 3) and (itemTable.category == "Medical Items") then
+			ply.noBusinessAllow = true
+			return true
+		else
+			ply.noBusinessAllow = false
+			return false
+		end
 	end
 end
 

@@ -4,6 +4,12 @@ function ENT:Initialize()
 	self.playerFaction = FACTION_CWU
 end
 
+net.Receive("ixSelector.CWU.SetClass", function()
+	local ply = LocalPlayer()
+	ply.ixCWUClass = net.ReadUInt(3) or 0
+	print(ply, " ", net.ReadUInt(3) or 0)
+end)
+
 net.Receive("ixSelector.CWU.NotAllowed", function()
 	Derma_Message("Get out of here, I have no business to do with you.", "Civil Worker's Union Vendor", "Alright, I'm moving! Jeez.")
 end)

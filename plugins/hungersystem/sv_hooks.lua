@@ -37,6 +37,6 @@ function PLUGIN:PlayerTick(ply)
 
 		char:SetHunger(hunger)
 
-		ply.HungerTick = CurTime() + (ix.config.Get("hungerTime", 120))
+		ply.HungerTick = CurTime() + (ix.config.Get("hungerTime", 60))
 	end
 end

@@ -23,9 +23,16 @@ FACTION.defaultClass = nil
 FACTION.adminOnly = false
 FACTION.donatorOnly = false
 FACTION.noModelSelection = true
-FACTION.requiredXP = 800
+FACTION.requiredXP = 1000
 FACTION.command = "ix_faction_become_ota"
 FACTION.modelWhitelist = "litenetwork/ota/echo"
+
+--[[ Plugin Configs ]]--
+
+FACTION.canSeeWaypoints = true
+FACTION.canAddWaypoints = true
+FACTION.canRemoveWaypoints = true
+FACTION.canUpdateWaypoints = true
 
 --[[ Do not change! ]]--
 

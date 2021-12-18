@@ -368,7 +368,7 @@ end
 
 function PLUGIN:AutonomousJudgementStart()
 	for k, v in pairs(player.GetAll()) do
-		net.Start("ixEventMessageAll")
+		net.Start("ixEventMessage")
 			net.WriteString("Autonomous Judgement.. Prepare yourselves..")
 		net.Send(v)
 	end

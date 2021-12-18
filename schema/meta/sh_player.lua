@@ -21,11 +21,11 @@ function PLAYER:IsCombine()
 end
 
 function PLAYER:IsCombineCommand()
-	return (self:IsCombine() and ((self.ixOTARank == 3) or (self.ixCCARank == 8) or (self.ixCCARank == 9) or (self.ixCCADivision == 6)))
+	return (self:IsCombine() and ((self.ixOTARank == 3) or (self.ixCCARank == 7) or (self.ixCCARank == 8) or (self.ixCCARank == 9) or (self.ixCCADivision == 6) or (self.ixOTADivision == 7)))
 end
 
 function PLAYER:IsCombineLeader()
-	return (self:IsCombine() and (self.ixCCADivision == 6))
+	return (self:IsCombine() and (self.ixCCADivision == 7))
 end
 
 function PLAYER:IsCA()

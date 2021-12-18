@@ -2,7 +2,7 @@
 
 
 RECIPE.name = "Supplements"
-RECIPE.description = "Melon + Melon = Supplements???"
+RECIPE.description = "Scotnay's favourite meal."
 RECIPE.model = "models/props_lab/jar01b.mdl"
 RECIPE.category = "Miscellaneous"
 

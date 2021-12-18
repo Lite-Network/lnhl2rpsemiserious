@@ -63,19 +63,39 @@ local buildingWeapon = {
 	["swep_construction_kit"] = true,
 }
 
+local function DrawBox(x, y, w, h, ply, char)
+	ix.util.DrawBlurAt(x, y, w, h, 1)
+
+	surface.SetDrawColor(ColorAlpha(team.GetColor(ply:Team()), 25))
+	surface.DrawRect(x, y, w, h)
+
+	surface.SetDrawColor(Color(30, 30, 30, 100))
+	surface.DrawRect(x, y, w, h)
+end
+
 local text01position = ScrH() - 50
 local text02position = ScrH() - 30
 local function DrawHud(ply, char) -- Hud inspiration from impulse.
 	-- If anyone like smug comments that this is stolen, it aint, I just remade it so fuck off :)
-	ix.util.DrawBlurAt(10, ScrH() - 200 - 10, 350, 200, 1)
+	DrawBox(10, ScrH() - 210, 350, 200, ply, char)
 
-	surface.SetDrawColor(ColorAlpha(team.GetColor(ply:Team()), 25))
-	surface.DrawRect(10, ScrH() - 200 - 10, 350, 200)
+	local currentCityCode = "Green"
+	local currentCityCodeColor = color_white
+	for k, v in pairs(ix.cityCodes) do
+		local value = ix.config.Get("cityCode", 0)
 
-	surface.SetDrawColor(Color(30, 30, 30, 100))
-	surface.DrawRect(10, ScrH() - 200 - 10, 350, 200)
+		if (value == k) then
+			currentCityCode = v[3]
+			currentCityCodeColor = v[2]
+		end
+	end
 
 	surface.SetFont("LiteNetworkFont32")
+	local cityCodeSizeWidth, cityCodeSizeHeight = surface.GetTextSize(currentCityCode)
+
+	DrawBox(ScrW() / 2 - ((cityCodeSizeWidth + 50) / 2), ScrH() - 60, (cityCodeSizeWidth + 50), 50, ply, char)
+
+	draw.SimpleTextOutlined(currentCityCode, "LiteNetworkFont32", ScrW() / 2, ScrH() - 52.5, currentCityCodeColor, TEXT_ALIGN_CENTER, nil, 1, color_black)
 
 	surface.SetTextColor(team.GetColor(ply:Team()))
 	surface.SetTextPos(20, ScrH() - 200 - 10 + 5)
@@ -87,21 +107,81 @@ local function DrawHud(ply, char) -- Hud inspiration from impulse.
 
 	surface.SetFont("LiteNetworkFont28")
 	surface.SetTextPos(160, ScrH() - 200 - 10 + 50)
+
+	surface.SetTextColor(color_white)
 	surface.DrawText("Health: "..ply:Health())
+
+	-- poop blizzard
+	--[[local healthText = "Healthy"
+	local health = ply:Health()
+
+	-- this is fucking disgusting, but oh well
+	if ( health >= 100 ) then
+		healthText = "Healthy"
+		surface.SetTextColor(Color(0, 255, 0, 255))
+	elseif ( health >= 80 ) then
+		healthText = "Wounded"
+		surface.SetTextColor(Color(200, 180, 0, 255))
+	elseif ( health >= 60 ) then
+		healthText = "Slightly Injured"
+		surface.SetTextColor(Color(210, 150, 0, 255))
+	elseif ( health >= 40 ) then
+		healthText = "Injured"
+		surface.SetTextColor(Color(230, 100, 0, 255))
+	elseif ( health >= 20 ) then
+		healthText = "Seriously Injured"
+		surface.SetTextColor(Color(230, 40, 0, 255))
+	else
+		healthText = "Very close to death"
+		surface.SetTextColor(Color(150, 0, 0, math.random(100, 255)))
+	end
+
+	surface.DrawText(healthText)]]
+	surface.SetTextColor(color_white)
 
 	surface.SetDrawColor(healthColor)
 	surface.SetMaterial(healthIcon)
 	surface.DrawTexturedRect(130, ScrH() - 200 - 10 + 52.5, 25, 25)
 
 	surface.SetTextPos(160, ScrH() - 200 - 10 + 75)
-	surface.DrawText("Tokens: "..char:GetMoney())
+	if ( char:GetMoney() == 0 ) then
+		surface.DrawText("No Tokens")
+	else
+		surface.DrawText(char:GetMoney().." Tokens")
+	end
 
 	surface.SetDrawColor(tokensColor)
 	surface.SetMaterial(tokensIcon)
 	surface.DrawTexturedRect(130, ScrH() - 200 - 10 + 77.5, 25, 25)
 
 	surface.SetTextPos(160, ScrH() - 200 - 10 + 100)
-	surface.DrawText("Hunger: "..char:GetHunger())
+
+	local hungerText = "Well Fed"
+	local hunger = char:GetHunger()
+
+	-- this is fucking disgusting, but oh well
+	if ( hunger >= 100 ) then
+		hungerText = "Well Fed"
+		surface.SetTextColor(Color(0, 255, 0, 255))
+	elseif ( hunger >= 80 ) then
+		hungerText = "Satisfied"
+		surface.SetTextColor(Color(200, 180, 0, 255))
+	elseif ( hunger >= 60 ) then
+		hungerText = "Hungry"
+		surface.SetTextColor(Color(210, 150, 0, 255))
+	elseif ( hunger >= 40 ) then
+		hungerText = "Grumbling"
+		surface.SetTextColor(Color(230, 100, 0, 255))
+	elseif ( hunger >= 20 ) then
+		hungerText = "Starving"
+		surface.SetTextColor(Color(230, 40, 0, 255))
+	else
+		hungerText = "Heavily Starving"
+		surface.SetTextColor(Color(150, 0, 0, math.random(100, 255)))
+	end
+
+	surface.DrawText(hungerText)
+	surface.SetTextColor(color_white)
 
 	surface.SetDrawColor(hungerColor)
 	surface.SetMaterial(hungerIcon)
@@ -303,30 +383,22 @@ local function DrawCombineHud(ply, char)
 	if (ix.option.Get("showLocalAssets", true) == true) then
 		draw.SimpleTextOutlined("<:: LOCAL ASSETS //", "BudgetLabel", 10, 5 + 16 * 10, team.GetColor(ply:Team()), nil, nil, 1, color_black)
 		for k, v in pairs(player.GetAll()) do
-			if ( v:IsCombine() ) then
-				if ( v:Team() == FACTION_CCA ) then
-					local zone = v:GetPlayerInArea() or "<UNDOCUMENTED ZONE>"
-
-					local health = v:Health().."%"
-					if not v:Alive() then
-						health = "<BIOSIGNAL LOST>"
-					end
-					draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-					draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-					draw.SimpleTextOutlined(" | ZONE: "..string.upper(zone), "BudgetLabel", 350, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-					y = y + 16
-				elseif ( v:Team() == FACTION_OTA )
-					local zone = v:GetPlayerInArea() or "<UNDOCUMENTED ZONE>"
-
-					local health = v:Health().."%"
-					if not v:Alive() then
-						health = "<BIOSIGNAL LOST>"
-					end
-					draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-					draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-					draw.SimpleTextOutlined(" | ZONE: "..string.upper(zone), "BudgetLabel", 350, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-					y = y + 16
+			if ( v:Team() == FACTION_CCA ) and ( ply:Team() == FACTION_CCA ) then
+				local health = v:Health().."%"
+				if not v:Alive() then
+					health = "<BIOSIGNAL LOST>"
 				end
+				draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+				draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+				y = y + 16
+			elseif ( v:Team() == FACTION_OTA ) and ( ply:Team() == FACTION_OTA ) then
+				local health = v:Health().."%"
+				if not v:Alive() then
+					health = "<BIOSIGNAL LOST>"
+				end
+				draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+				draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+				y = y + 16
 			end
 		end
 	end
@@ -452,15 +524,15 @@ local function DrawPlayerInfo(ply)
 				if health >= 1 then
 					draw.DrawText(name, "ixMediumFont", headpos_x, headpos_y - ScreenScale(6), Color(teamcol.r, teamcol.g, teamcol.b, v.alpha), TEXT_ALIGN_CENTER)
 
-					if health >= 100 then
+					if ( health >= 100 ) then
 						draw.DrawText("Healthy", "ixSmallFont", headpos_x, headpos_y, Color(0, 255, 0, v.alpha), TEXT_ALIGN_CENTER)
-					elseif health >= 80 then
+					elseif ( health >= 80 ) then
 						draw.DrawText("Wounded", "ixSmallFont", headpos_x, headpos_y, Color(200, 180, 0, v.alpha), TEXT_ALIGN_CENTER)
-					elseif health >= 60 then
-						draw.DrawText("Injured", "ixSmallFont", headpos_x, headpos_y, Color(210, 150, 0, v.alpha), TEXT_ALIGN_CENTER)
-					elseif health >= 40 then
+					elseif ( health >= 60 ) then
+						draw.DrawText("Slightly Injured", "ixSmallFont", headpos_x, headpos_y, Color(210, 150, 0, v.alpha), TEXT_ALIGN_CENTER)
+					elseif ( health >= 40 ) then
 						draw.DrawText("Looks Injured", "ixSmallFont", headpos_x, headpos_y, Color(230, 100, 0, v.alpha), TEXT_ALIGN_CENTER)
-					elseif health >= 20 then
+					elseif ( health >= 20 ) then
 						draw.DrawText("Looks Seriously Injured", "ixSmallFont", headpos_x, headpos_y, Color(230, 40, 0, v.alpha), TEXT_ALIGN_CENTER)
 					else
 						draw.DrawText("Very close to death", "ixSmallFont", headpos_x, headpos_y, Color(150, 0, 0, v.alpha - math.random(20, 100)), TEXT_ALIGN_CENTER)

@@ -39,7 +39,7 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 			return
 		end
 
-		local RandomNumbers = tonumber(args[3]) or math.random(1000,9999)
+		local RandomNumbers = tonumber(args[3]) or Schema:ZeroNumber(math.random(1, 99999), 5)
 		local RankID = tonumber(args[1])
 		local DivisionID = tonumber(args[2])
 		local RankInfo = ix.ranks.cca[RankID]

@@ -1,7 +1,7 @@
 RECIPE.name = "SPAS-12"
 RECIPE.description = "Craft a spas-12 shotgun."
 RECIPE.model = "models/weapons/w_shotgun.mdl"
-RECIPE.category = "Weapons (Primary)"
+RECIPE.category = "Weapons (Ranged)"
 
 RECIPE.base = "recipe_base"
 

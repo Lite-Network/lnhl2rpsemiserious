@@ -18,17 +18,19 @@ ix.whitelists.CCA.Ranks = {
 		"STEAM_0:0:203818007", -- kingdarkness
 		"STEAM_0:0:196637456", -- German
 		"STEAM_0:1:157305669", -- haja
+		"STEAM_0:0:244971374", -- GMAN0289
 	}, 
 	["UNION-DvL"] = {
 		"STEAM_0:1:117769029", -- bonk
+		"STEAM_0:1:506629560", -- cor
+		"STEAM_0:0:10223064", -- xavier
 	},
-	["UNION-DcO"] = "STEAM_0:0:460056698", -- wheat
+	["UNION-DcO"] = "",
 
 	["HELIX-OfC"] = {
 		"STEAM_0:0:174143741", -- lee west
-		"STEAM_0:0:428839009", -- Yoboyboss76
 	},
-	["HELIX-DvL"] = "STEAM_0:1:506629560", -- cor
+	["HELIX-DvL"] = {},
 	["HELIX-DcO"] = "",
 
 	["GRID-OfC"] = {
@@ -41,8 +43,13 @@ ix.whitelists.CCA.Ranks = {
 	},
 	["GRID-DcO"] = "",
 
-	["JURY-OfC"] = "",
-	["JURY-DvL"] = "STEAM_0:0:203267540", -- Overwatch
+	["JURY-OfC"] = {
+		"STEAM_0:0:229400758", -- tea
+		"STEAM_0:0:25401034", -- Tsunami
+	},
+	["JURY-DvL"] = {
+		"STEAM_0:0:203267540", -- Overwatch
+	},
 	["JURY-DcO"] = "",
 }
 ix.whitelists.OTA.NoRanks = {
@@ -53,13 +60,19 @@ ix.whitelists.OTA.NoRanks = {
 		"STEAM_0:1:506629560", -- cor
 		"STEAM_1:1:15510316", -- gilinar
 		"STEAM_0:0:138626507", -- john smith
+		"STEAM_0:0:10223064", -- xavier
+		"STEAM_0:0:199691641", -- Revectane
+		"STEAM_0:0:54754855", -- Diablo
+		"STEAM_0:1:112093491", -- engi
 	},
 }
 ix.whitelists.OTA.Ranks = {
 	["LDR"] = {
 		"STEAM_0:1:104896936", -- Phil Leotardo
 		"STEAM_0:1:506629560", -- cor
-		"STEAM_0:0:10223064", -- xavier
+		"STEAM_0:0:229400758", -- tea
+		"STEAM_0:0:155006109", -- ProvingMedusa
+		"STEAM_0:0:89116555", -- sprite cran
 	},
 }
 
@@ -85,14 +98,14 @@ function Schema:GiveWeapons(ply, weapons)
 	end
 end
 
-function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn)
+function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeInventory)
 	local char = ply:GetCharacter()
 
-	if not (factionTable) then
+	if not ( factionTable ) then
 		return
 	end
 
-	if not (char) then
+	if not ( char ) then
 		return
 	end
 
@@ -131,6 +144,7 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn)
 
 	ply:StripWeapons()
 	ply:ResetBodygroups()
+	ply.ixRebelState = nil
 
 	if ( factionTable.index == FACTION_CITIZEN or factionTable.index == FACTION_CWU or factionTable.index == FACTION_PRISONER ) then
 		if not (char) then
@@ -145,9 +159,12 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn)
 
 	ply:SetupHands()
 
-	for k, v in pairs(char:GetInventory():GetItems()) do
-		v:Remove()
+	if not ( dontWipeInventory ) then
+		for k, v in pairs(char:GetInventory():GetItems()) do
+			v:Remove()
+		end
 	end
+
 	ply:ScreenFade(SCREENFADE.IN, color_black, 1, 1)
 
 	timer.Simple(0.5, function()
@@ -180,22 +197,8 @@ for k, v in pairs(ix.faction.teams) do
 	end
 end
 
-function Schema:PlayEventSound(sound)
-	for k, v in pairs(player.GetAll()) do
-		if istable(sound) then
-			v:PlaySound(table.Random(sound))
-		else
-			v:PlaySound(sound)
-		end
-	end
-end
-
-function Schema:PlayTimedEventSound(time, sound)
-	timer.Simple(time, function() Schema:PlayEventSound(tostring(sound)) end)
-end
-
 function Schema:AddCombineDisplayMessage(text, color, sound)
-    for k, v in ipairs(player.GetAll()) do
+    for k, v in pairs(player.GetAll()) do
         if v:IsCombine() then
 			net.Start("ixAddCombineDisplayMessage")
 				net.WriteString(tostring(text) or "Invalid Input..")
@@ -209,36 +212,3 @@ end
 --[[---------------------------------------------------------------------------
 	Serverside Net Messages
 ---------------------------------------------------------------------------]]--
-
---[[---------------------------------------------------------------------------
-	Serverside Data
----------------------------------------------------------------------------]]--
-
-function Schema:SaveForceFields()
-	local data = {}
-
-	for _, v in ipairs(ents.FindByClass("ix_forcefield")) do
-		data[#data + 1] = {v:GetPos(), v:GetAngles(), v:GetMode()}
-	end
-
-	ix.data.Set("forceFields", data)
-end
-
-function Schema:LoadForceFields()
-	for _, v in ipairs(ix.data.Get("forceFields") or {}) do
-		local field = ents.Create("ix_forcefield")
-
-		field:SetPos(v[1])
-		field:SetAngles(v[2])
-		field:Spawn()
-		field:SetMode(v[3])
-	end
-end
-
-function Schema:LoadData()
-	self:LoadForceFields()
-end
-
-function Schema:SaveData()
-	self:SaveForceFields()
-end

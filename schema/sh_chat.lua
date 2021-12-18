@@ -30,7 +30,9 @@ ix.chat.Register("radio", {
 		end
 	end,
 	OnChatAdd = function(self, speaker, text)
-		chat.AddText(team.GetColor(speaker:Team()), speaker:Nick().." radios in <:: "..text.." ::>")
+		if ( speaker ) then
+			chat.AddText(team.GetColor(speaker:Team()), speaker:Nick().." radios in <:: "..text.." ::>")
+		end
 	end,
 	CanHear = function(self, speaker, listener)
 		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch()) then
@@ -59,7 +61,9 @@ ix.chat.Register("importantradio", {
 		end
 	end,
 	OnChatAdd = function(self, speaker, text)
-		chat.AddText(Color(200, 50, 50), speaker:Nick().." radios something important in <:: "..text.." ::>")
+		if ( speaker ) then
+			chat.AddText(Color(200, 50, 50), speaker:Nick().." radios something important in <:: "..text.." ::>")
+		end
 	end,
 	CanHear = function(self, speaker, listener)
 		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch()) then
@@ -89,7 +93,9 @@ ix.chat.Register("commandradio", {
 		end
 	end,
 	OnChatAdd = function(self, speaker, text)
-		chat.AddText(Color(255, 150, 0), speaker:Nick().." radios in command freq. <:: "..text.." ::>")
+		if ( speaker ) then
+			chat.AddText(Color(255, 150, 0), speaker:Nick().." radios in command freq. <:: "..text.." ::>")
+		end
 	end,
 	CanHear = function(self, speaker, listener)
 		if not listener:IsCombineCommand() then
@@ -118,7 +124,9 @@ ix.chat.Register("dispatchradio", {
 		end
 	end,
 	OnChatAdd = function(self, speaker, text)
-		chat.AddText(Color(150, 50, 50), "Dispatch radios in <:: "..text.." ::>")
+		if ( speaker ) then
+			chat.AddText(Color(150, 50, 50), "Dispatch radios in <:: "..text.." ::>")
+		end
 	end,
 	CanHear = function(self, speaker, listener)
 		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch()) then
@@ -147,7 +155,9 @@ ix.chat.Register("dispatch", {
 		end
 	end,
 	OnChatAdd = function(self, speaker, text)
-		chat.AddText(Color(30, 120, 130), "Dispatch announces: "..text)
+		if ( speaker ) then
+			chat.AddText(Color(30, 120, 130), "Dispatch announces: "..text)
+		end
 	end,
 	CanHear = function(self, speaker, listener)
 		return true
@@ -161,7 +171,9 @@ ix.chat.Register("dispatch", {
 
 ix.chat.Register("dispatchradioforce", {
 	OnChatAdd = function(self, speaker, text)
-		chat.AddText(Color(150, 50, 50), "Dispatch radios in <:: "..text.." ::>")
+		if ( speaker ) then
+			chat.AddText(Color(150, 50, 50), "Dispatch radios in <:: "..text.." ::>")
+		end
 	end,
 	CanHear = function(self, speaker, listener)
 		if not (listener:IsCombine() or listener:IsCA()) then
@@ -181,7 +193,9 @@ ix.chat.Register("dispatchradioforce", {
 
 ix.chat.Register("dispatchperson", {
 	OnChatAdd = function(self, speaker, text)
-		chat.AddText(Color(81, 88, 146), "Dispatch radios from "..speaker:Nick().." radio: "..text)
+		if ( speaker ) then
+			chat.AddText(Color(81, 88, 146), "Dispatch radios from "..speaker:Nick().." radio: "..text)
+		end
 	end,
 	CanHear = ix.config.Get("chatRange", 280),
 	font = "RadioFont",
@@ -189,9 +203,11 @@ ix.chat.Register("dispatchperson", {
 
 ix.chat.Register("adminchat", {
 	CanSay = function(self, speaker, text)
-		if not (speaker:IsAdmin()) then
-			speaker:Notify("Only Staff Members can use the admin chat, silly.")
-			return false
+		if ( speaker ) then
+			if not (speaker:IsAdmin()) then
+				speaker:Notify("Only Staff Members can use the admin chat, silly.")
+				return false
+			end
 		end
 	end,
 	CanHear = function(self, speaker, listener)

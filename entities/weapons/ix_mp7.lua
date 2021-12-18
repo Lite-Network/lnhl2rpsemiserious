@@ -24,9 +24,9 @@ SWEP.EmptySound = "Weapon_Pistol.Empty"
 
 SWEP.Primary.Sound = "Weapon_SMG1.Single"
 SWEP.Primary.Recoil = 0.5
-SWEP.Primary.Damage = 7
+SWEP.Primary.Damage = 9
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Cone = 0.06
+SWEP.Primary.Cone = 0.03
 SWEP.Primary.Delay = RPM(800)
 
 SWEP.Primary.Ammo = "smg1"
@@ -40,8 +40,8 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 
 SWEP.Spread = {}
-SWEP.Spread.Min = 0
-SWEP.Spread.Max = 0.8
+SWEP.Spread.Min = 0.1
+SWEP.Spread.Max = 0.4
 SWEP.Spread.IronsightsMod = 0.6
 SWEP.Spread.CrouchMod = 0.8
 SWEP.Spread.AirMod = 1.2

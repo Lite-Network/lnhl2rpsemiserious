@@ -1,7 +1,7 @@
 RECIPE.name = "M14"
 RECIPE.description = "Craft a hunting rifle."
 RECIPE.model = "models/weapons/w_tfa_mni14b.mdl"
-RECIPE.category = "Weapons (Primary)"
+RECIPE.category = "Weapons (Ranged)"
 
 RECIPE.base = "recipe_base"
 

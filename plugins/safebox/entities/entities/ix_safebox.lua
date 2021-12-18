@@ -42,8 +42,14 @@ if ( SERVER ) then
 			return
 		end
 
-		if (GetGlobalBool("ixJWStatus", false) == true) then
+		if (GetGlobalBool("ixCTStatus", false) == true) then
+			activator:Notify("During a City Turmoil, you cannot open safeboxes!")
+			return
+		elseif (GetGlobalBool("ixJWStatus", false) == true) then
 			activator:Notify("During a Judgement Waiver, you cannot open safeboxes!")
+			return
+		elseif (GetGlobalBool("ixAJStatus", false) == true) then
+			activator:Notify("During a Autonomous Waiver, you cannot open safeboxes!")
 			return
 		end
 

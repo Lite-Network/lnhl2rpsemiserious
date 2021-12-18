@@ -1,4 +1,7 @@
 
+-- Support for IX:Craft by wowm0d
+-- replace code in meta/sh_recipe.lua
+
 local PLUGIN = PLUGIN
 PLUGIN.meta = PLUGIN.meta or {}
 
@@ -8,6 +11,7 @@ RECIPE.name = "undefined"
 RECIPE.description = "undefined"
 RECIPE.uniqueID = "undefined"
 RECIPE.category = "Crafting"
+RECIPE.craftTime = 0
 
 function RECIPE:GetName()
 	return self.name
@@ -23,6 +27,10 @@ end
 
 function RECIPE:GetModel()
 	return self.model
+end
+
+function RECIPE:GetCraftTime()
+	return self.craftTime
 end
 
 function RECIPE:PreHook(name, func)
@@ -60,6 +68,10 @@ function RECIPE:OnCanSee(client)
 		return false
 	end
 
+	if (self.blueprint and !character:GetInventory():HasItem(self.blueprint)) then
+		return false
+	end
+
 	if (self.postHooks and self.postHooks["OnCanSee"]) then
 		local a, b, c, d, e, f = self.postHooks["OnCanSee"](self, client)
 
@@ -92,6 +104,10 @@ function RECIPE:OnCanCraft(client)
 
 	if (self.flag and !character:HasFlags(self.flag)) then
 		return false, "@CraftMissingFlag", self.flag
+	end
+
+	if (self.blueprint and !character:GetInventory():HasItem(self.blueprint)) then
+		return false, "@CraftMissingBlueprint", self.blueprint
 	end
 
 	for uniqueID, amount in pairs(self.requirements or {}) do
@@ -167,9 +183,35 @@ if ( SERVER ) then
 					local amount = self.requirements[uniqueID]
 
 					if (amountRemoved < amount) then
-						itemTable:Remove()
+						local ffAmount = 1
 
-						removedItems[uniqueID] = amountRemoved + 1
+						if (itemTable.base) then
+							if (itemTable.base == 'base_stackable') then
+								if ( itemTable:GetData('stacks', 1) == amount ) then
+									itemTable:Remove()
+									goto calculation
+								end
+
+								if ( itemTable:GetData('stacks', 1) > amount ) then
+									itemTable:SetData('stacks', itemTable:GetData('stacks', 1) - amount)
+
+									if (itemTable:GetData('stacks', 1) <= 0) then
+										itemTable:Remove()
+									end
+									ffAmount = amount
+									goto calculation
+								end
+
+								return false, '@CraftStackItems'
+							else
+								itemTable:Remove()
+							end
+						else
+							itemTable:Remove()
+						end
+
+						::calculation::
+						removedItems[uniqueID] = amountRemoved + ffAmount
 					end
 				end
 			end
@@ -184,9 +226,13 @@ if ( SERVER ) then
 				end
 			end
 
-			for i = 1, amount do
-				if (!inventory:Add(uniqueID)) then
-					ix.item.Spawn(uniqueID, client)
+			if amount == 0 then
+				return false, Format('You failed to create %s and lost your resources.', self.name)
+			else
+				for i = 1, amount do
+					if (!inventory:Add(uniqueID)) then
+						ix.item.Spawn(uniqueID, client)
+					end
 				end
 			end
 		end

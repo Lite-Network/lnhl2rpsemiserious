@@ -131,7 +131,7 @@ function PANEL:Init()
 			net.Start("LiteNetworkRebelLockerChange.RebelMedic")
 			net.SendToServer()
 		end
-	elseif LocalPlayer():IsVort() then
+	elseif LocalPlayer():IsVortigaunt() then
 		self.vortshackledbutton = self.buttonpanel:Add("ixMenuButton")
 		self.vortshackledbutton:SetSize(self:GetWide() / 2, 40)
 		self.vortshackledbutton:SetText("Become a Shackled Vortigaunt")

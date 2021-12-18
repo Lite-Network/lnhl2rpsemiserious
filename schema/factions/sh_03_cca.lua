@@ -43,6 +43,13 @@ FACTION.requiredXP = 50
 FACTION.command = "ix_faction_become_cca"
 FACTION.modelWhitelist = "wn7new/metropolice"
 
+--[[ Plugin Configs ]]--
+
+FACTION.canSeeWaypoints = true
+FACTION.canAddWaypoints = true
+FACTION.canRemoveWaypoints = true
+FACTION.canUpdateWaypoints = true
+
 --[[ Do not change! ]]--
 
 FACTION_CCA = FACTION.index
