@@ -11,7 +11,7 @@ RECIPE.requirements = {
 	["glue"] = 1,
 }
 RECIPE.results = {
-	["axe"] = 1
+	["axe"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

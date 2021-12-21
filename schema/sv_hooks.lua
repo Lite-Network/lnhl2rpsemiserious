@@ -6,10 +6,10 @@ function Schema:OnReloaded()
 	if ((ix.luaReloaded or 0) < CurTime()) then
 		for k, v in pairs(player.GetAll()) do
 			v:ChatNotify("Lua has been refreshed!")
-			--v:PlaySound("vo/k_lab/ba_pushinit.wav")
+			v:PlaySound("vo/k_lab/ba_pushinit.wav")
 		end
 
-		ix.luaReloaded = CurTime() + 5
+		ix.luaReloaded = CurTime() + 30
 	end
 end
 
@@ -52,7 +52,7 @@ function Schema:PlayerFootstep(ply, pos, foot, sound, volume)
 			ply:EmitSound(sound, 80, math.random(90, 110), 1)
 		end
 	else
-		if not ( ply:KeyDown(IN_DUCK) ) then
+		if not ( ply:KeyDown(IN_DUCK) or ply:KeyDown(IN_WALK) ) then
 			ply:EmitSound(newSound, 70, math.random(90, 110), 0.2)
 
 			if not ( newSound == sound ) then
@@ -277,6 +277,12 @@ function Schema:PlayerLoadout(ply)
 	net.Start("ixCustomSettings")
 	net.Send(ply)
 
+	for k, v in pairs(ents.GetAll()) do
+		if ( v:IsNPC() ) then
+			Schema:UpdateRelationShip(v)
+		end
+	end
+
 	print(ply:IPAddress(), " ", ply:SteamName(), " [", ply:Nick(), "] - ", ply:SteamID(), " | PlayerLoadout")
 end
 
@@ -295,7 +301,7 @@ local dropAbleWeapons = {
 	["ix_mp7"] = "mp7",
 	["ix_spas12"] = "spas12",
 	["ix_usp"] = "usp",
-	["ix_m16"] = "m16",
+	["ix_akm"] = "akm",
 	["ix_m14"] = "m14",
 	["ix_stunstick"] = "stunstick",
 	["ix_crowbar"] = "crowbar",
@@ -303,6 +309,19 @@ local dropAbleWeapons = {
 	["weapon_grenade"] = "grenade",
 	["weapon_crossbow"] = "crossbow",
 	["weapon_rpg"] = "rpg",
+}
+
+local ammoWeapons = {
+	["ix_357"] = "357ammo",
+	["ix_ar2"] = "ar2ammo",
+	["ix_mp7"] = "smg1ammo",
+	["ix_spas12"] = "shotgunammo",
+	["ix_usp"] = "pistolammo",
+	["ix_akm"] = "rifleammo",
+	["ix_m14"] = "rifleammo",
+	["weapon_grenade"] = "grenade",
+	["weapon_crossbow"] = "crossbowammo",
+	["weapon_rpg"] = "rocketammo",
 }
 
 function Schema:DoPlayerDeath(ply, inflicter, attacker)
@@ -314,29 +333,30 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 		ply:Freeze(false)
 	end
 
-	if ply:IsBot() then
-		return false
-	end
-
 	local char = ply:GetCharacter()
 
 	if (!char) then return end
 
 	if ( ply:Team() == FACTION_OTA ) then
-		local randomChance = math.random(1,5)
+		ix.item.Spawn("damagedotavest", ply:GetPos() + Vector(0, 0, 60))
+	end
 
-		if (randomChance == math.random(1,5)) then
-			ix.item.Spawn("damagedotavest", ply:GetPos() + Vector(0, 0, 70))
-		end
+	if ( ply:IsCombine() ) then
+		ix.item.Spawn("biolink", ply:GetPos() + Vector(0, 0, 50))
 	end
 
 	local held = ply:GetActiveWeapon()
 
-	if ( IsValid( held ) ) then
+	if ( IsValid( held ) and dropAbleWeapons[ ply:GetActiveWeapon():GetClass() ] ) then
 		local wep = dropAbleWeapons[ held:GetClass() ]
+		local wepAmmo = ammoWeapons[ held:GetClass() ]
 
 		if ( wep ) then
-			ix.item.Spawn( wep, ply:GetPos() + Vector( 0, 0, 70 ), nil, ply:GetAngles() )
+			ix.item.Spawn( wep, ply:GetPos() + Vector( 0, 0, 40 ), nil, ply:GetAngles() )
+		end
+
+		if ( wepAmmo ) then
+			ix.item.Spawn( wepAmmo, ply:GetPos() + Vector( 0, 0, 30 ), nil, ply:GetAngles() )
 		end
 	else
 		local weapons = { }
@@ -352,8 +372,12 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 		if ( #weapons > 0 ) then
 			local randWeapon = table.Random( weapons )
 
-			ix.item.Spawn( wep, ply:GetPos() + Vector( 0, 0, 70 ), nil, ply:GetAngles() )
+			ix.item.Spawn( randWeapon, ply:GetPos() + Vector( 0, 0, 40 ), nil, ply:GetAngles() )
 		end
+	end
+
+	if ply:IsBot() then
+		return false
 	end
 
 	if (char:GetMoney() == 0) then return end
@@ -416,6 +440,7 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 			headCrab = ents.Create("npc_fastzombie")
 		end
 		headCrab:SetPos(ply:GetPos())
+		headCrab:SetAngles(ply:GetAngles())
 		headCrab:Spawn()
 		attacker:Remove()
 		ply:Notify("A Headcrab has latched on to your body and is now taking control of it!")
@@ -428,8 +453,15 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 		corpse:Spawn()
 		corpse:SetCollisionGroup(COLLISION_GROUP_WORLD)
 		corpse.player = ply
-		corpse.attacker = attacker or nil
-		corpse.weaponUsed = attacker:GetActiveWeapon():GetClass() or nil
+		corpse.playerName = ply:Nick()
+
+		if ( attacker:IsPlayer() ) then
+			corpse.attacker = attacker or nil
+			corpse.weaponUsed = attacker:GetActiveWeapon():GetClass() or nil
+		else
+			corpse.attacker = nil
+			corpse.weaponUsed = nil
+		end
 
 		for k, v in pairs(ply:GetBodyGroups()) do
 			corpse:SetBodygroup(v.id, ply:GetBodygroup(v.id))
@@ -563,6 +595,16 @@ function Schema:OnPlayerHitGround(ply, inWater, onFloater, speed)
 	end
 end
 
+function Schema:PlayerSpawnedNPC(ply, ent)
+	ent:SetKeyValue("spawnflags", "16384")
+	ent:SetKeyValue("spawnflags", "2097152")
+	ent:SetKeyValue("spawnflags", "8192") -- dont drop weapons
+
+	ent:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_GOOD)
+
+	Schema:UpdateRelationShip(ent)
+end
+
 -- Pain Sound
 local painSounds = {
 	[FACTION_CCA] = {sound = function() return "npc/metropolice/pain"..math.random(1,4)..".wav" end},
@@ -662,5 +704,20 @@ function Schema:PlayerMessageSend(speaker, chatType, text, anonymous, receivers,
 				return "<:: "..text.." ::>"
 			end
 		end
+	end
+end
+
+function Schema:InitPostEntity()
+	for _, v in ipairs( ents.FindByClass("prop_door_rotating") ) do
+		if IsValid(v) and v:IsDoor() then
+			v:DrawShadow(false)
+		end
+	end
+end
+
+function Schema:PlayerSpawnRagdoll(ply, model)
+	if ( not ply:IsAdmin() ) then
+		ply:Notify("You cannot spawn ragdolls!")
+		return false
 	end
 end

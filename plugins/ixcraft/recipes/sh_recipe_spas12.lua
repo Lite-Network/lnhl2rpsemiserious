@@ -1,7 +1,7 @@
 RECIPE.name = "SPAS-12"
 RECIPE.description = "Craft a spas-12 shotgun."
 RECIPE.model = "models/weapons/w_shotgun.mdl"
-RECIPE.category = "Weapons (Ranged)"
+RECIPE.category = "Weapons (Firearms)"
 
 RECIPE.base = "recipe_base"
 
@@ -13,7 +13,7 @@ RECIPE.requirements = {
 	["refinedmetal"] = 3,
 }
 RECIPE.results = {
-	["spas12"] = 1
+	["spas12"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

@@ -1,7 +1,7 @@
 RECIPE.name = "Gear"
 RECIPE.description = "Craft a metal gear."
 RECIPE.model = "models/props_wasteland/gear02.mdl"
-RECIPE.category = "Crafting Items"
+RECIPE.category = "Miscellaneous"
 
 RECIPE.base = "recipe_base"
 
@@ -10,7 +10,7 @@ RECIPE.requirements = {
 	["glue"] = 1,
 }
 RECIPE.results = {
-	["gear"] = 1
+	["gear"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

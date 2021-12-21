@@ -48,6 +48,43 @@ function ix.gui.GlowingLogo(x, y, w, h, text)
 	surface.DrawTexturedRect(x, y, w, h)
 end
 
+function Schema:PopulateHelpMenu(categories)
+	categories["achievements"] = function(container)
+		for k, v in pairs(ix.achievements) do
+			if ( LocalPlayer():GetNWBool(tostring(ix.achievements[k][1]), false) == true ) then
+				achievementPanel = container:Add("DPanel")
+				achievementPanel:Dock(TOP)
+				achievementPanel:DockMargin(5, 5, 5, 5)
+				achievementPanel:SetSize(0, 85)
+				achievementPanel.Paint = function(self, w, h)
+					surface.SetDrawColor(Color(30, 30, 30, 100))
+					surface.DrawRect(0, 0, w, h)
+		
+					surface.SetDrawColor(ix.config.Get("color"))
+					surface.DrawOutlinedRect(0, 0, w, h, 1)
+
+					draw.DrawText(ix.achievements[k][2], "LiteNetworkFont32", achievementPanel:GetWide() / 2, 5, ix.config.Get("color"), TEXT_ALIGN_CENTER)
+					draw.DrawText(ix.achievements[k][3], "LiteNetworkFont32", achievementPanel:GetWide() / 2, 45, color_white, TEXT_ALIGN_CENTER)
+				end
+			end
+		end
+	end
+end
+
+timer.Create("FixShadows", 10, 0, function()
+	for _, ply in ipairs( player.GetAll() ) do
+		ply:DrawShadow(false)
+	end
+
+	for _, v in ipairs( ents.FindByClass("prop_door_rotating") ) do
+		if IsValid(v) and v:IsDoor() then
+			v:DrawShadow(false)
+		end
+	end
+end)
+
+hook.Remove("HUDPaint", "simfphys_HUD") -- no thx
+
 --[[---------------------------------------------------------------------------
 	Clientside Net Nessages
 ---------------------------------------------------------------------------]]--
@@ -78,8 +115,8 @@ net.Receive("ixCustomSettings", function(len, ply)
 	ix.option.stored["animationScale"].hidden = function() return true end
 	ix.option.stored["24hourTime"].hidden = function() return true end
 	ix.option.stored["openBags"].hidden = function() return true end
-	ix.option.stored["disableAnimations"].hidden = function() return true end
-	ix.option.stored["cheapBlur"].hidden = function() return true end
+	--ix.option.stored["disableAnimations"].hidden = function() return true end
+	--ix.option.stored["cheapBlur"].hidden = function() return true end
 	ix.option.stored["language"].hidden = function() return true end
 	ix.option.stored["observerTeleportBack"].hidden = function() return true end
 	ix.option.stored["observerESP"].hidden = function() return true end
@@ -88,5 +125,5 @@ net.Receive("ixCustomSettings", function(len, ply)
 	ix.option.stored["chatFontScale"].hidden = function() return true end
 	ix.option.stored["chatOutline"].hidden = function() return true end
 	ix.option.stored["chatNotices"].hidden = function() return true end
-	ix.option.stored["chatTimestamps"].hidden = function() return true end
+	--ix.option.stored["chatTimestamps"].hidden = function() return true end
 end)

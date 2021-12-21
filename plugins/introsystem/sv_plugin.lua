@@ -43,12 +43,12 @@ end)
 
 util.AddNetworkString("ixIntroStart")
 function PLUGIN:PlayerLoadedCharacter(ply, char, oldChar)
-    if not ( ply:GetPData("ixIntroHistory") ) then
+    if not ( ply:GetPData("ixIntroHistory."..tostring(game.GetMap())) ) then
         ply.ixIntroBool = true
 
         net.Start("ixIntroStart")
         net.Send(ply)
 
-        ply:SetPData("ixIntroHistory", true)
+        ply:SetPData("ixIntroHistory."..tostring(game.GetMap()), true)
     end
 end

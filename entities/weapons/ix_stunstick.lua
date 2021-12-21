@@ -223,7 +223,7 @@ function SWEP:PrimaryAttack()
 				entity:ViewPunch(Angle(-20, math.random(-15, 15), math.random(-10, 10)))
 
 				if (self:GetActivated() and entity.ixStuns > 3) then
-					entity:SetRagdolled(true, 60)
+					entity:SetRagdolled(true, 20)
 					entity.ixStuns = 0
 
 					return

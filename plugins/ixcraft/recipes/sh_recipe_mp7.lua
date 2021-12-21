@@ -1,7 +1,7 @@
 RECIPE.name = "MP7"
 RECIPE.description = "Craft a submachine gun."
 RECIPE.model = "models/weapons/w_smg1.mdl"
-RECIPE.category = "Weapons (Ranged)"
+RECIPE.category = "Weapons (Firearms)"
 
 RECIPE.base = "recipe_base"
 
@@ -13,7 +13,7 @@ RECIPE.requirements = {
 	["refinedmetal"] = 3,
 }
 RECIPE.results = {
-	["mp7"] = 1
+	["mp7"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

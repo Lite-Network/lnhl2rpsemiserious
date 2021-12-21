@@ -1,4 +1,3 @@
-
 -- Item Statistics
 
 ITEM.name = "Overwatch Soldier Vest"
@@ -22,8 +21,7 @@ ITEM.iconCam = {
 
 -- Item Custom Configuration
 
-ITEM.price = 400
-ITEM.maxArmor = 75
+ITEM.maxArmor = 100
 
 ITEM.pacData = {
 	[1] = {

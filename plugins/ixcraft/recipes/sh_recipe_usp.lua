@@ -1,7 +1,7 @@
 RECIPE.name = "USP Match"
 RECIPE.description = "Craft a 9mm sidearm pistol."
 RECIPE.model = "models/weapons/w_pistol.mdl"
-RECIPE.category = "Weapons (Ranged)"
+RECIPE.category = "Weapons (Firearms)"
 
 RECIPE.base = "recipe_base"
 
@@ -13,7 +13,7 @@ RECIPE.requirements = {
 	["metalplate"] = 2,
 }
 RECIPE.results = {
-	["usp"] = 1
+	["usp"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

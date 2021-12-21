@@ -1,16 +1,17 @@
-RECIPE.name = "357 Ammo"
-RECIPE.description = "Craft some 357 Revolver Bullets."
-RECIPE.model = "models/Items/357ammo.mdl"
+RECIPE.name = "Crossbow Bolts"
+RECIPE.description = "Craft some Crossbow Bolt's."
+RECIPE.model = "models/Items/CrossbowRounds.mdl"
 RECIPE.category = "Ammunition"
 
 RECIPE.base = "recipe_base"
 
 RECIPE.requirements = {
-	["bulletcasing"] = 2,
-	["gunpowder"] = 2,
+	["pipe"] = 4,
+	["glue"] = 3,
+	["refinedmetal"] = 2,
 }
 RECIPE.results = {
-	["357ammo"] = 1,
+	["crossbowammo"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

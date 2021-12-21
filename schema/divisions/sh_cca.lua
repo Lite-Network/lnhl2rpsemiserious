@@ -3,7 +3,7 @@ ix.ranks.cca[1] = {
 	id = 1,
 	name = "RCT",
 	description = "Recruit",
-	xp = 35,
+	xp = 50,
 	health = 0,
 	armor = 0,
 	-- Bodygroups
@@ -20,7 +20,7 @@ ix.ranks.cca[2] = {
 	id = 2,
 	name = "i5",
 	description = "Ground Unit 5",
-	xp = 50,
+	xp = 100,
 	health = 0,
 	armor = 0,
 	-- Bodygroups
@@ -37,7 +37,7 @@ ix.ranks.cca[3] = {
 	id = 3,
 	name = "i4",
 	description = "Ground Unit 4",
-	xp = 100,
+	xp = 240,
 	health = 0,
 	armor = 0,
 	-- Bodygroups
@@ -54,7 +54,7 @@ ix.ranks.cca[4] = {
 	id = 4,
 	name = "i3",
 	description = "Ground Unit 3",
-	xp = 200,
+	xp = 400,
 	health = 0,
 	armor = 5,
 	-- Bodygroups
@@ -71,7 +71,7 @@ ix.ranks.cca[5] = {
 	id = 5,
 	name = "i2",
 	description = "Ground Unit 2",
-	xp = 400,
+	xp = 650,
 	health = 0,
 	armor = 10,
 	-- Bodygroups
@@ -88,7 +88,7 @@ ix.ranks.cca[6] = {
 	id = 6,
 	name = "i1",
 	description = "Ground Unit 1",
-	xp = 800,
+	xp = 1000,
 	health = 0,
 	armor = 20,
 	-- Bodygroups

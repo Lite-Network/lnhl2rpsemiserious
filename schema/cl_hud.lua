@@ -468,11 +468,12 @@ local function DrawSpookyHud(ply)
 				"Ramirez will return..",
 				"Ramirez will make chaos..",
 				"The Nuke..",
+				"Please.. send someone to help me!",
+				"Where am I?",
 				"2012..",
 				"Shadow..",
 				"Company..",
-				"Lite Network will survive..",
-				"November the 12th..",
+				"October the 12th..",
 				"ESCAPE.. ESCAPE.. ESCAPE.. ESCAPE..",
 				"blue door.."}), "lnAkbarFontBig", ScrW() / math.random(1.5, 2.5), ScrH() / math.random(1.5, 2.5), Color(200, 0, 0), TEXT_ALIGN_CENTER, 0)
 
@@ -512,6 +513,10 @@ local function DrawPlayerInfo(ply)
 				local name = v:Nick()
 				local namecolor = Color(teamcol.r, teamcol.g, teamcol.b, v.alpha)
 				local health = v:Health()
+
+				if ( v.ixBandanaEquipped ) then
+					name = "Masked Person"
+				end
 
 				if ( talking ) then
 					draw.DrawText("Talking..", "ixMediumFont", headpos_x, headpos_y - ScreenScale(12), Color(200, 200, 200, v.alpha2), TEXT_ALIGN_CENTER)
@@ -559,27 +564,35 @@ local function DrawEntityInfo(ply)
 	local ply = LocalPlayer()
 
 	for _, v in ipairs(ents.GetAll()) do
-		if (ply:GetPos():Distance(v:GetPos()) < 1024) and (v:IsLineOfSightClear(ply)) then
-			if v:IsValid() and v:GetClass():find("ix_selector") then
-				local headPos = v:GetPos() + Vector(0, 0, 74)
-				local HeadPos = headPos:ToScreen()
+		if ( ply:GetPos():Distance(v:GetPos()) < 256 ) then
+			local color = ix.config.Get("color")
+			local distance = ply:GetPos():Distance(v:GetPos())
 
-				v.alpha = v.alpha or 0
+			v.alpha = v.alpha or 0
 
-				local teamcol = team.GetColor(v.Faction)
-				local distance = ply:GetPos():Distance(v:GetPos())
-				local lineofsight = v:IsLineOfSightClear(ply)
-				local entitytrace = ply:GetEyeTrace().Entity == v
-				local namecolor = Color(teamcol.r, teamcol.g, teamcol.b, v.alpha)
+			if ( v:GetClass():find("ix_selector") ) then
+				local HeadBone = v:EyePos() + Vector(0, 0, 10)
+				local HeadPos = HeadBone:ToScreen()
 
-				draw.DrawText(v.PrintName or "nil", "ixMediumFont", HeadPos.x, HeadPos.y - ScreenScale(10), namecolor, TEXT_ALIGN_CENTER)
+				draw.DrawText(v.PrintName or "nil", "ixMediumFont", HeadPos.x, HeadPos.y - ScreenScale(10), ColorAlpha(color, v.alpha), TEXT_ALIGN_CENTER)
 				draw.DrawText(v.Purpose or "nil", "ixSmallFont", HeadPos.x, HeadPos.y - ScreenScale(4), ColorAlpha(color_white, v.alpha), TEXT_ALIGN_CENTER)
+			elseif ( v:GetClass():find("ragdoll") ) then
+				local EntityPosition = v:GetPos():ToScreen()
 
-				if distance < 256 and lineofsight and entitytrace then
-					v.alpha = Lerp(0.05, v.alpha, 255)
-				else
-					v.alpha = Lerp(0.05, v.alpha, 0)
-				end
+				draw.DrawText("Dead Corpse" or "nil", "ixMediumFont", EntityPosition.x, EntityPosition.y - ScreenScale(10), ColorAlpha(color, v.alpha), TEXT_ALIGN_CENTER)
+				draw.DrawText("Not really much use from it" or "nil", "ixSmallFont", EntityPosition.x, EntityPosition.y - ScreenScale(4), ColorAlpha(color_white, v.alpha), TEXT_ALIGN_CENTER)
+			elseif ( v:GetClass() == "ix_item" ) then
+				local EntityPosition = v:GetPos():ToScreen()
+				local itemTable = v:GetItemTable()
+
+				draw.DrawText(itemTable.name or "nil", "ixMediumFont", EntityPosition.x, EntityPosition.y - ScreenScale(10), ColorAlpha(color, v.alpha), TEXT_ALIGN_CENTER)
+				draw.DrawText(itemTable.description or "nil", "ixSmallFont", EntityPosition.x, EntityPosition.y - ScreenScale(4), ColorAlpha(color_white, v.alpha), TEXT_ALIGN_CENTER)
+			end
+
+			if ( distance < 96 ) then
+				v.alpha = Lerp(0.05, v.alpha, 255)
+			else
+				v.alpha = Lerp(0.05, v.alpha, 0)
 			end
 		end
 	end

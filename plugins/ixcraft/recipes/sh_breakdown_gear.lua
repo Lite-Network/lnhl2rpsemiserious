@@ -1,15 +1,15 @@
-RECIPE.name = "Pipe"
-RECIPE.description = "Craft a metal pipe."
-RECIPE.model = "models/props_lab/pipesystem03a.mdl"
-RECIPE.category = "Miscellaneous"
+RECIPE.name = "Gear"
+RECIPE.description = "Breakdown a Metal Gear."
+RECIPE.model = "models/props_wasteland/gear02.mdl"
+RECIPE.category = "Breakdownable"
 
 RECIPE.base = "recipe_base"
 
 RECIPE.requirements = {
-	["metalplate"] = 2,
+	["gear"] = 1,
 }
 RECIPE.results = {
-	["pipe"] = 1,
+	["metalplate"] = 3,
 }
 
 RECIPE.station = "ix_station_workbench"

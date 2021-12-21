@@ -1,12 +1,12 @@
 -- Item Statistics
 
-ITEM.name = "Glue"
-ITEM.description = "A tube with sticky liquid."
+ITEM.name = "Destroyed Biolink"
+ITEM.description = "An Destroyed Biolick from an Metropolice Unit."
 ITEM.category = "Items"
 
 -- Item Configuration
 
-ITEM.model = "models/items/battery.mdl"
+ITEM.model = "models/gibs/manhack_gib03.mdl"
 ITEM.skin = 0
 
 -- Item Inventory Size Configuration
@@ -16,4 +16,4 @@ ITEM.height = 1
 
 -- Item Custom Configuration
 
-ITEM.maxStacks = 15
+ITEM.maxStacks = 10

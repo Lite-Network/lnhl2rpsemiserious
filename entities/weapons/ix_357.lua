@@ -28,6 +28,7 @@ SWEP.Primary.Damage = 40
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.02
 SWEP.Primary.Delay = RPM(60)
+SWEP.Primary.PenetrationScale = 2
 
 SWEP.Primary.Ammo = "357"
 SWEP.Primary.Automatic = false

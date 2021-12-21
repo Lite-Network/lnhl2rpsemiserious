@@ -1,22 +1,22 @@
-RECIPE.name = "AKM"
-RECIPE.description = "Craft an AKM."
-RECIPE.model = "models/weapons/w_rif_ak47.mdl"
+RECIPE.name = "Crossbow"
+RECIPE.description = "Craft a Crossbow."
+RECIPE.model = "models/weapons/w_crossbow.mdl"
 RECIPE.category = "Weapons (Firearms)"
 
 RECIPE.base = "recipe_base"
 
 RECIPE.requirements = {
-	["pipe"] = 3,
-	["glue"] = 2,
-	["gear"] = 2,
-	["plastic"] = 3,
-	["refinedmetal"] = 3,
+	["pipe"] = 4,
+	["metalplate"] = 5,
+	["glue"] = 3,
+	["gear"] = 3,
+	["refinedmetal"] = 4,
 }
 RECIPE.results = {
-	["akm"] = 1,
+	["crossbow"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"
 RECIPE.craftStartSound = "physics/metal/weapon_impact_hard1.wav"
-RECIPE.craftTime = 10
+RECIPE.craftTime = 13
 RECIPE.craftEndSound = "physics/metal/weapon_impact_hard3.wav"

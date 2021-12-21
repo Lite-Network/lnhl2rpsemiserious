@@ -10,7 +10,7 @@ RECIPE.requirements = {
 	["gunpowder"] = 3,
 }
 RECIPE.results = {
-	["rifleammo"] = 1
+	["rifleammo"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

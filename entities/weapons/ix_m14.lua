@@ -35,10 +35,11 @@ SWEP.EmptySound = "Weapon_danger_mini14_rifle.empty"
 
 SWEP.Primary.Sound = "ixM14.Fire"
 SWEP.Primary.Recoil = 1
-SWEP.Primary.Damage = 24
+SWEP.Primary.Damage = 25
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.03
 SWEP.Primary.Delay = RPM(170)
+SWEP.Primary.PenetrationScale = 2
 
 SWEP.Primary.Ammo = "ixRifleAmmo"
 SWEP.Primary.Automatic = false

@@ -1,7 +1,7 @@
 RECIPE.name = "M14"
 RECIPE.description = "Craft a hunting rifle."
 RECIPE.model = "models/weapons/w_tfa_mni14b.mdl"
-RECIPE.category = "Weapons (Ranged)"
+RECIPE.category = "Weapons (Firearms)"
 
 RECIPE.base = "recipe_base"
 
@@ -13,7 +13,7 @@ RECIPE.requirements = {
 	["wood"] = 10,
 }
 RECIPE.results = {
-	["m14"] = 1
+	["m14"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

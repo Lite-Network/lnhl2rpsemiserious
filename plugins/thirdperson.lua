@@ -1,6 +1,6 @@
 local PLUGIN = PLUGIN
 
-PLUGIN.name = "Third Person & View bobbing"
+PLUGIN.name = "Lite Network Revamped Thirdperson"
 PLUGIN.author = "Riggs Mackay"
 PLUGIN.description = "Enables third person camera usage, and forces you to use view bobbing."
 

@@ -44,7 +44,7 @@ ITEM.functions.PlaceVehicle = {
 
 		if ( ent:IsValid() and ent:GetClass() == "gmod_sent_vehicle_fphysics_base" ) then
 			local entityPosition = ent:GetPos()
-			ent:EmitSound("weapons/c4/c4_plant.wav", 90)
+			ent:EmitSound("weapons/c4/c4_disarm.wav", 90)
 			PlayBeep(0.5, ent)
 			PlayBeep(1.5, ent)
 			PlayBeep(2.5, ent)
@@ -67,6 +67,37 @@ ITEM.functions.PlaceVehicle = {
 				end
 			end)
 		end
+
+		return true
+	end
+}
+
+ITEM.functions.Arm = {
+	name = "Arm on yourself",
+	OnRun = function(item)
+		local ply = item.player
+		
+		ply:EmitSound("weapons/c4/c4_disarm.wav", 80)
+		PlayBeep(0.5, ply)
+		PlayBeep(1.5, ply)
+		PlayBeep(2.5, ply)
+		PlayBeep(3, ply)
+		PlayBeep(3.25, ply)
+		PlayBeep(3.50, ply)
+		PlayBeep(3.75, ply)
+		timer.Simple(4, function()
+			if ( IsValid(ply) and ply:Alive() ) then
+				local explode = ents.Create("env_explosion")
+				explode:SetPos(ply:GetPos())
+				explode:SetOwner(ply)
+				explode:Spawn()
+				explode:SetKeyValue("iMagnitude", "130")
+				explode:Fire("Explode", 0, 0)
+				explode:EmitSound("weapons/c4/c4_explode1.wav", 100)
+				explode:EmitSound("weapons/c4/c4_exp_deb1.wav", 90)
+				explode:EmitSound("weapons/c4/c4_exp_deb2.wav", 90)
+			end
+		end)
 
 		return true
 	end

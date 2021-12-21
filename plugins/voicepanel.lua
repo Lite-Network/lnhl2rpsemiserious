@@ -73,7 +73,7 @@ if (CLIENT) then
 	vgui.Register("VoicePanel", PANEL, "DPanel")
 
 	function PLUGIN:PlayerStartVoice(client)
-		if (!IsValid(g_VoicePanelList) or !ix.config.Get("allowVoice", false)) then return end
+		if (!IsValid(ixVoicePanelList) or !ix.config.Get("allowVoice", false)) then return end
 
 		hook.Run("PlayerEndVoice", client)
 
@@ -90,7 +90,7 @@ if (CLIENT) then
 
 		if (!IsValid(client)) then return end
 
-		local pnl = g_VoicePanelList:Add("VoicePanel")
+		local pnl = ixVoicePanelList:Add("VoicePanel")
 		pnl:Setup(client)
 
 		ixVoicePanels[client] = pnl
@@ -118,16 +118,16 @@ if (CLIENT) then
 		gmod.GetGamemode().PlayerStartVoice = function() end
 		gmod.GetGamemode().PlayerEndVoice = function() end
 
-		if (IsValid(g_VoicePanelList)) then
-			g_VoicePanelList:Remove()
+		if (IsValid(ixVoicePanelList)) then
+			ixVoicePanelList:Remove()
 		end
 
-		g_VoicePanelList = vgui.Create("DPanel")
+		ixVoicePanelList = vgui.Create("DPanel")
 
-		g_VoicePanelList:ParentToHUD()
-		g_VoicePanelList:SetSize(270, ScrH() - 200)
-		g_VoicePanelList:SetPos(ScrW() - 320, 100)
-		g_VoicePanelList:SetPaintBackground(false)
+		ixVoicePanelList:ParentToHUD()
+		ixVoicePanelList:SetSize(270, ScrH() - 200)
+		ixVoicePanelList:SetPos(ScrW() - 320, 100)
+		ixVoicePanelList:SetPaintBackground(false)
 	end
 
 	hook.Add("InitPostEntity", "CreateVoiceVGUI", CreateVoiceVGUI)

@@ -1,7 +1,7 @@
 RECIPE.name = "Bullet Casing"
 RECIPE.description = "Craft a bullet casing."
 RECIPE.model = "models/items/ar2_grenade.mdl"
-RECIPE.category = "Crafting Items"
+RECIPE.category = "Miscellaneous"
 
 RECIPE.base = "recipe_base"
 
@@ -9,7 +9,7 @@ RECIPE.requirements = {
 	["metalplate"] = 2,
 }
 RECIPE.results = {
-	["bulletcasing"] = 1
+	["bulletcasing"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

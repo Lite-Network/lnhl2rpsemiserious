@@ -1,15 +1,15 @@
-RECIPE.name = "Pipe"
-RECIPE.description = "Craft a metal pipe."
-RECIPE.model = "models/props_lab/pipesystem03a.mdl"
-RECIPE.category = "Miscellaneous"
+RECIPE.name = "Destroyed Biolink"
+RECIPE.description = "Breakdown a Destroyed Biolink."
+RECIPE.model = "models/gibs/manhack_gib03.mdl"
+RECIPE.category = "Breakdownable"
 
 RECIPE.base = "recipe_base"
 
 RECIPE.requirements = {
-	["metalplate"] = 2,
+	["biolink"] = 1,
 }
 RECIPE.results = {
-	["pipe"] = 1,
+	["metalplate"] = 2,
 }
 
 RECIPE.station = "ix_station_workbench"

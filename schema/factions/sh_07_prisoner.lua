@@ -34,6 +34,7 @@ FACTION.pay = 0
 
 --[[ Custom Config ]]--
 
+FACTION.voicelinesHuman = true
 FACTION.defaultClass = nil
 FACTION.adminOnly = false
 FACTION.donatorOnly = false

@@ -84,13 +84,17 @@ function Schema:OnCharacterCreated(ply, char)
 end
 
 function Schema:EntityTakeDamage(target, dmginfo)
-	if target:IsPlayer() and (dmginfo:GetDamageType() == DMG_CRUSH) then
-		dmginfo:ScaleDamage(0)
-	end
-
 	if ( target:IsPlayer() ) then
 		if ( dmginfo:GetAttacker():GetClass() == "npc_headcrab" or dmginfo:GetAttacker():GetClass() == "npc_headcrab_fast" ) then
 			dmginfo:ScaleDamage(math.random(3.00,5.00))
+		end
+		
+		if (dmginfo:GetDamageType() == DMG_BULLET) then
+			if not ( target:Armor() == 0 ) then
+				dmginfo:ScaleDamage(0.9)
+			end
+		elseif (dmginfo:GetDamageType() == DMG_CRUSH) and not (IsValid(target.ixRagdoll)) then
+			dmginfo:ScaleDamage(0)
 		end
 	end
 end
@@ -110,6 +114,10 @@ function Schema:CanPlayerUseBusiness(ply, uniqueID)
 			return false
 		end
 	end
+end
+
+function Schema:simfphysPhysicsCollide() -- stop with the fucking sparks jeez
+	return true
 end
 
 function Schema:SetupMove(ply, mv, cmd)
@@ -146,7 +154,7 @@ function Schema:SetupMove(ply, mv, cmd)
 	local speedMult = 3 + ( (xDif + yDif) * 0.5) ^ 1.01
 	local vertMult = math.max((math.Max(300 - (xDif + yDif), -10) * 0.08) ^ 1.01 + (zDif / 2), 0)
 	
-	if kidnapper:GetGroundEntity() == ply then
+	if ( kidnapper:GetGroundEntity() == ply ) then
 		vertMult = - vertMult
 	end
 	

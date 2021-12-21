@@ -6,7 +6,7 @@ ITEM.category = "Ammo"
 
 -- Item Configuration
 
-ITEM.model = "models/nemez/combine_soldiers/combine_soldier_prop_bag.mdl"
+ITEM.model = "models/willardnetworks/skills/explosive_material.mdl"
 ITEM.skin = 0
 
 -- Item Inventory Size Configuration

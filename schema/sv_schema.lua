@@ -19,6 +19,7 @@ ix.whitelists.CCA.Ranks = {
 		"STEAM_0:0:196637456", -- German
 		"STEAM_0:1:157305669", -- haja
 		"STEAM_0:0:244971374", -- GMAN0289
+		"STEAM_0:0:455356942", -- tsukii
 	}, 
 	["UNION-DvL"] = {
 		"STEAM_0:1:117769029", -- bonk
@@ -46,6 +47,7 @@ ix.whitelists.CCA.Ranks = {
 	["JURY-OfC"] = {
 		"STEAM_0:0:229400758", -- tea
 		"STEAM_0:0:25401034", -- Tsunami
+		"STEAM_0:0:104447930", -- Maraluna
 	},
 	["JURY-DvL"] = {
 		"STEAM_0:0:203267540", -- Overwatch
@@ -90,6 +92,41 @@ function Schema:SearchPlayer(ply, target)
 	})
 
 	return true
+end
+
+local rebelNPCs = {
+	["npc_citizen"] = true,
+	["npc_vortigaunt"] = true,
+}
+
+local combineNPCs = {
+	["npc_cscanner"] = true,
+	["npc_stalker"] = true,
+	["npc_clawscanner"] = true,
+	["npc_turret_floor"] = true,
+	["npc_combine_camera"] = true,
+	["npc_metropolice"] = true,
+	["npc_combine_s"] = true,
+	["npc_manhack"] = true,
+	["npc_rollermine"] = true,
+	["npc_strider"] = true,
+}
+function Schema:UpdateRelationShip(ent)
+	for k, v in pairs(player.GetAll()) do
+		if ( v:IsCombine() or v:IsCA() ) then
+			if ( combineNPCs[ent:GetClass()] ) then
+				ent:AddEntityRelationship(v, D_LI, 99)
+			elseif ( rebelNPCs[ent:GetClass()] ) then
+				ent:AddEntityRelationship(v, D_HT, 99)
+			end
+		else
+			if ( combineNPCs[ent:GetClass()] ) then
+				ent:AddEntityRelationship(v, D_HT, 99)
+			elseif ( rebelNPCs[ent:GetClass()] ) then
+				ent:AddEntityRelationship(v, D_LI, 99)
+			end
+		end
+	end
 end
 
 function Schema:GiveWeapons(ply, weapons)
@@ -197,6 +234,7 @@ for k, v in pairs(ix.faction.teams) do
 	end
 end
 
+util.AddNetworkString("ixAddCombineDisplayMessage")
 function Schema:AddCombineDisplayMessage(text, color, sound)
     for k, v in pairs(player.GetAll()) do
         if v:IsCombine() then
@@ -204,7 +242,7 @@ function Schema:AddCombineDisplayMessage(text, color, sound)
 				net.WriteString(tostring(text) or "Invalid Input..")
 				net.WriteColor(color or color_white)
 				net.WriteBool(tobool(sound) or false)
-			net.Send(self)
+			net.Send(v)
         end
     end
 end

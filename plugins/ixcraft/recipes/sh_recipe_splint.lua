@@ -9,7 +9,7 @@ RECIPE.requirements = {
 	["wood"] = 2,
 }
 RECIPE.results = {
-	["splint"] = 1
+	["splint"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

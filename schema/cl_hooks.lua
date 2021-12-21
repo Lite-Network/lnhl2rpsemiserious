@@ -78,3 +78,14 @@ end
 function Schema:PopulateImportantCharacterInfo()
 	return false
 end
+
+local steps = {".stepleft", ".stepright"}
+function Schema:EntityEmitSound(data)
+	if ix.option.Get("thirdpersonEnabled", false) then
+		if !IsValid(data.Entity) and !data.Entity:IsPlayer() then return end
+		local sName = data.OriginalSoundName
+		if sName:find(steps[1]) or sName:find(steps[2]) then
+			return false
+		end
+	end
+end

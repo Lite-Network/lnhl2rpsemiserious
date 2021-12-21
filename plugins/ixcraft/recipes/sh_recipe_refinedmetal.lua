@@ -1,7 +1,7 @@
 RECIPE.name = "Refined Metal"
 RECIPE.description = "Craft refined metal."
 RECIPE.model = "models/gibs/scanner_gib02.mdl"
-RECIPE.category = "Crafting Items"
+RECIPE.category = "Miscellaneous"
 
 RECIPE.base = "recipe_base"
 
@@ -10,7 +10,7 @@ RECIPE.requirements = {
 	["glue"] = 1,
 }
 RECIPE.results = {
-	["refinedmetal"] = 1
+	["refinedmetal"] = 1,
 }
 
 RECIPE.station = "ix_station_workbench"

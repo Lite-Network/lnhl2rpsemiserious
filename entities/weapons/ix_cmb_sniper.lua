@@ -72,6 +72,40 @@ function SWEP:DrawHUD()
     end
 end
 
+function SWEP:ShootBullet(damage, num_bullets, aimcone)
+	local bullet = {}
+
+	bullet.Num 	= num_bullets
+	bullet.Src 	= self.Owner:GetShootPos() -- Source
+	bullet.Dir 	= self.Owner:GetAimVector() -- Dir of bullet
+	bullet.Spread 	= Vector(aimcone, aimcone, 0)	-- Aim Cone
+
+	if self.Primary.Tracer then
+		bullet.TracerName = self.Primary.Tracer
+	end
+
+	if self.Primary.Range then
+		bullet.Distance = self.Primary.Range
+	end
+
+	bullet.Tracer	= 1 -- Show a tracer on every x bullets
+	bullet.Force	= 1 -- Amount of force to give to phys objects
+	bullet.Damage	= damage
+	bullet.AmmoType = ""
+
+	if CLIENT then
+		bullet.Callback = function(attacker, tr)
+			debugoverlay.Cross(tr.HitPos, 2, 3, Color(255, 0, 0), true)
+		end
+	end
+
+	self.Owner:FireBullets(bullet)
+
+	self:ShootEffects()
+
+    self.Owner:EmitSound("npc/sniper/sniper1.wav", 90)
+end
+
 sound.Add({
     name = "clipout_com",
     channel = CHAN_STATIC,

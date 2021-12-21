@@ -202,7 +202,7 @@ if ( SERVER ) then
 									goto calculation
 								end
 
-								return false, '@CraftStackItems'
+								return false, 'You must stack your items together, in order to craft this item!'
 							else
 								itemTable:Remove()
 							end
