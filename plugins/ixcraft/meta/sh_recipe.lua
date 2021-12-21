@@ -186,7 +186,22 @@ if ( SERVER ) then
 						local ffAmount = 1
 
 						if (itemTable.base) then
+
+							// Small workaround which will stack all the items of the same type
+							// so that it hopefully fixes the crafting bug.
 							if (itemTable.base == 'base_stackable') then
+								local items = inventory:GetItemsByUniqueID( itemTable.uniqueID )
+
+								if ( #items > 1 ) then
+									for i, v in ipairs( items ) do
+										if ( v:GetID() == itemTable:GetID() ) then
+											continue
+										end
+
+										ix.item.PerformInventoryAction( client, "combine", itemTable, inventory:GetID(), { v:GetID() } )
+									end
+								end
+
 								if ( itemTable:GetData('stacks', 1) == amount ) then
 									itemTable:Remove()
 									goto calculation
