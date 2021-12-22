@@ -52,7 +52,13 @@ ITEM.functions.split = {
 				ix.item.Spawn(itemUniqueID, client, nil, angle_zero, {stacks = cleanSplitStack})
 			end
 
-			item:SetData("stacks", stackedCount, ix.inventory.Get(item.invID):GetReceivers())
+			local inv = ix.inventory.Get( item.invID )
+
+			if ( inv ) then
+				item:SetData("stacks", stackedCount, inv:GetReceivers())
+			else
+				item:SetData( "stacks", stackedCount )
+			end
 		end, '1')
 		return false
 	end,
