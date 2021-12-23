@@ -35,34 +35,33 @@ ITEM.functions.combine = {
 }
 
 ITEM.functions.split = {
-	name = "Split",
-	icon = "icon16/arrow_divide.png",
-	OnRun = function(item)
-		local client = item.player
-		local character = client:GetCharacter()
-		local itemUniqueID = item.uniqueID
-		local stacks = item:GetData('stacks', 1)
-		client:RequestString('Split', 'Please enter how many items you want to split', function(splitStack)
-			if !isnumber(tonumber(splitStack)) then client:Notify('Please enter a `number`') return false end
-			local cleanSplitStack = math.Round(math.abs(tonumber(splitStack)))
-			if (cleanSplitStack >= stacks) then return false end
-			local stackedCount = (stacks - cleanSplitStack)
+    name = "Split",
+    icon = "icon16/arrow_divide.png",
+    OnRun = function(item)
+        local client = item.player
+        local character = client:GetCharacter()
+        local itemUniqueID = item.uniqueID
+        local stacks = item:GetData('stacks', 1)
+        if (item:GetData('stacks', 1) == 1) then return false end
+        client:RequestString('Split', 'Please enter how many items you want to split', function(splitStack)
+            if !isnumber(tonumber(splitStack)) then client:Notify('Please enter a `number`') return false end
+            if (item:GetData('stacks', 1) == 1) then return false end
+            local cleanSplitStack = math.Round(math.abs(tonumber(splitStack)))
+            if (cleanSplitStack >= stacks) then return false end
+            local stackedCount = (stacks - cleanSplitStack)
 
-			if !character:GetInventory():Add(itemUniqueID, 1, {stacks = cleanSplitStack}) then
-				ix.item.Spawn(itemUniqueID, client, nil, angle_zero, {stacks = cleanSplitStack})
-			end
+            if !character:GetInventory():Add(itemUniqueID, 1, {stacks = cleanSplitStack}) then
+                ix.item.Spawn(itemUniqueID, client, nil, angle_zero, {stacks = cleanSplitStack})
+            end
 
-			local inv = ix.inventory.Get( item.invID )
+            local inv = ix.inventory.Get( item.invID )
 
-			if ( inv ) then
-				item:SetData("stacks", stackedCount, inv:GetReceivers())
-			else
-				item:SetData( "stacks", stackedCount )
-			end
-		end, '1')
-		return false
-	end,
-	OnCanRun = function(item)
-		return (item:GetData('stacks', 1) ~= 1)
-	end
+            
+            item:SetData( "stacks", stackedCount )
+        end, '1')
+        return false
+    end,
+    OnCanRun = function(item)
+        return (item:GetData('stacks', 1) != 1)
+    end
 }
