@@ -245,6 +245,9 @@ function Schema:InitializedChatClasses()
 		end,
 		OnChatAdd = function(self, speaker, text, anonymous, info)
 			local color = self:GetColor(speaker, text, info)
+			if ( ixBandanaEquipped ) then
+				name = "Masked Person"
+			end
 			local name = anonymous and
 				L"someone" or hook.Run("GetCharacterName", speaker, "ic") or
 				(IsValid(speaker) and speaker:Name() or "Console")
@@ -265,6 +268,9 @@ function Schema:InitializedChatClasses()
 		prefix = {"/W", "/Whisper"},
 		OnChatAdd = function(self, speaker, text, anonymous, info)
 			local color = Color(0, 150, 255)
+			if ( ixBandanaEquipped ) then
+				name = "Masked Person"
+			end
 			local name = anonymous and
 				L"someone" or hook.Run("GetCharacterName", speaker, "y") or
 				(IsValid(speaker) and speaker:Name() or "Console")
@@ -286,6 +292,9 @@ function Schema:InitializedChatClasses()
 		prefix = {"/Y", "/Yell"},
 		OnChatAdd = function(self, speaker, text, anonymous, info)
 			local color = Color(250, 100, 0)
+			if ( ixBandanaEquipped ) then
+				name = "Masked Person"
+			end
 			local name = anonymous and
 				L"someone" or hook.Run("GetCharacterName", speaker, "y") or
 				(IsValid(speaker) and speaker:Name() or "Console")
@@ -402,7 +411,12 @@ function Schema:InitializedChatClasses()
 
 			icon = Material(hook.Run("GetPlayerIcon", speaker) or icon)
 
-			chat.AddText(icon, Color(175, 0, 0), "[LOOC] ", color, speaker:SteamName(), team.GetColor(speaker:Team()), " ("..speaker:Nick()..")", color_white, ": "..text)
+			local name = speaker:Nick()
+			if ( ixBandanaEquipped ) then
+				name = "Masked Person ["..speaker:Nick().."]"
+			end
+
+			chat.AddText(icon, Color(175, 0, 0), "[LOOC] ", color, speaker:SteamName(), team.GetColor(speaker:Team()), " ("..name..")", color_white, ": "..text)
 		end,
 		CanHear = ix.config.Get("chatRange", 280),
 		prefix = {".//", "[[", "/LOOC"},
