@@ -324,39 +324,19 @@ local ammoWeapons = {
 	["weapon_rpg"] = "rocketammo",
 }
 
-function Schema:DoPlayerDeath(ply, inflicter, attacker)
-	ply.deathPos = ply:GetPos()
-	ply.deathAngles = ply:GetAngles()
-	ply.ixCWUClass = 0
-
-	if ply:IsRestricted() then
-		ply:Freeze(false)
-	end
-
-	local char = ply:GetCharacter()
-
-	if (!char) then return end
-
-	if ( ply:Team() == FACTION_OTA ) then
-		ix.item.Spawn("damagedotavest", ply:GetPos() + Vector(0, 0, 60))
-	end
-
-	if ( ply:IsCombine() ) then
-		ix.item.Spawn("biolink", ply:GetPos() + Vector(0, 0, 50))
-	end
-
-	local held = ply:GetActiveWeapon()
-
+local function DropRandomWeapon(ply, held, dropAmmoInstead)
 	if ( IsValid( held ) and dropAbleWeapons[ ply:GetActiveWeapon():GetClass() ] ) then
 		local wep = dropAbleWeapons[ held:GetClass() ]
 		local wepAmmo = ammoWeapons[ held:GetClass() ]
 
-		if ( wep ) then
-			ix.item.Spawn( wep, ply:GetPos() + Vector( 0, 0, 40 ), nil, ply:GetAngles() )
-		end
-
-		if ( wepAmmo ) then
-			ix.item.Spawn( wepAmmo, ply:GetPos() + Vector( 0, 0, 30 ), nil, ply:GetAngles() )
+		if ( dropAmmoInstead ) then
+			if ( wepAmmo ) then
+				ix.item.Spawn( wepAmmo, ply:GetPos() + Vector( 0, 0, 30 ), nil, ply:GetAngles() )
+			end
+		else
+			if ( wep ) then
+				ix.item.Spawn( wep, ply:GetPos() + Vector( 0, 0, 40 ), nil, ply:GetAngles() )
+			end
 		end
 	else
 		local weapons = { }
@@ -374,6 +354,40 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 
 			ix.item.Spawn( randWeapon, ply:GetPos() + Vector( 0, 0, 40 ), nil, ply:GetAngles() )
 		end
+	end
+end
+
+function Schema:DoPlayerDeath(ply, inflicter, attacker)
+	local randomChance = math.random(1,2)
+
+	ply.deathPos = ply:GetPos()
+	ply.deathAngles = ply:GetAngles()
+	ply.ixCWUClass = 0
+
+	if ply:IsRestricted() then
+		ply:Freeze(false)
+	end
+
+	local char = ply:GetCharacter()
+
+	if (!char) then return end
+
+	if ( ply:Team() == FACTION_OTA ) then
+		ix.item.Spawn("damagedotavest", ply:GetPos() + Vector(0, 0, 60))
+	end
+
+	local held = ply:GetActiveWeapon()
+
+	if ( randomChance == 1 ) then
+		if ( ply:IsCombine() ) then
+			ix.item.Spawn("biolink", ply:GetPos() + Vector(0, 0, 50))
+		else
+			DropRandomWeapon(ply, held, true)
+		end
+	elseif ( randomChance == 2 ) then
+		DropRandomWeapon(ply, held, true)
+	else
+		DropRandomWeapon(ply, held)
 	end
 
 	if ply:IsBot() then
@@ -418,7 +432,7 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 
 		for k, v in ipairs(player.GetAll()) do
 			if (v:IsCombine()) then
-				ix.util.EmitQueuedSounds(v, sounds, 3, 0.2, 70)
+				ix.util.EmitQueuedSounds(v, sounds, 3, 0.2, 50)
 			end
 		end
 
@@ -639,7 +653,7 @@ function Schema:GetPlayerDeathSound(ply)
 
 		for k, v in ipairs(player.GetAll()) do
 			if (v:IsCombine() and ply:IsCombine()) and ( deathSounds[ply:Team()].globalCombine == true ) then
-				v:EmitSound(deathSound, 80)
+				v:EmitSound(deathSound, 60)
 			end
 		end
 
