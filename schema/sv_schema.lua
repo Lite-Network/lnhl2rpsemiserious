@@ -26,7 +26,6 @@ ix.whitelists.CCA.Ranks = {
 	}, 
 	["UNION-DvL"] = {
 		"STEAM_0:1:117769029", -- bonk
-		"STEAM_0:1:506629560", -- cor
 		"STEAM_0:0:10223064", -- xavier
 	},
 	["UNION-DcO"] = "",
@@ -65,8 +64,6 @@ ix.whitelists.OTA.NoRanks = {
 		"STEAM_0:0:203818007", -- kingdarkness
 		"STEAM_0:0:448077906", -- prototwat
 		"STEAM_0:0:89116555", -- sprite cran
-		"STEAM_0:1:506629560", -- cor
-		"STEAM_1:1:15510316", -- gilinar
 		"STEAM_0:0:138626507", -- john smith
 		"STEAM_0:0:10223064", -- xavier
 		"STEAM_0:0:199691641", -- Revectane
@@ -77,7 +74,6 @@ ix.whitelists.OTA.NoRanks = {
 ix.whitelists.OTA.Ranks = {
 	["LDR"] = {
 		"STEAM_0:1:104896936", -- Phil Leotardo
-		"STEAM_0:1:506629560", -- cor
 		"STEAM_0:0:229400758", -- tea
 		"STEAM_0:0:155006109", -- ProvingMedusa
 		"STEAM_0:0:89116555", -- sprite cran
@@ -170,7 +166,7 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeI
 	end
 
 	local waittime = 180
-	
+
 	if ( ply:IsSuperAdmin() ) then
 		waittime = 2
 	elseif ( ply:IsAdmin() ) then
