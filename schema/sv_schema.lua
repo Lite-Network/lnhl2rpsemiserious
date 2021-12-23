@@ -20,6 +20,9 @@ ix.whitelists.CCA.Ranks = {
 		"STEAM_0:1:157305669", -- haja
 		"STEAM_0:0:244971374", -- GMAN0289
 		"STEAM_0:0:455356942", -- tsukii
+		"STEAM_0:0:57781706", -- Dr.Anon
+		"STEAM_0:0:57794116", -- Mike
+		"STEAM_0:0:95908775", -- Roshe
 	}, 
 	["UNION-DvL"] = {
 		"STEAM_0:1:117769029", -- bonk
@@ -30,6 +33,8 @@ ix.whitelists.CCA.Ranks = {
 
 	["HELIX-OfC"] = {
 		"STEAM_0:0:174143741", -- lee west
+		"STEAM_0:0:428839009", -- Yoboy
+		"STEAM_0:1:40787669", -- Apollo
 	},
 	["HELIX-DvL"] = {},
 	["HELIX-DcO"] = "",
@@ -38,6 +43,7 @@ ix.whitelists.CCA.Ranks = {
 		"STEAM_0:1:157305669", -- haja
 		"STEAM_0:1:580525463", -- Creek
 		"STEAM_0:0:226903802", --Fawful
+		"STEAM_0:1:88481744", -- Winkie
 	},
 	["GRID-DvL"] = {
 		"STEAM_0:0:448077906", -- prototwat
@@ -162,6 +168,21 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeI
 			return
 		end
 	end
+
+	local waittime = 180
+	
+	if ( ply:IsSuperAdmin() ) then
+		waittime = 2
+	elseif ( ply:IsAdmin() ) then
+		waittime = 10
+	end
+
+	if (ply.jobCooldown or 0) > RealTime() then
+		ply:Notify("You need to waiter another "..math.Round(ply.jobCooldown - RealTime()).." seconds, to switch jobs again!")
+		return
+	end
+
+	ply.jobCooldown = RealTime() + waittime or 300
 	
 	char:SetFaction(factionTable.index)
 
