@@ -55,7 +55,7 @@ if ( SERVER ) then
         net.Start(achievement..".Take") net.Send(ply)
     end
 
-    function PLUGIN:PlayerInitialSpawn(ply)
+    function PLUGIN:PlayerLoadout(ply)
         for k, v in pairs(ix.achievements) do
             if ( ply:GetPData(tostring(ix.achievements[k][1]), false) == true ) then
                 net.Start(tostring(ix.achievements[k][1])..".Give") net.Send(ply)
