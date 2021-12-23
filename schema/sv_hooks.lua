@@ -664,13 +664,17 @@ function Schema:GetPlayerDeathSound(ply)
 end
 
 function Schema:PlayerMessageSend(speaker, chatType, text, anonymous, receivers, rawText)
-	if (chatType == "ic" or chatType == "w" or chatType == "y" or chatType == "commandradio" or chatType == "radio" or chatType == "dispatch" or chatType == "dispatchradio") then
+	if (chatType == "ic" or chatType == "w" or chatType == "y" or chatType == "commandradio" or chatType == "radio" or chatType == "dispatch" or chatType == "dispatchradio" or chatType == "importantradio") then
 		local class = self.voices.GetClass(speaker)
 
 		for k, v in ipairs(class) do
 			local info = self.voices.Get(v, rawText)
 
 			if v:find("citizen") and not (speaker:IsDonator() or speaker:IsAdmin()) then
+				return text
+			end
+
+			if ( v:find("dispatch") and not ( chatType == "dispatch" or chatType == "dispatchradio" ) ) then
 				return text
 			end
 
@@ -689,7 +693,7 @@ function Schema:PlayerMessageSend(speaker, chatType, text, anonymous, receivers,
 					else
 						local sounds = {info.sound}
 
-						if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio")) then
+						if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio") or (chatType == "importantradio")) then
 							for k2, v2 in pairs(player.GetAll()) do
 								if v2:IsCombine() then
 									v2:PlaySound(info.sound)
@@ -702,7 +706,7 @@ function Schema:PlayerMessageSend(speaker, chatType, text, anonymous, receivers,
 				end
 
 				if (speaker:IsCombine()) then
-					if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio")) then
+					if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio") or (chatType == "importantradio")) then
 						return info.text
 					else
 						return "<:: "..info.text.." ::>"
@@ -714,7 +718,7 @@ function Schema:PlayerMessageSend(speaker, chatType, text, anonymous, receivers,
 		end
 
 		if (speaker:IsCombine()) then
-			if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio")) then
+			if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio") or (chatType == "importantradio")) then
 				return text
 			else
 				return "<:: "..text.." ::>"

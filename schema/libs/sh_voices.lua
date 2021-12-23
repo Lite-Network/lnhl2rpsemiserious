@@ -70,11 +70,11 @@ Schema.voices.AddClass("UniversalUnion", function(ply)
 end)
 
 Schema.voices.AddClass("Dispatch", function(ply)
-	return ply:IsDispatch() or ply:IsCombineCommand()
+	return ply:IsDispatch() or ply:IsCombineCommand() or ply:IsAdmin()
 end)
 
 Schema.voices.AddClass("DispatchRadio", function(ply)
-	return ply:IsDispatch()
+	return ply:IsDispatch() or ply:IsCombineCommand() or ply:IsAdmin()
 end)
 
 Schema.voices.AddClass("Vortigaunt", function(ply)
