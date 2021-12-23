@@ -68,7 +68,7 @@ ITEM.functions.Consume = {
 		local bSpoiled = item:GetSpoiled()
 		local actiontext = "Invalid Action"
 
-		if ply.isEatingConsumeable == true then
+		if ( ply.isEatingConsumeable == true ) then
 			ply:Notify("You can't stuff too much food in your mouth, bruh.")
 			return false
 		end
