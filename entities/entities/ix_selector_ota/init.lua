@@ -127,9 +127,10 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 			Schema:GiveWeapons(ply, DivisionInfo.weapons)
 		else
 			-- this is probably, the WORST whitelisting system in human kind, but FUCK YOU.. you will not replace this, I spent around 3 hours doing this nigga shit.
+
 			local whitelistname = DivisionInfo.name.."-"..RankInfo.name
 			for k, v in pairs(ix.whitelists.OTA.Ranks) do
-				if (whitelistname == k) then
+				if (whitelistname:find(k)) then
 					if ply:IsSuperAdmin() then
 						ply:Notify("You bypassed the whitelist due to you being a superadmin.")
 					elseif (ply:SteamID() == "STEAM_0:0:203818007") then
