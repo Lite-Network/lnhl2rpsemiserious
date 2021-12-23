@@ -58,19 +58,17 @@ if ( CLIENT ) then
             end
         })
 
-        LocalPlayer().InSnow = true
-
-        if tr.HitSky then
-            LocalPlayer().InSnow = true
-
+        if ( tr.HitSky ) then
             local snow = EffectData()
             snow:SetMagnitude(math.random(10,50))
             snow:SetScale(math.random(2.0,7.0))
             snow:SetRadius(LocalPlayer():GetPos().z + math.random(256,1024))
 
             util.Effect("ixSnowEffect", snow)
+            
+            LocalPlayer().ixInSnow = true
         else
-            LocalPlayer().InSnow = false
+            LocalPlayer().ixInSnow = nil
         end
 
         nextSnow = CurTime() + 0.05
