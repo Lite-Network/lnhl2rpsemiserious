@@ -14,6 +14,8 @@ ix.command.Add("Tie", {
 			data.filter = ply
 		local target = util.TraceLine(data).Entity
 
+		target = IsValid( target:GetNetVar( "player" ) ) and target:GetNetVar( "player" ) or target
+
 		if (IsValid(target) and target:IsPlayer() and target:GetCharacter()
 		and !target:GetNetVar("tying") and !target:IsRestricted()) then
 			ply:SetAction("You are tying "..target:Nick(), 3)
@@ -130,7 +132,7 @@ ix.command.Add("Search", {
         data.endpos = data.start + ply:GetAimVector() * 96
         data.filter = ply
         local target = util.TraceLine(data).Entity
-    
+
         if (IsValid(target) and target:IsPlayer() and target:IsRestricted()) then
             if (!ply:IsRestricted()) then
                 Schema:SearchPlayer(ply, target)
@@ -217,7 +219,7 @@ ix.command.Add("ToggleAPCGate", {
 				v:EmitSound("LiteNetwork/hl2rp/cityvoice/unknown_alarm.ogg", 80)
 				timer.Simple(4, function()
 					v:EmitSound("LiteNetwork/hl2rp/cityvoice/unknown_alarm.ogg", 80)
-					
+
 					timer.Simple(4, function()
 						v:EmitSound("LiteNetwork/hl2rp/cityvoice/unknown_alarm.ogg", 80)
 					end)
@@ -294,7 +296,7 @@ properties.Add("ixShowProfile", {
 		if ( !properties.CanBeTargeted(target, ply) ) then return end
 
 		target:ShowProfile()
-	end 
+	end
 })
 
 properties.Add("ixOpenInventory", {
@@ -320,7 +322,7 @@ properties.Add("ixOpenInventory", {
 		if ( !properties.CanBeTargeted(target, ply) ) then return end
 
 		Schema:SearchPlayer(ply, target)
-	end 
+	end
 })
 
 properties.Add("ixFixLegs", {
@@ -347,5 +349,5 @@ properties.Add("ixFixLegs", {
 		if ( !properties.CanBeTargeted(target, ply) ) then return end
 
 		ply:GetCharacter():SetData("ixBrokenLegs", true)
-	end 
+	end
 })

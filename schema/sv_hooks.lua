@@ -447,7 +447,7 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 			end)
 		end)
 	end
-	
+
 	if ( attacker:IsNPC() and ( attacker:GetClass() == "npc_headcrab" or attacker:GetClass() == "npc_headcrab_fast" ) ) then
 		local headCrab = ents.Create("npc_zombie")
 		if ( attacker:GetClass() == "npc_headcrab_fast" ) then
@@ -614,7 +614,9 @@ function Schema:PlayerSpawnedNPC(ply, ent)
 	ent:SetKeyValue("spawnflags", "2097152")
 	ent:SetKeyValue("spawnflags", "8192") -- dont drop weapons
 
-	ent:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_GOOD)
+	if ( ent.SetCurrentWeaponProficiency ) then
+		ent:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_GOOD)
+	end
 
 	Schema:UpdateRelationShip(ent)
 end
