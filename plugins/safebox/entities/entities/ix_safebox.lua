@@ -37,7 +37,7 @@ if ( SERVER ) then
 			return
 		end
 
-		if activator:IsCombine() then
+		if ( activator:IsCombine() or activator:IsCA() ) then
 			activator:Notify("You are a Combine, you cannot use safeboxes!")
 			return
 		end
