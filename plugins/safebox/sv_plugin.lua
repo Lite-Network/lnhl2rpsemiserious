@@ -4,6 +4,15 @@ function PLUGIN:PlayerLoadedCharacter(ply)
 	ix.safebox.Restore(ply)
 end
 
+function PLUGIN:PlayerHurt(ply, attacker)
+	if ((ply.ixCombatPeriodCooldown or 0) < CurTime()) then
+		if ( attacker:IsPlayer() and attacker:IsCombine() ) then
+			ply.ixCombatPeriod = CurTime() + 180
+		end
+		ply.ixCombatPeriodCooldown = CurTime() + 60
+	end
+end
+
 function ix.safebox.Restore(ply, callback)
 	local character = ply:GetCharacter()
 

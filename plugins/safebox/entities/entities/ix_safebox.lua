@@ -51,6 +51,9 @@ if ( SERVER ) then
 		elseif (GetGlobalBool("ixAJStatus", false) == true) then
 			activator:Notify("During a Autonomous Waiver, you cannot open safeboxes!")
 			return
+		elseif not ((activator.ixCombatPeriod or 0) < CurTime()) then
+			activator:Notify("You cannot open your safebox due to you getting damaged before!")
+			return
 		end
 
 		local openTime = ix.config.Get("safeboxOpenTime", 1)
