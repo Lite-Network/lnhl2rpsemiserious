@@ -67,7 +67,7 @@ ix.divisions.ota[2].weapons[1] = {"ix_spas12"}
 ix.divisions.ota[2].weapons[2] = {"ix_spas12"}
 ix.divisions.ota[2].weapons[3] = {"ix_spas12", "weapon_frag"}
 
-ix.divisions.ota[3] = {
+--[[ix.divisions.ota[3] = {
 	id = 3,
 	name = "NOVA",
 	model = "models/litenetwork/ota/nova.mdl",
@@ -85,7 +85,7 @@ ix.divisions.ota[3] = {
 }
 ix.divisions.ota[3].weapons[1] = {"ix_mp7"}
 ix.divisions.ota[3].weapons[2] = {"ix_ar2"}
-ix.divisions.ota[3].weapons[3] = {"ix_spas12", "weapon_frag"}
+ix.divisions.ota[3].weapons[3] = {"ix_spas12", "weapon_frag"}]]
 
 ix.divisions.ota[4] = {
 	id = 4,
