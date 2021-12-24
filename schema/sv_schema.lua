@@ -28,7 +28,7 @@ ix.whitelists.CCA.Ranks = {
 		"STEAM_0:1:117769029", -- bonk
 		"STEAM_0:0:10223064", -- xavier
 	},
-	["UNION-DcO"] = "",
+	["UNION-DcO"] = "STEAM_0:0:138626507", -- John Smith
 
 	["HELIX-OfC"] = {
 		"STEAM_0:0:174143741", -- lee west
@@ -208,6 +208,9 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeI
 		char:SetName(char:GetData("ixKnownName", "John Doe"))
 		char:SetModel(char:GetData("ixPreferedModel") or table.Random(factionTable.models) or "models/error.mdl")
 	else
+		if ( factionTable.index == FACTION_CA ) then
+			char:SetName(char:GetData("ixKnownName", "John Doe"))
+		end
 		char:SetModel(preferedModel or table.Random(factionTable.models))
 	end
 
