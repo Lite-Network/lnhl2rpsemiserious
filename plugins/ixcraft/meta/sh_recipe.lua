@@ -1,4 +1,3 @@
-
 -- Support for IX:Craft by wowm0d
 -- replace code in meta/sh_recipe.lua
 
@@ -153,7 +152,7 @@ function RECIPE:OnCanCraft(client)
 	return true
 end
 
-if ( SERVER ) then
+if (SERVER) then
 	function RECIPE:OnCraft(client)
 		local bCanCraft, failString, c, d, e, f = self:OnCanCraft(client)
 
@@ -186,22 +185,7 @@ if ( SERVER ) then
 						local ffAmount = 1
 
 						if (itemTable.base) then
-
-							// Small workaround which will stack all the items of the same type
-							// so that it hopefully fixes the crafting bug.
 							if (itemTable.base == 'base_stackable') then
-								local items = inventory:GetItemsByUniqueID( itemTable.uniqueID )
-
-								if ( #items > 1 ) then
-									for i, v in ipairs( items ) do
-										if ( v:GetID() == itemTable:GetID() ) then
-											continue
-										end
-
-										ix.item.PerformInventoryAction( client, "combine", itemTable, inventory:GetID(), { v:GetID() } )
-									end
-								end
-
 								if ( itemTable:GetData('stacks', 1) == amount ) then
 									itemTable:Remove()
 									goto calculation
@@ -217,7 +201,7 @@ if ( SERVER ) then
 									goto calculation
 								end
 
-								return false, 'You must stack your items together, in order to craft this item!'
+								return false, 'You need to collect the materials used in one stack'
 							else
 								itemTable:Remove()
 							end
