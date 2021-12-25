@@ -91,7 +91,7 @@ ITEM.functions.Arm = {
 				explode:SetPos(ply:GetPos())
 				explode:SetOwner(ply)
 				explode:Spawn()
-				explode:SetKeyValue("iMagnitude", "130")
+				explode:SetKeyValue("iMagnitude", "400")
 				explode:Fire("Explode", 0, 0)
 				explode:EmitSound("weapons/c4/c4_explode1.wav", 100)
 				explode:EmitSound("weapons/c4/c4_exp_deb1.wav", 90)
