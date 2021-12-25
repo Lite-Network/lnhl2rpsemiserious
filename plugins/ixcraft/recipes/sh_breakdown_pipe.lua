@@ -6,7 +6,7 @@ RECIPE.category = "Breakdownable"
 RECIPE.base = "recipe_base"
 
 RECIPE.requirements = {
-	["metalpipe"] = 1,
+	["pipe"] = 1,
 }
 RECIPE.results = {
 	["metalplate"] = 1,
