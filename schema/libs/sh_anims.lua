@@ -67,13 +67,8 @@ ix.anim.playerzombie = {
 	},
 }
 
-ix.anim.SetModelClass("models/litenetwork/ota/echo.mdl", "overwatch")
-ix.anim.SetModelClass("models/litenetwork/ota/mace.mdl", "overwatch")
-ix.anim.SetModelClass("models/litenetwork/ota/ranger.mdl", "overwatch")
-ix.anim.SetModelClass("models/litenetwork/ota/xray.mdl", "overwatch")
-ix.anim.SetModelClass("models/litenetwork/ota/reaper.mdl", "overwatch")
-ix.anim.SetModelClass("models/litenetwork/ota/ldr.mdl", "overwatch")
-ix.anim.SetModelClass("models/litenetwork/ota/nova.mdl", "overwatch")
+ix.anim.SetModelClass("models/litenetwork/cca.mdl", "metrocop")
+ix.anim.SetModelClass("models/litenetwork/ota.mdl", "overwatch")
 ix.anim.SetModelClass("models/nemez/combine_soldiers/combine_soldier_beta_h.mdl", "overwatch")
 ix.anim.SetModelClass("models/nemez/combine_soldiers/combine_soldier_border_patrol_h.mdl", "overwatch")
 ix.anim.SetModelClass("models/nemez/combine_soldiers/combine_soldier_coordinator_h.mdl", "overwatch")
