@@ -1,7 +1,7 @@
 
 local PLUGIN = PLUGIN
-local entityMeta = ENTITY
-local playerMeta = PLAYER
+local entityMeta = FindMetaTable("Entity")
+local playerMeta = FindMetaTable("Player")
 
 function entityMeta:GetPrimaryVisorColor()
     return self:GetNWVector("PrimaryVisorColor")

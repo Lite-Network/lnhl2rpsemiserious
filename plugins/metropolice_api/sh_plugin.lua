@@ -4,12 +4,8 @@ PLUGIN.name = "Metropolice API"
 PLUGIN.author = "Bilwin, SchwarzKruppzo"
 PLUGIN.description = "Support for Customizable Metropolice outfit API"
 
-ix.anim.SetModelClass("models/metropolice/c08.mdl", "metrocop")
-ix.anim.SetModelClass("models/metropolice/c08_female.mdl", "metrocop")
-ix.anim.SetModelClass("models/metropolice/c08_female_2.mdl", "citizen_female")
-ix.anim.SetModelClass("models/metropolice/c08_female_3.mdl", "citizen_female")
-ix.anim.SetModelClass("models/player/metropolice/c08.mdl", "player")
-ix.anim.SetModelClass("models/player/metropolice/c08_female.mdl", "player")
+ix.anim.SetModelClass("models/litenetwork/cca.mdl", "metrocop")
+ix.anim.SetModelClass("models/litenetwork/ota.mdl", "overwatch")
 
 cpoutfit = {}
 cpoutfit.supported = {}

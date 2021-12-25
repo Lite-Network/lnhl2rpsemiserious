@@ -8,7 +8,7 @@ FACTION.color = Color(150, 50, 50)
 --[[ Helix Base Config ]]--
 
 FACTION.models = {
-	"models/litenetwork/ota/echo.mdl",
+	"models/litenetwork/ota.mdl",
 }
 
 FACTION.isGloballyRecognized = true
@@ -25,7 +25,7 @@ FACTION.donatorOnly = false
 FACTION.noModelSelection = true
 FACTION.requiredXP = 1000
 FACTION.command = "ix_faction_become_ota"
-FACTION.modelWhitelist = "litenetwork/ota/echo"
+FACTION.modelWhitelist = "litenetwork/ota"
 
 --[[ Plugin Configs ]]--
 

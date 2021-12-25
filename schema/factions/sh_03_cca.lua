@@ -8,23 +8,7 @@ FACTION.color = Color(80, 125, 230)
 --[[ Helix Base Config ]]--
 
 FACTION.models = {
-	--[["models/wn7new/metropolice/female_01.mdl",
-	"models/wn7new/metropolice/female_02.mdl",
-	"models/wn7new/metropolice/female_03.mdl",
-	"models/wn7new/metropolice/female_04.mdl",
-	"models/wn7new/metropolice/female_06.mdl",
-	"models/wn7new/metropolice/female_07.mdl",]]
-	
-	"models/wn7new/metropolice/male_01.mdl",
-	"models/wn7new/metropolice/male_02.mdl",
-	"models/wn7new/metropolice/male_03.mdl",
-	"models/wn7new/metropolice/male_04.mdl",
-	"models/wn7new/metropolice/male_05.mdl",
-	"models/wn7new/metropolice/male_06.mdl",
-	"models/wn7new/metropolice/male_07.mdl",
-	"models/wn7new/metropolice/male_08.mdl",
-	"models/wn7new/metropolice/male_09.mdl",
-	"models/wn7new/metropolice/male_10.mdl",
+	"models/litenetwork/cca.mdl",
 }
 
 FACTION.isGloballyRecognized = true
@@ -42,7 +26,7 @@ FACTION.donatorOnly = false
 FACTION.noModelSelection = true
 FACTION.requiredXP = 50
 FACTION.command = "ix_faction_become_cca"
-FACTION.modelWhitelist = "wn7new/metropolice"
+FACTION.modelWhitelist = "litenetwork/cca"
 
 --[[ Plugin Configs ]]--
 
