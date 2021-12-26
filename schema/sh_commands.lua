@@ -293,8 +293,6 @@ properties.Add("ixShowProfile", {
 	Receive = function(self, length, ply)
 		local target = net.ReadEntity()
 
-		if ( !properties.CanBeTargeted(target, ply) ) then return end
-
 		target:ShowProfile()
 	end
 })
@@ -318,8 +316,6 @@ properties.Add("ixOpenInventory", {
 	end,
 	Receive = function(self, length, ply)
 		local target = net.ReadEntity()
-
-		if ( !properties.CanBeTargeted(target, ply) ) then return end
 
 		Schema:SearchPlayer(ply, target)
 	end
@@ -345,8 +341,6 @@ properties.Add("ixFixLegs", {
 	end,
 	Receive = function(self, length, ply)
 		local target = net.ReadEntity()
-
-		if ( !properties.CanBeTargeted(target, ply) ) then return end
 
 		ply:GetCharacter():SetData("ixBrokenLegs", true)
 	end
