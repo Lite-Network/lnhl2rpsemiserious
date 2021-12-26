@@ -13,6 +13,16 @@ function Schema:OnReloaded()
 	end
 end
 
+function Schema:PlayerSwitchFlashlight(ply, state)
+	if ((ply.ixAntiSpamFlashlight or 0) < CurTime()) then
+		return true
+
+		ply.ixAntiSpamFlashlight = CurTime() + 2
+	else
+		return false
+	end
+end
+
 function Schema:PlayerSpawnSENT(ply, class)
 	if ( class:find("ix_") and not class == "ix_radio" ) and not ( ply:IsSuperAdmin() ) then
 		ply:Notify("Spawning Helix Entities has been disabled.")
@@ -25,10 +35,6 @@ function Schema:OnCharacterCreated(ply, char)
 	char:SetData("ixPreferedModel", char:GetModel())
 
 	print(ply:IPAddress(), " ", ply:SteamName(), " [", ply:Nick(), "] - ", ply:SteamID(), " | OnCharacterCreated")
-end
-
-function Schema:PlayerSwitchFlashlight(ply)
-	return true
 end
 
 function Schema:PlayerFootstep(ply, pos, foot, sound, volume)
