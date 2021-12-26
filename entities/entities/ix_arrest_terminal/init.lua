@@ -101,7 +101,7 @@ net.Receive("ixCombineTerminalCharge", function(len, ply)
 	
 	ply.ixDraggedTarget = nil
 	target.ixDraggedBy = nil
-	Schema:SetTeam(target, ix.faction.Get(FACTION_PRISONER))
+	Schema:SetTeam(target, ix.faction.teams["07_prisoner"], nil, nil, nil, true, true)
 	target:ChatNotify("You have been sentenced for "..chargesTime.." seconds!")
 	target:StripWeapons()
 
@@ -114,7 +114,7 @@ net.Receive("ixCombineTerminalCharge", function(len, ply)
 	timer.Simple(chargesTime, function()
 		target.ixJailState = nil
 
-		Schema:SetTeam(target, ix.faction.teams["01_citizen"])
+		Schema:SetTeam(target, ix.faction.teams["01_citizen"], nil, nil, nil, true, true)
 		hook.Run("PlayerLoadout", target)
 	end)
 end)

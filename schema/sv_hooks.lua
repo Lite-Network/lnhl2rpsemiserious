@@ -137,7 +137,7 @@ function Schema:simfphysUse(ent, ply)
 end
 
 function Schema:PlayerDisconnected(ply)
-	Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, true, true)
+	Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, true, true, true, true)
 end
 
 function Schema:ShowSpare2(ply)
@@ -275,7 +275,7 @@ function Schema:PlayerLoadout(ply)
 
 		if ( ply.ixJailState and ( ply:Team() == FACTION_CITIZEN or ply:Team() == FACTION_CWU ) ) then
 			ply.ixDraggedBy = nil
-			Schema:SetTeam(ply, ix.faction.teams["07_prisoner"])
+			Schema:SetTeam(ply, ix.faction.teams["07_prisoner"], nil, nil, nil, true, true)
 			ply:StripWeapons()
 		end
 	end
@@ -294,9 +294,9 @@ end
 
 function Schema:PlayerLoadedCharacter(ply, char, oldChar)
 	if ( ply:IsCombine() ) then
-		Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, false, false)
+		Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, nil, nil, true, true)
 	else
-		Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, false, true)
+		Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, nil, true, true, true)
 	end
 	hook.Run("PlayerSpawn", ply)
 end
@@ -494,7 +494,7 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 		end)
 	end
 
-	timer.Simple(0, function() Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, true) end)
+	timer.Simple(0, function() Schema:SetTeam(ply, ix.faction.teams["01_citizen"], nil, true, nil, true, true) end)
 end
 
 function Schema:PlayerInteractItem(ply, action, item)

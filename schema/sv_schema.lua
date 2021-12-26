@@ -137,7 +137,7 @@ function Schema:GiveWeapons(ply, weapons)
 	end
 end
 
-function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeInventory)
+function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeInventory, bypassTime, bypassXP)
 	local char = ply:GetCharacter()
 
 	if not ( factionTable ) then
@@ -158,27 +158,31 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeI
 		return
 	end
 
-	if not ( factionTable.requiredXP == nil ) then
-		if (tonumber(ply:GetXP()) < factionTable.requiredXP) then
-			ply:Notify("You need "..factionTable.requiredXP.." XP to become a "..factionTable.name.."!")
-			return
+	if not ( bypassXP ) then
+		if not ( factionTable.requiredXP == nil ) then
+			if (tonumber(ply:GetXP()) < factionTable.requiredXP) then
+				ply:Notify("You need "..factionTable.requiredXP.." XP to become a "..factionTable.name.."!")
+				return
+			end
 		end
 	end
 
-	local waittime = 180
+	if not ( bypassTime ) then
+		local waittime = 180
 
-	if ( ply:IsSuperAdmin() ) then
-		waittime = 2
-	elseif ( ply:IsAdmin() ) then
-		waittime = 10
+		if ( ply:IsSuperAdmin() ) then
+			waittime = 2
+		elseif ( ply:IsAdmin() ) then
+			waittime = 10
+		end
+
+		if (ply.jobCooldown or 0) > RealTime() then
+			ply:Notify("You need to wait another "..math.Round(ply.jobCooldown - RealTime()).." seconds, to switch jobs again!")
+			return
+		end
+
+		ply.jobCooldown = RealTime() + waittime or 300
 	end
-
-	if (ply.jobCooldown or 0) > RealTime() then
-		ply:Notify("You need to waiter another "..math.Round(ply.jobCooldown - RealTime()).." seconds, to switch jobs again!")
-		return
-	end
-
-	ply.jobCooldown = RealTime() + waittime or 300
 	
 	char:SetFaction(factionTable.index)
 
