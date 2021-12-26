@@ -46,3 +46,9 @@ concommand.Add("ix_event_cinematicbars_target", function(ply, cmd, args)
 		net.Send(target)
 	end
 end)
+
+concommand.Add("ix_event_c17_start", function(ply, cmd, args)
+	if ( ply:IsSuperAdmin() ) then
+		
+	end
+end)
