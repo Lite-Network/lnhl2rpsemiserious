@@ -1,7 +1,7 @@
 -- Item Statistics
 
 ITEM.name = "Destroyed Biolink"
-ITEM.description = "An Destroyed Biolick from an Metropolice Unit."
+ITEM.description = "An Destroyed Biolink from an Metropolice Unit."
 ITEM.category = "Items"
 
 -- Item Configuration
