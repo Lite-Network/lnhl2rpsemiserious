@@ -148,13 +148,16 @@ function Schema:PopulateHelpMenu(tabs)
 				if self.voices and self.voices.stored and self.voices.stored[class] then
 					for command, info in SortedPairs(self.voices.stored[class]) do
 						if filter == nil or (command:lower():find(filter:lower()) or info.text:lower():find(filter:lower())) then
-							local title = container:Add("DLabel")
+							local title = container:Add("ixMenuButton")
 							title:SetFont("ixMediumLightFont")
 							title:SetText(command:upper())
 							title:Dock(TOP)
 							title:SetTextColor(ix.config.Get("color"))
-							title:SetExpensiveShadow(1, color_black)
 							title:SizeToContents()
+							title.DoClick = function()
+								ix.util.Notify("You have copied: "..tostring(command:upper()))
+								SetClipboardText(tostring(command:upper()))
+							end
 							title.removeOnFilter = true
 
 							local description = container:Add("DLabel")
@@ -212,8 +215,6 @@ net.Receive("ixCreateVGUI", function(len, ply)
 end)
 
 net.Receive("ixCustomSettings", function(len, ply)
-	ix.option.Set("disableAnimations", false, true)
-	ix.option.Set("cheapBlur", false, true)
 	ix.option.Set("language", "english", true)
 	ix.option.Set("observerTeleportBack", false, true)
 	ix.option.Set("observerESP", false, true)
@@ -221,17 +222,15 @@ net.Receive("ixCustomSettings", function(len, ply)
 	ix.option.stored["minimalTooltips"].hidden = function() return true end
 	ix.option.stored["alwaysShowBars"].hidden = function() return true end
 	ix.option.stored["animationScale"].hidden = function() return true end
-	ix.option.stored["24hourTime"].hidden = function() return true end
 	ix.option.stored["openBags"].hidden = function() return true end
-	--ix.option.stored["disableAnimations"].hidden = function() return true end
-	--ix.option.stored["cheapBlur"].hidden = function() return true end
 	ix.option.stored["language"].hidden = function() return true end
 	ix.option.stored["observerTeleportBack"].hidden = function() return true end
 	ix.option.stored["observerESP"].hidden = function() return true end
-	ix.option.stored["altLower"].hidden = function() return true end
+	--ix.option.stored["altLower"].hidden = function() return true end
 	ix.option.stored["showIntro"].hidden = function() return true end
 	ix.option.stored["chatFontScale"].hidden = function() return true end
 	ix.option.stored["chatOutline"].hidden = function() return true end
-	ix.option.stored["chatNotices"].hidden = function() return true end
-	--ix.option.stored["chatTimestamps"].hidden = function() return true end
+
+	RunConsoleCommand("pac_enable", "1")
+	RunConsoleCommand("pac_draw_distance", "-1")
 end)
