@@ -10,12 +10,7 @@ ITEM.skin = 0
 
 ITEM.illegal = false
 ITEM.items = {"noodles", "water"}
-ITEM.money = 100
 ITEM.noBusiness = true
-
--- Item Price Configuration
-
-ITEM.price = 200
 
 ITEM.exRender = true
 ITEM.iconCam = {
@@ -29,6 +24,15 @@ ITEM.functions.Open = {
 	OnRun = function(itemTable)
 		local ply = itemTable.player
 		local character = ply:GetCharacter()
+		local tokenReward = itemTable.money
+
+		if ( ply:Team() == FACTION_CCA ) then
+			tokenReward = 200
+		elseif ( ply:Team() == FACTION_OTA ) then
+			tokenReward = 300
+		else
+			tokenReward = 100
+		end
 
 		for k, v in ipairs(itemTable.items) do
 			if (!character:GetInventory():Add(v)) then
@@ -36,7 +40,7 @@ ITEM.functions.Open = {
 			end
 		end
 
-		character:GiveMoney(itemTable.money)
+		character:GiveMoney(tokenReward)
 		ply:EmitSound("physics/plastic/plastic_barrel_break"..math.random(1,2)..".wav", 80)
 	end
 }
