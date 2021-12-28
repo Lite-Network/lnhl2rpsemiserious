@@ -1,6 +1,6 @@
 RECIPE.name = "IED"
 RECIPE.description = "Craft a explosive IED."
-RECIPE.model = "models/props_lab/pipesystem03a.mdl"
+RECIPE.model = "models/weapons/w_c4_planted.mdl"
 RECIPE.category = "Miscellaneous"
 
 RECIPE.base = "recipe_base"
