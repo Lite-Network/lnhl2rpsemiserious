@@ -56,9 +56,9 @@ SWEP.Spread.Min = 0
 SWEP.Spread.Max = 5
 SWEP.Spread.IronsightsMod = 0.2
 SWEP.Spread.CrouchMod = 0.8
-SWEP.Spread.AirMod = 1.2
-SWEP.Spread.RecoilMod = 0
-SWEP.Spread.VelocityMod = 0.3
+SWEP.Spread.AirMod = 3
+SWEP.Spread.RecoilMod = 0.2
+SWEP.Spread.VelocityMod = 3
 
 SWEP.IronsightsPos = Vector(-7.211, -50, 1.009)
 SWEP.IronsightsAng = Angle(-0.151, 0, 0)
