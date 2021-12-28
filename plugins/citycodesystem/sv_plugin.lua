@@ -502,7 +502,7 @@ function PLUGIN:AutonomousJudgementStart()
 		end)
 	end)
 
-	timer.Create("ixAJFlasher", 20, 0, function()
+	timer.Create("ixAJFlasher", 60, 0, function()
 		PlayEventSound("ambient/levels/citadel/portal_beam_shoot"..math.random(1,6)..".wav")
 		PlayEventSound("ambient/levels/citadel/strange_talk"..math.random(1,11)..".wav")
 		PlayEventSound("ambient/levels/citadel/strange_talk"..math.random(1,11)..".wav")
