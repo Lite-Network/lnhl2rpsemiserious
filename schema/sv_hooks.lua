@@ -6,18 +6,21 @@ function Schema:OnReloaded()
 	if ((ix.luaReloaded or 0) < CurTime()) then
 		for k, v in pairs(player.GetAll()) do
 			v:ChatNotify("Lua has been refreshed!")
-			v:PlaySound("vo/k_lab/ba_pushinit.wav")
+			--v:PlaySound("vo/k_lab/ba_pushinit.wav")
 		end
 
 		ix.luaReloaded = CurTime() + 30
 	end
 end
 
+function Schema:Think()
+end
+
 function Schema:PlayerSwitchFlashlight(ply, state)
 	if ((ply.ixAntiSpamFlashlight or 0) < CurTime()) then
+		ply.ixAntiSpamFlashlight = CurTime() + 0.2
+		
 		return true
-
-		ply.ixAntiSpamFlashlight = CurTime() + 2
 	else
 		return false
 	end
@@ -72,14 +75,14 @@ end
 
 -- Temporary Code to Fix Backdoors
 local blacklistedEntities = {
-	["grenade_helicopter"] = true,
+	--["grenade_helicopter"] = true,
 	--["npc_grenade_frag"] = true,
-	["npc_handgrenade"] = true,
+	--["npc_handgrenade"] = true,
 	["obj_vj_grenade"] = true,
-	["grenade_ar2"] = true,
-	["npc_helicopter"] = true,
-	["npc_combinegunship"] = true,
-	["npc_combinedropship"] = true,
+	--["grenade_ar2"] = true,
+	--["npc_helicopter"] = true,
+	--["npc_combinegunship"] = true,
+	--["npc_combinedropship"] = true,
 	["gmod_wire_explosive"] = true,
 	["gmod_wire_detonator"] = true
 }
@@ -230,9 +233,8 @@ local cwuCombineDoors = {
 	[4365] = true,
 }
 function Schema:PlayerUseDoor(ply, door)
-	--print(door:MapCreationID())
 	if (ply:IsCombine() or ply:IsCA() or ply:IsDispatch()) then
-		if (!door:HasSpawnFlags(256) and !door:HasSpawnFlags(1024)) then
+		if (!door:HasSpawnFlags(256) and !door:HasSpawnFlags(1024)) and not (door:GetName():find("door_airlock_comb_") or door:GetName():find("lift_doors_") or door:GetName():find("shutters")) then
 			door:Fire("open")
 		end
 	elseif ((ply:IsCWU() or ply:IsCombine()) and cwuCombineDoors[door:MapCreationID()]) then
@@ -364,7 +366,7 @@ local function DropRandomWeapon(ply, held, dropAmmoInstead)
 end
 
 function Schema:DoPlayerDeath(ply, inflicter, attacker)
-	local randomChance = math.random(1,2)
+	local randomChance = math.random(1,3)
 
 	ply.deathPos = ply:GetPos()
 	ply.deathAngles = ply:GetAngles()
@@ -420,7 +422,7 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 			location = "unknown location"
 		end
 
-		local combineName = ply:Nick() or "unknown unit"
+		local combineName = string.upper(ply:Nick() or "unknown unit")
 
 		local sounds = {
 			"npc/overwatch/radiovoice/on3.wav",
@@ -438,7 +440,7 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 
 		for k, v in ipairs(player.GetAll()) do
 			if (v:IsCombine()) then
-				ix.util.EmitQueuedSounds(v, sounds, 3, 0.2, 50)
+				ix.util.EmitQueuedSounds(v, sounds, 3, 0.2, 40)
 			end
 		end
 
@@ -449,7 +451,7 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 			timer.Simple(math.random(4.00,5.00), function()
 				ix.chat.Send(ply, "dispatchradioforce", "Unit down at, "..location.." reinforcement teams code 3. Investigate and report.", false)
 				Schema:AddCombineDisplayMessage("WARNING! Biosignal lost for protection team unit "..combineName.." at "..location.."...", Color(255, 0, 0, 255))
-				Schema:AddWaypoint(ply.deathPos + Vector(0, 0, 30), "lost biosignal for "..combineName, Color(200, 0, 0), 120, ply)
+				Schema:AddWaypoint(ply.deathPos + Vector(0, 0, 30), "LOST BIOSIGNAL FOR "..combineName, Color(200, 0, 0), 120, ply)
 			end)
 		end)
 	end
@@ -530,15 +532,17 @@ function Schema:PlayerHurt(ply, attacker, health, damage)
 	end
 
 	if (ply:IsCombine() and (ply.ixTraumaCooldown or 0) < CurTime()) then
-		local text = "External"
+		local name = string.upper(ply:Nick() or "unknown unit")
+		local text = "EXTERNAL"
 
-		if (damage > 20) then
-			text = "Severe"
+		if (damage > 15) then
+			text = "SEVERE"
+			Schema:AddWaypoint(ply:GetPos() + Vector(0, 0, 30), "UNIT "..name.." RECEIVED "..text.." TRAUMA...", Color(200, 100, 0), 120, ply)
 		end
 
-		Schema:AddCombineDisplayMessage("WARNING! UNIT "..ply:Nick().." RECEIVED "..text.." trauma...", Color(255, 0, 0, 255), text)
+		Schema:AddCombineDisplayMessage("WARNING! UNIT "..name.." RECEIVED "..text.." TRAUMA...", Color(255, 0, 0, 255), text)
 
-		if (health < 25) then
+		if (health < 30) then
 			ply:AddCombineDisplayMessage("WARNING! VITAL SIGNS DROPPING, SEEK IMMEDIATE MEDICAL ATTENTION", Color(255, 0, 0, 255))
 		end
 
@@ -615,13 +619,24 @@ function Schema:OnPlayerHitGround(ply, inWater, onFloater, speed)
 	end
 end
 
+local npcHealthValues = {
+	["npc_antlionguard"] = 1000,
+	["npc_antlion"] = 200,
+	["npc_hunter"] = 400,
+	["npc_combine_s"] = 140,
+	["npc_citizen"] = 100,
+}
 function Schema:PlayerSpawnedNPC(ply, ent)
 	ent:SetKeyValue("spawnflags", "16384")
 	ent:SetKeyValue("spawnflags", "2097152")
 	ent:SetKeyValue("spawnflags", "8192") -- dont drop weapons
 
 	if ( ent.SetCurrentWeaponProficiency ) then
-		ent:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_GOOD)
+		ent:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_VERY_GOOD)
+	end
+
+	if ( npcHealthValues[ent:GetClass()] ) then
+		ent:SetHealth(npcHealthValues[ent:GetClass()])
 	end
 
 	Schema:UpdateRelationShip(ent)
@@ -661,7 +676,7 @@ function Schema:GetPlayerDeathSound(ply)
 
 		for k, v in ipairs(player.GetAll()) do
 			if (v:IsCombine() and ply:IsCombine()) and ( deathSounds[ply:Team()].globalCombine == true ) then
-				v:EmitSound(deathSound, 60)
+				v:EmitSound(deathSound, 40)
 			end
 		end
 
