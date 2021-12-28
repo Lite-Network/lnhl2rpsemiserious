@@ -112,6 +112,8 @@ local combineNPCs = {
 	["npc_manhack"] = true,
 	["npc_rollermine"] = true,
 	["npc_strider"] = true,
+	["npc_hunter"] = true,
+	["npc_stalker"] = true,
 }
 function Schema:UpdateRelationShip(ent)
 	for k, v in pairs(player.GetAll()) do
