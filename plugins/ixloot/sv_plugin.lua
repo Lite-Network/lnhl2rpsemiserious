@@ -5,12 +5,12 @@ function PLUGIN:SearchLootContainer(ent, ply)
         if not ent.containerAlreadyUsed or ent.containerAlreadyUsed <= CurTime() then
             if not ( ply.isEatingConsumeable == true ) then
                 local randomChance = math.random(1,20)
-                local randomAmountChance = math.random(1,4)
+                local randomAmountChance = math.random(1,3)
                 local lootAmount = 1
 
                 local randomLootItem = table.Random(PLUGIN.randomLoot.common)
-                if ( randomAmountChance == 4 ) then
-                    lootAmount = math.random(1,5)
+                if ( randomAmountChance == 3 ) then
+                    lootAmount = math.random(1,3)
                 else
                     lootAmount = 1
                 end

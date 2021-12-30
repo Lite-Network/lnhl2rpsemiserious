@@ -4,13 +4,13 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	self:SetModel("models/wn7new/metropolice/male_01.mdl")
+	self:SetModel("models/dpfilms/metropolice/rtb_police.mdl")
 	self:SetHullType(HULL_HUMAN)
 	self:SetHullSizeNormal()
 	self:SetSolid(SOLID_BBOX)
 	self:SetUseType(SIMPLE_USE)
 	self:DropToFloor()
-	self:SetBodyGroups("00012012")
+	self:SetSubMaterial(4, "models/dpfilms/metropolice/blacop/metrocop_sheet")
 end
 
 function ENT:OnTakeDamage()
@@ -32,7 +32,7 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 	if not (args[1] and args[2]) then return end
 	if not ply:NearEntity("ix_selector_cca") then ply:Notify("You need to be near the Combine Civil Authority quartermaster in order to use this!") return end
 	if not (ply:Team() == FACTION_CCA) then ply:Notify("You need to become a Combine Civil Authority to run this command.") return end
-	if not ((ply.ccaSelectionCoolDown or 0) > CurTime()) then
+	if not ( ( ply.ccaSelectionCoolDown or 0 ) > CurTime() ) then
 		local char = ply:GetCharacter()
 
 		if (!char) then
@@ -48,23 +48,23 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 		local StandardName = "CCA:C17-"..DivisionInfo.name.."-"..RankInfo.name.."-"..RandomNumbers
 		local BasicWeapons = {"weapon_physgun", "gmod_tool", "ix_hands", "ix_keys"}
 
-		if not (DivisionInfo.xp == nil) then
-			if not (tonumber(ply:GetXP()) >= DivisionInfo.xp) then
+		if not ( DivisionInfo.xp == nil ) then
+			if not ( tonumber( ply:GetXP() ) >= DivisionInfo.xp ) then
 				ply:Notify("You do not have the correct amount of XP to become that Division!")
 				return false
 			end
 		end
 
-		if not (DivisionInfo.norank == true) then
-			if not (RankInfo.xp == nil) then
-				if not (tonumber(ply:GetXP()) >= RankInfo.xp) then
+		if not ( DivisionInfo.norank == true ) then
+			if not ( RankInfo.xp == nil ) then
+				if not ( tonumber( ply:GetXP() ) >= RankInfo.xp ) then
 					ply:Notify("You do not have the correct amount of XP to become that Rank!")
 					return false
 				end
 			end
 		end
 
-		if (DivisionInfo.norank == true) then
+		if ( DivisionInfo.norank == true ) then
 			if CommandingName:find("COMMANDER") and not (ply:SteamID() == "STEAM_0:0:102502702" or ply:IsSuperAdmin()) then
 				ply:Notify("The Commander Division is whitelisted!")
 				return false
@@ -109,25 +109,35 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 			char:SetName(CommandingName)
 			ply:Notify("You are now: "..CommandingName)
 
-			if DivisionInfo.class and char then
+			if ( DivisionInfo.class ) then
 				char:SetClass(DivisionInfo.class)
 			end
-			if DivisionInfo.model then
+
+			if ( DivisionInfo.model ) then
 				ply:SetModel(DivisionInfo.model)
 			else
-				if ply:GetModel() == "models/ma/hla/metropolice.mdl" then
-					ply:SetModel(table.Random(ix.faction.Get(ply:Team()).models))
-				end
+				ply:SetModel("models/dpfilms/metropolice/hdpolice.mdl")
 			end
+
+			if ( DivisionInfo.sheet ) then
+				ply:SetSubMaterial(0, DivisionInfo.sheet)
+			else
+				ply:SetSubMaterial(0, "")
+			end
+
+			if ( DivisionInfo.gasmask ) then
+				ply:SetSubMaterial(3, DivisionInfo.gasmask)
+			else
+				ply:SetSubMaterial(3, "")
+			end
+
+			if ( DivisionInfo.lens ) then
+				ply:SetSubMaterial(5, DivisionInfo.lens)
+			else
+				ply:SetSubMaterial(5, "")
+			end
+
 			ply:ResetBodygroups()
-			ply:SetBodygroup(1, DivisionInfo.bg_cape)
-			ply:SetBodygroup(2, DivisionInfo.bg_body)
-			ply:SetBodygroup(3, DivisionInfo.bg_head)
-			ply:SetBodygroup(4, DivisionInfo.bg_armor)
-			ply:SetBodygroup(5, DivisionInfo.bg_belt)
-			ply:SetBodygroup(6, DivisionInfo.bg_pants)
-			ply:SetBodygroup(7, DivisionInfo.bg_bag)
-			ply:SetBodygroup(8, DivisionInfo.bg_satchel)
 			ply:SetSkin(DivisionInfo.skin)
 			ply:SetMaxHealth(DivisionInfo.health)
 			ply:SetHealth(DivisionInfo.health)
@@ -136,7 +146,7 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 			ply:SetupHands()
 
 			char:SetData("brokenLegs", false)
-			char:SetData("lastCombineName", CommandingName)
+			char:SetData("ixCombineName", CommandingName)
 
 			Schema:GiveWeapons(ply, BasicWeapons)
 			Schema:GiveWeapons(ply, DivisionInfo.weapons)
@@ -177,25 +187,35 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 			char:SetName(StandardName)
 			ply:Notify("You are now a: "..StandardName)
 
-			if DivisionInfo.class then
-				char:SetClass(DivisionInfo.class)
+			if ( DivisionInfo.class ) then
+				char:SetClass(DivisionInfo.class..string.upper(RankInfo.name))
 			end
-			if DivisionInfo.model then
-				ply:SetModel(DivisionInfo.model)
+
+			if ( RankInfo.model or DivisionInfo.model ) then
+				ply:SetModel(RankInfo.model or DivisionInfo.model)
 			else
-				if ply:GetModel() == "models/ma/hla/metropolice.mdl" then
-					ply:SetModel(table.Random(ix.faction.Get(ply:Team()).models))
-				end
+				ply:SetModel("models/dpfilms/metropolice/hdpolice.mdl")
 			end
+
+			if ( RankInfo.sheet or DivisionInfo.sheet ) then
+				ply:SetSubMaterial(0, RankInfo.sheet or DivisionInfo.sheet)
+			else
+				ply:SetSubMaterial(0, "")
+			end
+
+			if ( RankInfo.gasmask or DivisionInfo.gasmask ) then
+				ply:SetSubMaterial(3, RankInfo.gasmask or DivisionInfo.gasmask)
+			else
+				ply:SetSubMaterial(3, "")
+			end
+
+			if ( RankInfo.lens or DivisionInfo.lens ) then
+				ply:SetSubMaterial(5, RankInfo.lens or DivisionInfo.lens)
+			else
+				ply:SetSubMaterial(5, "")
+			end
+
 			ply:ResetBodygroups()
-			ply:SetBodygroup(1, RankInfo.bg_cape)
-			ply:SetBodygroup(2, DivisionInfo.bg_body)
-			ply:SetBodygroup(3, RankInfo.bg_head)
-			ply:SetBodygroup(4, RankInfo.bg_armor)
-			ply:SetBodygroup(5, RankInfo.bg_belt)
-			ply:SetBodygroup(6, RankInfo.bg_pants)
-			ply:SetBodygroup(7, RankInfo.bg_bag)
-			ply:SetBodygroup(8, RankInfo.bg_satchel)
 			ply:SetSkin(DivisionInfo.skin)
 			ply:SetMaxHealth(DivisionInfo.health + RankInfo.health)
 			ply:SetHealth(DivisionInfo.health + RankInfo.health)
@@ -204,14 +224,15 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 			ply:SetupHands()
 			
 			char:SetData("brokenLegs", false)
-			char:SetData("lastCombineName", StandardName)
+			char:SetData("ixCombineName", StandardName)
 
 			Schema:GiveWeapons(ply, BasicWeapons)
-			if (DivisionInfo.weapons[RankID]) then
+
+			if ( DivisionInfo.weapons[RankID] ) then
 				Schema:GiveWeapons(ply, DivisionInfo.weapons[RankID])
 			end
 		end
-		ply.ccaSelectionCoolDown = CurTime() + 10
+		ply.ccaSelectionCoolDown = CurTime() + 1
 	else
 		ply:Notify("You need to wait before you can change division and rank again.")
 	end

@@ -13,7 +13,15 @@ function Schema:OnReloaded()
 	end
 end
 
-function Schema:Think()
+local pickupAbleEntities = {
+	["grenade_helicopter"] = true,
+	["npc_grenade_frag"] = true,
+	["npc_handgrenade"] = true,
+}
+function Schema:CanPlayerHoldObject(ply, ent)
+	if ( pickupAbleEntities[ent:GetClass()] ) then
+		return true
+	end
 end
 
 function Schema:PlayerSwitchFlashlight(ply, state)
@@ -46,6 +54,10 @@ function Schema:PlayerFootstep(ply, pos, foot, sound, volume)
 		newSound = "npc/metropolice/gear"..math.random(1,6)..".wav"
 	elseif ( ply:Team() == FACTION_OTA ) then
 		newSound = "npc/combine_soldier/gear"..math.random(1,6)..".wav"
+	elseif ( ply:IsVortigaunt() ) then
+		newSound = "npc/vort/vort_foot"..math.random(1,4)..".wav"
+	elseif ( ply:IsCremator() ) then
+		newSound = "litenetwork/hl2rp/cremator/foot"..math.random(1,3)..".wav"
 	elseif ( ply:IsRebel() ) then
 		local rand = math.random( 1, 8 )
 		if ( rand == 7 ) then
@@ -164,6 +176,10 @@ function Schema:Move(ply, mv)
 		runPenalty = 0
 	end
 
+	if ( ply:IsCremator() ) then
+		runPenalty = 80
+	end
+
 	ply:SetDuckSpeed(0.4)
 	ply:SetUnDuckSpeed(0.4)
 	ply:SetSlowWalkSpeed(70)
@@ -233,7 +249,7 @@ local cwuCombineDoors = {
 	[4365] = true,
 }
 function Schema:PlayerUseDoor(ply, door)
-	if (ply:IsCombine() or ply:IsCA() or ply:IsDispatch()) then
+	if ( ply:IsCombine() or ply:IsCA() or ply:IsDispatch() or ply:IsCremator() ) then
 		if (!door:HasSpawnFlags(256) and !door:HasSpawnFlags(1024)) and not (door:GetName():find("door_airlock_comb_") or door:GetName():find("lift_doors_") or door:GetName():find("shutters")) then
 			door:Fire("open")
 		end
@@ -398,6 +414,11 @@ function Schema:DoPlayerDeath(ply, inflicter, attacker)
 		DropRandomWeapon(ply, held)
 	end
 
+	if ( ply:Team() == FACTION_CREMATOR ) then
+		ply:StopSound("litenetwork/hl2rp/cremator/breath.wav")
+		ply:EmitSound("litenetwork/hl2rp/cremator/die.wav")
+	end
+
 	if ply:IsBot() then
 		return false
 	end
@@ -477,7 +498,7 @@ function Schema:PlayerDeath(ply, inflictor, attacker)
 		corpse.player = ply
 		corpse.playerName = ply:Nick()
 
-		if ( attacker:IsPlayer() ) then
+		if ( attacker:IsPlayer() ) and not ( attacker == ply ) then
 			corpse.attacker = attacker or nil
 			corpse.weaponUsed = attacker:GetActiveWeapon():GetClass() or nil
 		else
@@ -632,7 +653,7 @@ function Schema:PlayerSpawnedNPC(ply, ent)
 	ent:SetKeyValue("spawnflags", "8192") -- dont drop weapons
 
 	if ( ent.SetCurrentWeaponProficiency ) then
-		ent:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_VERY_GOOD)
+		ent:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_PERFECT)
 	end
 
 	if ( npcHealthValues[ent:GetClass()] ) then
@@ -652,6 +673,7 @@ local painSounds = {
 		"vo/npc/vortigaunt/vortigese04.wav",
 		"vo/npc/vortigaunt/vortigese07.wav",
 	}) end},
+	[FACTION_CREMATOR] = {sound = function() return "litenetwork/hl2rp/cremator/alert"..math.random(1,2)..".wav" end},
 }
 function Schema:GetPlayerPainSound(ply)
 	if ( painSounds[ply:Team()] and painSounds[ply:Team()].sound ) then
@@ -669,6 +691,7 @@ local deathSounds = {
 		"vo/npc/vortigaunt/vortigese04.wav",
 		"vo/npc/vortigaunt/vortigese07.wav",
 	}) end},
+	[FACTION_CREMATOR] = {sound = function() return "litenetwork/hl2rp/cremator/die.wav" end},
 }
 function Schema:GetPlayerDeathSound(ply)
 	if ( deathSounds[ply:Team()] and deathSounds[ply:Team()].sound ) then

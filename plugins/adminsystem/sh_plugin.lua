@@ -14,10 +14,6 @@ PLUGIN.colors = {
 ix.option.Add("adminESP", ix.type.bool, true)
 ix.option.Add("adminOnDuty", ix.type.bool, false)
 
-function Schema:PlayerConnect(name, ip)
-	MsgC(PLUGIN.colors["red"], name, " ip: ", ip)
-end
-
 if (CLIENT) then
     function PLUGIN:HUDPaint()
         if not ( LocalPlayer().ixIntroBool ) then

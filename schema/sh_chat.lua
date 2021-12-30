@@ -15,7 +15,7 @@ ix.chat.Register("broadcast", {
 	CanHear = function(self, speaker, listener)
 		return true
 	end,
-	prefix = {"/Broadcast"},
+	prefix = {"/Broadcast", "/BR"},
 	description = "Broadcast something to the city.",
 	indicator = "chatPerforming",
 	font = "BroadcastFont",
@@ -35,7 +35,7 @@ ix.chat.Register("radio", {
 		end
 	end,
 	CanHear = function(self, speaker, listener)
-		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch()) then
+		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch() or listener:IsCremator()) then
 			return false
 		else
 			if (listener:Team() == FACTION_OTA) then
@@ -66,7 +66,7 @@ ix.chat.Register("importantradio", {
 		end
 	end,
 	CanHear = function(self, speaker, listener)
-		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch()) then
+		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch() or listener:IsCremator()) then
 			return false
 		else
 			if (listener:Team() == FACTION_OTA) then
@@ -109,7 +109,7 @@ ix.chat.Register("commandradio", {
 			return true
 		end
 	end,
-	prefix = {"/CMDRadio", "/CMR"},
+	prefix = {"/CMDRadio", "/CR"},
 	description = "Radio something to the commanding units of the combine.",
 	indicator = "chatPerforming",
 	font = "RadioFont",
@@ -129,7 +129,7 @@ ix.chat.Register("dispatchradio", {
 		end
 	end,
 	CanHear = function(self, speaker, listener)
-		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch()) then
+		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch() or listener:IsCremator()) then
 			return false
 		else
 			if (speaker:Team() == FACTION_OTA) then
@@ -176,7 +176,7 @@ ix.chat.Register("dispatchradioforce", {
 		end
 	end,
 	CanHear = function(self, speaker, listener)
-		if not (listener:IsCombine() or listener:IsCA()) then
+		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch() or listener:IsCremator()) then
 			return false
 		else
 			if (speaker:Team() == FACTION_OTA) then
@@ -245,12 +245,11 @@ function Schema:InitializedChatClasses()
 		end,
 		OnChatAdd = function(self, speaker, text, anonymous, info)
 			local color = self:GetColor(speaker, text, info)
-			if ( ixBandanaEquipped ) then
+			local name = anonymous and L"someone" or hook.Run("GetCharacterName", speaker, "ic") or (IsValid(speaker) and speaker:Name() or "Console")
+
+			if ( speaker.ixBandanaEquipped ) then
 				name = "Masked Person"
 			end
-			local name = anonymous and
-				L"someone" or hook.Run("GetCharacterName", speaker, "ic") or
-				(IsValid(speaker) and speaker:Name() or "Console")
 
 			-- to you - inspired by willard networks
 			local lookingAt = speaker:GetEyeTraceNoCursor().Entity == LocalPlayer()
@@ -268,12 +267,11 @@ function Schema:InitializedChatClasses()
 		prefix = {"/W", "/Whisper"},
 		OnChatAdd = function(self, speaker, text, anonymous, info)
 			local color = Color(0, 150, 255)
-			if ( ixBandanaEquipped ) then
+			local name = anonymous and L"someone" or hook.Run("GetCharacterName", speaker, "w") or (IsValid(speaker) and speaker:Name() or "Console")
+
+			if ( speaker.ixBandanaEquipped ) then
 				name = "Masked Person"
 			end
-			local name = anonymous and
-				L"someone" or hook.Run("GetCharacterName", speaker, "y") or
-				(IsValid(speaker) and speaker:Name() or "Console")
 
 			-- to you - inspired by willard networks
 			local lookingAt = speaker:GetEyeTraceNoCursor().Entity == LocalPlayer()
@@ -292,12 +290,11 @@ function Schema:InitializedChatClasses()
 		prefix = {"/Y", "/Yell"},
 		OnChatAdd = function(self, speaker, text, anonymous, info)
 			local color = Color(250, 100, 0)
-			if ( ixBandanaEquipped ) then
+			local name = anonymous and L"someone" or hook.Run("GetCharacterName", speaker, "y") or (IsValid(speaker) and speaker:Name() or "Console")
+			
+			if ( speaker.ixBandanaEquipped ) then
 				name = "Masked Person"
 			end
-			local name = anonymous and
-				L"someone" or hook.Run("GetCharacterName", speaker, "y") or
-				(IsValid(speaker) and speaker:Name() or "Console")
 
 			-- to you - inspired by willard networks
 			local lookingAt = speaker:GetEyeTraceNoCursor().Entity == LocalPlayer()
@@ -412,7 +409,7 @@ function Schema:InitializedChatClasses()
 			icon = Material(hook.Run("GetPlayerIcon", speaker) or icon)
 
 			local name = speaker:Nick()
-			if ( ixBandanaEquipped ) then
+			if ( speaker.ixBandanaEquipped ) then
 				name = "Masked Person ["..speaker:Nick().."]"
 			end
 

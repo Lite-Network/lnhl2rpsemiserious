@@ -31,7 +31,7 @@ SWEP.HealDelay				= 1		--we heal again CurTime()+self.HealDelay
 SWEP.MaxArmor				= 18	--used for the math.random
 SWEP.MinArmor				= 12	--"		"	"	"
 SWEP.ArmorLimit				= 100	--100 is the default hl2 armor limit
-SWEP.BeamDamage				= 25	
+SWEP.BeamDamage				= 40	
 SWEP.BeamChargeTime			= 0.5	--the delay used to charge the beam and zap!
 SWEP.Deny					= Sound("Buttons.snd19")			
 
@@ -179,6 +179,12 @@ function SWEP:Shoot(dmg, effect)
 			DMG:SetDamageForce(ply:GetAimVector() * self.DamageForce)
 
 			traceres.Entity:TakeDamageInfo(DMG)
+
+			local target = traceres.Entity
+			if ( target and target:IsPlayer() ) then
+				target:ViewPunch(Angle(5, math.random(-2,2), math.random(-2,2)))
+				target:ScreenFade(SCREENFADE.OUT, Color(30, 200, 30), 4, 1)
+			end
 		end
 	end
 

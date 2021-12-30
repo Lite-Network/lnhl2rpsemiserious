@@ -10,7 +10,19 @@ PLUGIN.description = "Adds background music (ply-side)"
 PLUGIN.author = "Bilwin"
 PLUGIN.schema = "Any"
 PLUGIN.songs = {
-	{path = "LiteNetwork/hl2rp/music/passive/passivemusic_1.ogg", duration = 82},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_1.mp3", duration = 73},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_2.mp3", duration = 128},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_3.mp3", duration = 333},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_4.mp3", duration = 126},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_5.mp3", duration = 289},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_6.mp3", duration = 238},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_7.mp3", duration = 219},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_8.mp3", duration = 282},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_9.mp3", duration = 197},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_10.mp3", duration = 180},
+	{path = "LiteNetwork/hl2rp/music/beta/passivemusic_11.mp3", duration = 110},
+
+	--[[{path = "LiteNetwork/hl2rp/music/passive/passivemusic_1.ogg", duration = 82},
 	{path = "LiteNetwork/hl2rp/music/passive/passivemusic_2.ogg", duration = 130},
 	{path = "LiteNetwork/hl2rp/music/passive/passivemusic_3.ogg", duration = 92},
 	{path = "LiteNetwork/hl2rp/music/passive/passivemusic_4.ogg", duration = 123},
@@ -29,7 +41,7 @@ PLUGIN.songs = {
 	{path = "LiteNetwork/hl2rp/music/passive/passivemusic_17.ogg", duration = 270},
 	{path = "LiteNetwork/hl2rp/music/passive/passivemusic_18.ogg", duration = 319},
 	{path = "LiteNetwork/hl2rp/music/passive/passivemusic_19.ogg", duration = 97},
-	{path = "LiteNetwork/hl2rp/music/passive/passivemusic_20.ogg", duration = 207},
+	{path = "LiteNetwork/hl2rp/music/passive/passivemusic_20.ogg", duration = 207},]]
 }
 
 ix.lang.AddTable("english", {

@@ -130,6 +130,10 @@ function Schema:UpdateRelationShip(ent)
 				ent:AddEntityRelationship(v, D_LI, 99)
 			end
 		end
+
+		if ( v:IsCremator() ) and ( combineNPCs[ent:GetClass()] or rebelNPCs[ent:GetClass()] ) then
+			ent:AddEntityRelationship(v, D_LI, 99)
+		end
 	end
 end
 
@@ -220,6 +224,11 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeI
 		char:SetModel(preferedModel or table.Random(factionTable.models))
 	end
 
+	ply:StopSound("litenetwork/hl2rp/cremator/breath.wav")
+	if ( factionTable.index == FACTION_CREMATOR ) then
+		char:SetName("UU:C17-CREMATOR-"..Schema:ZeroNumber(math.random(1, 99999), 5))
+	end
+
 	ply:SetupHands()
 
 	if not ( dontWipeInventory ) then
@@ -229,6 +238,10 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeI
 	end
 
 	ply:ScreenFade(SCREENFADE.IN, color_black, 1, 1)
+	
+	for i = 0, 30 do
+		ply:SetSubMaterial(i, "")
+	end
 
 	timer.Simple(0.5, function()
 		if ply:IsValid() then
@@ -236,10 +249,17 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeI
 
 			ply:SelectWeapon("ix_hands")
 
-			ply:SetHealth(100)
-			ply:SetMaxHealth(100)
-			ply:SetArmor(0)
-			ply:SetMaxArmor(0)
+			if ( factionTable.playerLoadout ) then
+				factionTable.playerLoadout(ply)
+			else
+				ply:SetHealth(100)
+				ply:SetMaxHealth(100)
+				ply:SetArmor(0)
+				ply:SetMaxArmor(0)
+
+				ply:SetViewOffset(Vector(0, 0, 66))
+				ply:SetJumpPower(160)
+			end
 		end
 	end)
 end

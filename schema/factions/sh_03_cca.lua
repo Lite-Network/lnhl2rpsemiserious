@@ -8,7 +8,7 @@ FACTION.color = Color(80, 125, 230)
 --[[ Helix Base Config ]]--
 
 FACTION.models = {
-	"models/litenetwork/cca.mdl",
+	"models/dpfilms/metropolice/hdpolice.mdl",
 }
 
 FACTION.isGloballyRecognized = true
@@ -26,7 +26,7 @@ FACTION.donatorOnly = false
 FACTION.noModelSelection = true
 FACTION.requiredXP = 50
 FACTION.command = "ix_faction_become_cca"
-FACTION.modelWhitelist = "litenetwork/cca"
+FACTION.modelWhitelist = "dpfilms/metropolice/hdpolice"
 
 --[[ Plugin Configs ]]--
 

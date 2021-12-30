@@ -31,7 +31,7 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 	if not (args[1] and args[2]) then return end
 	if not ply:NearEntity("ix_selector_ota") then ply:Notify("You need to be near the Overwatch Transhuman Arm quartermaster in order to use this!") return end
 	if not (ply:Team() == FACTION_OTA) then ply:Notify("You need to become a Overwatch Transhuman Arm to run this command.") return end
-	if not ((ply.ixOverwatchCoolDown or 0) > CurTime()) then
+	if not ( ( ply.ixOverwatchCoolDown or 0 ) > CurTime() ) then
 		local char = ply:GetCharacter()
 
 		if (!char) then
@@ -48,23 +48,23 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 		local StandardName = "OTA:C17-"..DivisionInfo.name.."-"..RankInfo.name.."-"..RandomNumbers
 		local BasicWeapons = {"weapon_physgun", "gmod_tool", "ix_hands", "ix_keys"}
 
-		if not (DivisionInfo.xp == nil) then
-			if not (tonumber(ply:GetXP()) >= DivisionInfo.xp) then
+		if not ( DivisionInfo.xp == nil ) then
+			if not ( tonumber( ply:GetXP() ) >= DivisionInfo.xp ) then
 				ply:Notify("You do not have the correct amount of XP to become that Division!")
 				return false
 			end
 		end
 
-		if not (DivisionInfo.norank == true) then
-			if not (RankInfo.xp == nil) then
-				if not (tonumber(ply:GetXP()) >= RankInfo.xp) then
+		if not ( DivisionInfo.norank == true ) then
+			if not ( RankInfo.xp == nil ) then
+				if not ( tonumber( ply:GetXP() ) >= RankInfo.xp ) then
 					ply:Notify("You do not have the correct amount of XP to become that Rank!")
 					return false
 				end
 			end
 		end
 
-		if (DivisionInfo.norank == true) then
+		if ( DivisionInfo.norank == true ) then
 			if CommandingName:find("COMMANDER") and not (ply:SteamID() == "STEAM_0:0:203818007" or ply:IsSuperAdmin()) then
 				ply:Notify("The Commander Division is whitelisted!")
 				return false
@@ -163,16 +163,18 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 			char:SetName(StandardName)
 			ply:Notify("You are now a: "..StandardName)
 
-			if DivisionInfo.class then
+			if ( DivisionInfo.class ) then
 				char:SetClass(DivisionInfo.class)
 			end
-			if StandardName:find("LDR") then
+
+			if ( RankInfo.name == "LDR" ) then
 				ply:SetModel(DivisionInfo.model_ldr)
 				ply:SetSkin(DivisionInfo.skin_ldr)
 			else
 				ply:SetModel(DivisionInfo.model)
 				ply:SetSkin(DivisionInfo.skin)
 			end
+
 			ply:ResetBodygroups()
 			ply:SetMaxHealth(DivisionInfo.health + RankInfo.health)
 			ply:SetHealth(DivisionInfo.health + RankInfo.health)

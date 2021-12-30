@@ -6,14 +6,6 @@ ix.ranks.cca[1] = {
 	xp = 50,
 	health = 0,
 	armor = 0,
-	-- Bodygroups
-	bg_cape = 0,
-	bg_head = 1,
-	bg_armor = 0,
-	bg_belt = 0,
-	bg_pants = 0,
-	bg_bag = 0,
-	bg_satchel = 0,
 }
 
 ix.ranks.cca[2] = {
@@ -23,14 +15,6 @@ ix.ranks.cca[2] = {
 	xp = 100,
 	health = 0,
 	armor = 0,
-	-- Bodygroups
-	bg_cape = 0,
-	bg_head = 1,
-	bg_armor = 0,
-	bg_belt = 0,
-	bg_pants = 0,
-	bg_bag = 0,
-	bg_satchel = 0,
 }
 
 ix.ranks.cca[3] = {
@@ -40,14 +24,6 @@ ix.ranks.cca[3] = {
 	xp = 240,
 	health = 0,
 	armor = 0,
-	-- Bodygroups
-	bg_cape = 0,
-	bg_head = 1,
-	bg_armor = 0,
-	bg_belt = 0,
-	bg_pants = 0,
-	bg_bag = 0,
-	bg_satchel = 0,
 }
 
 ix.ranks.cca[4] = {
@@ -57,14 +33,6 @@ ix.ranks.cca[4] = {
 	xp = 400,
 	health = 0,
 	armor = 5,
-	-- Bodygroups
-	bg_cape = 0,
-	bg_head = 1,
-	bg_armor = 0,
-	bg_belt = 0,
-	bg_pants = 0,
-	bg_bag = 0,
-	bg_satchel = 0,
 }
 
 ix.ranks.cca[5] = {
@@ -74,14 +42,6 @@ ix.ranks.cca[5] = {
 	xp = 650,
 	health = 0,
 	armor = 10,
-	-- Bodygroups
-	bg_cape = 0,
-	bg_head = 1,
-	bg_armor = 0,
-	bg_belt = 0,
-	bg_pants = 1,
-	bg_bag = 0,
-	bg_satchel = 0,
 }
 
 ix.ranks.cca[6] = {
@@ -91,66 +51,41 @@ ix.ranks.cca[6] = {
 	xp = 1000,
 	health = 0,
 	armor = 20,
-	-- Bodygroups
-	bg_cape = 0,
-	bg_head = 1,
-	bg_armor = 0,
-	bg_belt = 0,
-	bg_pants = 1,
-	bg_bag = 1,
-	bg_satchel = 0,
 }
 
 ix.ranks.cca[7] = {
 	id = 7,
 	name = "OfC",
 	description = "Officer",
+	model = "models/dpfilms/metropolice/hl2concept.mdl",
+	sheet = "models/dpfilms/metropolice/elite/metrocop_sheet",
 	xp = nil,
 	health = 0,
 	armor = 40,
-	-- Bodygroups
-	bg_cape = 0,
-	bg_head = 1,
-	bg_armor = 1,
-	bg_belt = 0,
-	bg_pants = 0,
-	bg_bag = 2,
-	bg_satchel = 0,
 }
 
 ix.ranks.cca[8] = {
 	id = 8,
 	name = "DvL",
 	description = "Division Leader",
+	model = "models/dpfilms/metropolice/hl2concept.mdl",
+	sheet = "models/dpfilms/metropolice/elite/metrocop_sheet",
+	gasmask = "models/dpfilms/metropolice/elite/gasmask",
+	lens = "models/dpfilms/metropolice/rogue/gasmask_lens",
 	xp = nil,
 	health = 0,
 	armor = 60,
-	-- Bodygroups
-	bg_cape = 0,
-	bg_head = 3,
-	bg_armor = 2,
-	bg_belt = 0,
-	bg_pants = 1,
-	bg_bag = 2,
-	bg_satchel = 0,
 }
 
 ix.ranks.cca[9] = {
 	id = 9,
 	name = "DcO",
 	description = "District Control Officer",
+	model = "models/dpfilms/metropolice/elite_police.mdl",
+	sheet = "models/dpfilms/metropolice/elite/metrocop_sheet",
 	xp = nil,
 	health = 0,
 	armor = 80,
-	-- Bodygroups
-	bg_cape = 0,
-	bg_body = 10,
-	bg_head = 3,
-	bg_armor = 1,
-	bg_belt = 1,
-	bg_pants = 1,
-	bg_bag = 0,
-	bg_satchel = 1,
 }
 
 ix.divisions.cca = {}
@@ -158,6 +93,7 @@ ix.divisions.cca[1] = {
     id = 1,
     name = "UNION",
     description = "Patrol Unit",
+	model = "models/dpfilms/metropolice/hdpolice.mdl",
     norank = false,
     skin = 0,
     weapons = {},
@@ -165,9 +101,7 @@ ix.divisions.cca[1] = {
     armor = 0,
     max = 10,
     xp = 35,
-    class = CLASS_CP_UNION,
-    -- Bodygroups
-    bg_body = 2,
+    class = CLASS_CCA_UNION,
 }
 ix.divisions.cca[1].weapons[1] = {"ix_stunstick"}
 ix.divisions.cca[1].weapons[2] = {"ix_stunstick"}
@@ -183,6 +117,7 @@ ix.divisions.cca[2] = {
 	id = 2,
 	name = "HELIX",
 	description = "Medical Unit",
+	model = "models/dpfilms/metropolice/civil_medic.mdl",
 	norank = false,
 	skin = 0,
 	weapons = {},
@@ -190,9 +125,7 @@ ix.divisions.cca[2] = {
 	armor = 0,
 	max = 10,
 	xp = 200,
-	class = CLASS_CP_HELIX,
-	-- Bodygroups
-	bg_body = 4,
+	class = CLASS_CCA_HELIX,
 }
 ix.divisions.cca[2].weapons[1] = {"ix_medkit", "ix_stunstick"}
 ix.divisions.cca[2].weapons[2] = {"ix_medkit", "ix_stunstick"}
@@ -208,6 +141,8 @@ ix.divisions.cca[3] = {
 	id = 3,
 	name = "GRID",
 	description = "Technician Unit",
+	model = "models/dpfilms/metropolice/c08cop.mdl",
+	gasmask = "models/dpfilms/metropolice/hd_police/gasmask",
 	norank = false,
 	skin = 0,
 	weapons = {},
@@ -215,9 +150,7 @@ ix.divisions.cca[3] = {
 	armor = 0,
 	max = 10,
 	xp = 600,
-	class = CLASS_CP_GRID,
-	-- Bodygroups
-	bg_body = 6,
+	class = CLASS_CCA_GRID,
 }
 ix.divisions.cca[3].weapons[1] = {"ix_stunstick"}
 ix.divisions.cca[3].weapons[2] = {"ix_stunstick"}
@@ -233,6 +166,8 @@ ix.divisions.cca[4] = {
 	id = 4,
 	name = "JURY",
 	description = "Investigation Unit",
+	model = "models/dpfilms/metropolice/policetrench.mdl",
+	sheet = "models/dpfilms/metropolice/retrocop/metrocop_sheet",
 	norank = false,
 	skin = 0,
 	weapons = {},
@@ -240,9 +175,7 @@ ix.divisions.cca[4] = {
 	armor = 0,
 	max = 10,
 	xp = 1000,
-	class = CLASS_CP_JURY,
-	-- Bodygroups
-	bg_body = 8,
+	class = CLASS_CCA_JURY,
 }
 ix.divisions.cca[4].weapons[1] = {"ix_stunstick"}
 ix.divisions.cca[4].weapons[2] = {"ix_stunstick"}
@@ -256,8 +189,9 @@ ix.divisions.cca[4].weapons[9] = {"ix_stunstick", "ix_357", "ix_spas12"}
 
 ix.divisions.cca[5] = {
     id = 5,
-    name = "VANGUARD",
+    name = "VNG",
     description = "Special Operation Unit",
+	model = "models/dpfilms/metropolice/urban_police.mdl",
     norank = true,
     skin = 1,
     weapons = {"ix_mp7", "ix_spas12"},
@@ -265,23 +199,15 @@ ix.divisions.cca[5] = {
     armor = 80,
     max = 1,
     xp = nil,
-    class = CLASS_CP_VANGUARD,
-    model = "models/ma/hla/metropolice.mdl",
-	-- Bodygroups
-	bg_cape = 1,
-    bg_body = 1,
-    bg_head = 1,
-    bg_armor = 0,
-    bg_belt = 0,
-    bg_pants = 0,
-    bg_bag = 0,
-    bg_satchel = 0,
+    class = CLASS_CCA_VANGUARD,
 }
 
 ix.divisions.cca[6] = {
 	id = 6,
-	name = "COMMANDER",
+	name = "CmD",
 	description = "Overall Civil Protection Commander",
+	model = "models/dpfilms/metropolice/police_bt.mdl",
+	sheet = "models/dpfilms/metropolice/metrold/metrocop_sheet",
 	norank = true,
 	skin = 0,
 	weapons = {"ix_stunstick", "ix_mp7", "ix_357"},
@@ -289,14 +215,5 @@ ix.divisions.cca[6] = {
 	armor = 80,
 	max = 1,
 	xp = nil,
-	class = CLASS_CP_COMMANDER,
-	-- Bodygroups
-	bg_cape = 0,
-    bg_body = 10,
-    bg_head = 3,
-    bg_armor = 0,
-    bg_belt = 0,
-    bg_pants = 0,
-    bg_bag = 1,
-    bg_satchel = 0,
+	class = CLASS_CCA_COMMANDER,
 }

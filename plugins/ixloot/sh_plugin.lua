@@ -31,7 +31,6 @@ PLUGIN.randomLoot.rare = {
 	"splint",
 	"pistolammo",
 	"pistolammo",
-	"usp",
 	"bandage",
 	"electronics",
 	"ration",
