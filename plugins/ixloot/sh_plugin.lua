@@ -41,14 +41,21 @@ ix.util.Include("sv_plugin.lua")
 
 -- No point putting it in a seperate file when they can get clientside code anyway these fuckers, yeah im talking to you
 if (CLIENT) then
-	function PLUGIN:PreDrawHalos()
-		local ply = LocalPlayer()
-		if not (ply:IsCombine() or ply:IsCA() or ply:IsDispatch()) then
-			for k, v in pairs(ents.GetAll()) do
-				if v and v:GetClass():find("ix_loot") and (EyePos():Distance(v:GetPos()) < 512) then
-					halo.Add({v}, ix.config.Get("color"), 2, 2, 1)
-				end
-			end
+	function PLUGIN:PopulateEntityInfo( ent, tooltip )
+		local client = LocalPlayer()
+		local cl = ent:GetClass()
+
+		if ( !client:IsCombine() or !client:IsCA() or !client:IsDispatch() ) then
+			return
 		end
+
+		if ( !cl:find( "ix_loot" ) ) then
+			return
+		end
+
+		local t = tooltip:AddRow( "loot" )
+		t:SetText( "Lootable Container" )
+		t:SetImportant()
+		t:SizeToContents()
 	end
 end
