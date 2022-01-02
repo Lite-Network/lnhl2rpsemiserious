@@ -65,12 +65,12 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 		end
 
 		if ( DivisionInfo.norank == true ) then
-			if CommandingName:find("COMMANDER") and not (ply:SteamID() == "STEAM_0:0:203818007" or ply:IsSuperAdmin()) then
+			if CommandingName:find("OWC") and not (ply:SteamID() == "STEAM_0:0:203818007" or ply:IsSuperAdmin()) then
 				ply:Notify("The Commander Division is whitelisted!")
 				return false
 			end
 
-			if (CommandingName:find("COMMANDER") and not (ply:SteamID() == "STEAM_0:0:203818007")) and ply:IsSuperAdmin() then
+			if (CommandingName:find("OWC") and not (ply:SteamID() == "STEAM_0:0:203818007")) and ply:IsSuperAdmin() then
 				ply:Notify("You bypassed the whitelist due to you being a superadmin.")
 			end
 

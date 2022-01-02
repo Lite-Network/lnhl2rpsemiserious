@@ -260,7 +260,25 @@ function Schema:PlayerUseDoor(ply, door)
 	end
 end
 
+local crematorAllowedChatTypes = {
+	["ooc"] = true,
+	["looc"] = true,
+	["it"] = true,
+	["me"] = true,
+}
+function Schema:PrePlayerMessageSend(ply, chatType, message, bAnonymous)
+	if ( ply:IsCremator() ) and not ( crematorAllowedChatTypes[chatType] ) then
+		ply:EmitSound("litenetwork/hl2rp/cremator/alert"..math.random(1,2)..".wav")
+		ply:ChatNotify("Cremators cannot talk.")
+		return false
+	end
+end
+
 function Schema:PlayerSpray(ply)
+	return true
+end
+
+function Schema:OnDamagedByExplosion()
 	return true
 end
 
@@ -707,66 +725,152 @@ function Schema:GetPlayerDeathSound(ply)
 	end
 end
 
+local chatTypes = {
+	["ic"] = true,
+	["w"] = true,
+	["y"] = true,
+	["radio"] = true,
+	["importantradio"] = true,
+	["commandradio"] = true,
+	["dispatch"] = true,
+	["dispatchradio"] = true
+}
+
+local radioChatTypes = {
+	["radio"] = true,
+	["importantradio"] = true,
+	["commandradio"] = true,
+	["dispatch"] = true,
+	["dispatchradio"] = true
+}
+
+local validEnds = {
+	["."] = true,
+	["?"] = true,
+	["!"] = true
+}
 function Schema:PlayerMessageSend(speaker, chatType, text, anonymous, receivers, rawText)
-	if (chatType == "ic" or chatType == "w" or chatType == "y" or chatType == "commandradio" or chatType == "radio" or chatType == "dispatch" or chatType == "dispatchradio" or chatType == "importantradio") then
+	local function fixMarkup(a, b)
+		return a.." "..string.upper(b) 
+	end
+
+	if ( chatTypes[chatType] ) then
 		local class = self.voices.GetClass(speaker)
 
-		for k, v in ipairs(class) do
-			local info = self.voices.Get(v, rawText)
+		local textTable = string.Explode("; ?", rawText, true)
+		local voiceList = {}
 
-			if v:find("citizen") and not (speaker:IsDonator() or speaker:IsAdmin()) then
-				return text
-			end
+		for k, v in ipairs(textTable) do
+			local bFound = false
+			local text = string.upper(v)
 
-			if ( v:find("dispatch") and not ( chatType == "dispatch" or chatType == "dispatchradio" ) ) then
-				return text
+			local info
+
+			for _, c in ipairs(class) do
+				info = self.voices.Get(c, text)
+
+				if (info) then break end
 			end
 
 			if (info) then
-				local volume = 80
-
-				if (chatType == "w") then
-					volume = 60
-				elseif (chatType == "y") then
-					volume = 150
-				end
+				bFound = true
 
 				if (info.sound) then
-					if (info.global) and (chatType == "dispatch") then
-						PlayEventSound(info.sound)
-					else
-						local sounds = {info.sound}
-
-						if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio") or (chatType == "importantradio")) then
-							for k2, v2 in pairs(player.GetAll()) do
-								if v2:IsCombine() then
-									v2:PlaySound(info.sound)
-								end
-							end
-						else
-							ix.util.EmitQueuedSounds(speaker, sounds, nil, nil, volume)
-						end
-					end
+					voiceList[#voiceList + 1] = {
+						global = info.global,
+						sound = info.sound
+					}
 				end
 
-				if (speaker:IsCombine()) then
-					if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio") or (chatType == "importantradio")) then
-						return info.text
-					else
-						return "<:: "..info.text.." ::>"
-					end
+				if (k == 1) then
+					textTable[k] = info.text
 				else
-					return info.text
+					textTable[k] = string.lower(info.text)
 				end
+
+				if (k != #textTable) then
+					local endText = string.sub(info.text, -1)
+
+					if (endText == "!" or endText == "?") then
+						textTable[k] = string.gsub(textTable[k], "[!?]$", ",")
+					end
+				end
+			end
+
+			if (bFound == false and k != #textTable) then
+				textTable[k] = v .. "; "
 			end
 		end
 
-		if (speaker:IsCombine()) then
-			if ((chatType == "commandradio") or (chatType == "radio") or (chatType == "dispatchradio") or (chatType == "importantradio")) then
-				return text
-			else
-				return "<:: "..text.." ::>"
+		local str
+		str = table.concat(textTable, " ")
+		str = string.gsub(str, " ?([.?!]) (%l?)", fixMarkup)
+
+		if (voiceList[1]) then
+			local volume = 80
+
+			if (chatType == "w") then
+				volume = 60
+			elseif (chatType == "y") then
+				volume = 150
 			end
+
+			local delay = 0
+
+			for k, v in ipairs(voiceList) do
+				local sound = v.sound
+
+				if (istable(sound)) then
+					sound = v.sound[1]
+				end
+
+				if (delay == 0) then
+					speaker:EmitSound(sound, volume)
+				else
+					timer.Simple(delay, function()
+						speaker:EmitSound(sound, volume)
+					end)
+				end
+
+				if (v.global) then
+					if (delay == 0) then
+						for k1, v1 in ipairs(receivers) do
+							if (v1 != speaker) then
+								netstream.Start(v1, "PlaySound", sound)
+							end
+						end
+					else
+						timer.Simple(delay, function()
+							for k1, v1 in ipairs(receivers) do
+								if (v1 != speaker) then
+									netstream.Start(v1, "PlaySound", sound)
+								end
+							end
+						end)
+					end
+				end
+
+				delay = delay + SoundDuration(sound) + 0.1
+			end
+		end
+
+		str = str:sub(1, 1):upper() .. str:sub(2)
+		if (!validEnds[str:sub(-1)]) then
+			str = str .. "."
+		end
+	
+		if ( radioChatTypes[chatType] ) then
+			return "<:: "..str.." ::>"
+		end
+
+		if ( speaker:IsCombine() ) then
+			return "<:: "..str.." ::>"
+		else
+			return str
+		end
+	else
+		if ( speaker:IsCombine() ) and ( chatTypes[chatType] ) then
+			return "<:: "..text.." ::>"
 		end
 	end
 end
@@ -780,7 +884,7 @@ function Schema:InitPostEntity()
 end
 
 function Schema:PlayerSpawnRagdoll(ply, model)
-	if ( not ply:IsAdmin() ) then
+	if not ( ply:IsAdmin() ) then
 		ply:Notify("You cannot spawn ragdolls!")
 		return false
 	end

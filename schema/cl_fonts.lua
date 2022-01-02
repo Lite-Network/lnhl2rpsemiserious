@@ -4,7 +4,7 @@
 
 surface.CreateFont("BroadcastFont", {
 	font = "Cambria",
-	size = ScreenScale(7),
+	size = 24,
 	weight = 800,
 	antialias = true,
 	shadow = true,
@@ -13,17 +13,17 @@ surface.CreateFont("BroadcastFont", {
 
 surface.CreateFont("AdminChatFont", {
 	font = "Cambria",
-	size = ScreenScale(6),
+	size = 18,
 	weight = 800,
 	antialias = true,
 	shadow = true,
 })
 
 surface.CreateFont("RadioFont", {
-	font = "Consolas",
-	size = ScreenScale(7),
+	font = "Segoe Ui",
+	size = 24,
+	antialias = true,
 	shadow = true,
-	italic = true,
 	scanlines = 2,
 	blursize = 0.5,
 })

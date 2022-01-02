@@ -598,6 +598,24 @@ local function DrawEntityInfo(ply)
 	end
 end
 
+local function DrawEffects(ply, char)
+	surface.SetDrawColor(Color(255, 0, 0, 0))
+			
+	if ( ply:Health() <= 80 ) then
+		surface.SetDrawColor(Color(255, 0, 0, 10))
+	elseif ( ply:Health() <= 60 ) then
+		surface.SetDrawColor(Color(255, 0, 0, 20))
+	elseif ( ply:Health() <= 40 ) then
+		surface.SetDrawColor(Color(255, 0, 0, 40))
+	elseif ( ply:Health() <= 20 ) then
+		surface.SetDrawColor(Color(255, 0, 0, 60))
+	end
+
+	surface.SetMaterial(Material("willardnetworks/nlrbleedout/bleedout-background.png"))
+	surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+	surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+end
+
 function Schema:HUDPaint()
 	local ply = LocalPlayer()
 	local char = ply:GetCharacter()
@@ -616,16 +634,17 @@ function Schema:HUDPaint()
 		else
 			DrawCrosshair(ScrW() / 2, ScrH() / 2)
 		end
-
-
-		if ( ix.option.Get("hudDrawBox", true) ) or ( not ply.ixIntroBool ) then
-			DrawHud(ply, char)
-			DrawPlayerIcon(ply, char)
-		end
 		
 		if ( ix.option.Get("hudDrawPlayerInformation", true) ) then
 			DrawEntityInfo(ply)
 			DrawPlayerInfo(ply)
+		end
+
+		DrawEffects(ply, char)
+
+		if ( ix.option.Get("hudDrawBox", true) ) or ( not ply.ixIntroBool ) then
+			DrawHud(ply, char)
+			DrawPlayerIcon(ply, char)
 		end
 
 		if ( ply:IsCombine() and not (ply.adminHud == true) ) then

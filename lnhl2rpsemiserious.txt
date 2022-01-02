@@ -1,8 +1,7 @@
 "lnhl2rpsemiserious"
 {
 	"base"			"sandbox"
-	"title"			"Lite Network: HL2RP Semi Serious"
-	"author"		"Riggs Mackay"
-	"category"	"rp"
+	"title"			"Lite Network HL2RP"
+	"author" 		"Lite Network"
 	"menusystem"	"1"
 }

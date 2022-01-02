@@ -7,7 +7,7 @@ ix.whitelists.CCA = ix.whitelists.CCA or {}
 ix.whitelists.OTA = ix.whitelists.OTA or {}
 
 ix.whitelists.CCA.NoRanks = {
-	["VANGUARD"] = {
+	["VNG"] = {
 		"STEAM_0:0:102502702", -- universal
 		"STEAM_0:0:138626507", -- John Smith
 	},
@@ -69,6 +69,13 @@ ix.whitelists.OTA.NoRanks = {
 		"STEAM_0:0:199691641", -- Revectane
 		"STEAM_0:0:54754855", -- Diablo
 		"STEAM_0:1:112093491", -- engi
+		"STEAM_0:0:455356942", -- tsukii
+		"STEAM_1:1:104896936", -- phil leotardo
+		"STEAM_0:1:76725981", -- m3 r88
+		"STEAM_0:1:599186470", -- punished glunch
+		"STEAM_0:0:64132801", -- ovxy
+		"STEAM_0:1:104370902", -- archer
+		"STEAM_1:0:203749017 ", -- detective pat
 	},
 }
 ix.whitelists.OTA.Ranks = {
@@ -77,6 +84,14 @@ ix.whitelists.OTA.Ranks = {
 		"STEAM_0:0:229400758", -- tea
 		"STEAM_0:0:155006109", -- ProvingMedusa
 		"STEAM_0:0:89116555", -- sprite cran
+		"STEAM_0:0:20320092", -- adamski
+		"STEAM_0:0:580428602", -- morph
+		"STEAM_0:1:91589611", -- breadgaming
+		"STEAM_0:0:554357457", -- nocturne
+		"STEAM_0:0:226903802", -- fawful
+		"STEAM_0:1:213488223", -- lastcrusader
+		"STEAM_0:1:75454172", -- vault
+		"STEAM_0:0:455356942", -- tsukii
 	},
 }
 
@@ -296,3 +311,59 @@ end
 --[[---------------------------------------------------------------------------
 	Serverside Net Messages
 ---------------------------------------------------------------------------]]--
+
+local uploads = WireLib.RegisterPlayerTable()
+local upload_ents = WireLib.RegisterPlayerTable()
+net.Receive("wire_expression2_upload", function(len, ply)
+	local toent = Entity(net.ReadUInt(16))
+	local numpackets = net.ReadUInt(16)
+
+	if (not IsValid(toent) or toent:GetClass() ~= "gmod_wire_expression2") then
+		if uploads[ply] then -- this is to prevent notification spam due to the net library automatically limiting its own transfer rate so that the messages arrive late
+			uploads[ply] = nil
+			upload_ents[ply] = nil
+			WireLib.AddNotify(ply, "Invalid Expression chip specified. Upload aborted.", NOTIFY_ERROR, 7, NOTIFYSOUND_DRIP3)
+		end
+		return
+	end
+
+	if not ( ply:IsDonator() or ply:IsAdmin() ) then
+		WireLib.AddNotify(ply, "You are not allowed to upload to the target Expression chip. Upload aborted.", NOTIFY_ERROR, 7, NOTIFYSOUND_DRIP3)
+		return
+	end
+
+	if upload_ents[ply] ~= toent then -- a new upload was started, abort previous
+		uploads[ply] = nil
+	end
+
+	upload_ents[ply] = toent
+
+	if not uploads[ply] then uploads[ply] = {} end
+	uploads[ply][#uploads[ply]+1] = net.ReadData(net.ReadUInt(32))
+	if numpackets <= #uploads[ply] then
+		local datastr = E2Lib.decode(table.concat(uploads[ply]))
+		uploads[ply] = nil
+		local ok, ret = pcall(WireLib.von.deserialize, datastr)
+
+		if not ok then
+			WireLib.AddNotify(ply, "Expression 2 upload failed! Error message:\n" .. ret, NOTIFY_ERROR, 7, NOTIFYSOUND_DRIP3)
+			print("Expression 2 upload failed! Error message:\n" .. ret)
+			return
+		end
+
+		local code = ret[1]
+
+		local includes = {}
+		for k, v in pairs(ret[2]) do
+			includes[k] = v
+		end
+
+		local filepath = ret[3]
+
+		if ply ~= toent.player and toent.player:GetInfoNum("wire_expression2_friendwrite", 0) ~= 1 then
+			code = "@disabled for security reasons. Remove this line (Ctrl+Shift+L) and left-click the chip to enable. 'wire_expression2_friendwrite 1' disables security.\n" .. code
+		end
+
+		toent:Setup(code, includes, nil, nil, filepath)
+	end
+end)
