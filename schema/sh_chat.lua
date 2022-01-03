@@ -35,7 +35,7 @@ ix.chat.Register("radio", {
 		end
 	end,
 	CanHear = function(self, speaker, listener)
-		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch() or listener:IsCremator()) then
+		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch()) then
 			return false
 		else
 			if (listener:Team() == FACTION_OTA) then
@@ -66,7 +66,7 @@ ix.chat.Register("importantradio", {
 		end
 	end,
 	CanHear = function(self, speaker, listener)
-		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch() or listener:IsCremator()) then
+		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch()) then
 			return false
 		else
 			if (listener:Team() == FACTION_OTA) then
@@ -129,7 +129,7 @@ ix.chat.Register("dispatchradio", {
 		end
 	end,
 	CanHear = function(self, speaker, listener)
-		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch() or listener:IsCremator()) then
+		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch()) then
 			return false
 		else
 			if (speaker:Team() == FACTION_OTA) then
@@ -176,7 +176,7 @@ ix.chat.Register("dispatchradioforce", {
 		end
 	end,
 	CanHear = function(self, speaker, listener)
-		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch() or listener:IsCremator()) then
+		if not (listener:IsCombine() or listener:IsCA() or listener:IsDispatch()) then
 			return false
 		else
 			if (speaker:Team() == FACTION_OTA) then

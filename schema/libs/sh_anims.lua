@@ -67,43 +67,7 @@ ix.anim.playerzombie = {
 	},
 }
 
-ix.anim.cremator = {
-	normal = {
-		[ACT_MP_STAND_IDLE] = {ACT_IDLE, ACT_IDLE},
-		[ACT_MP_CROUCH_IDLE] = {ACT_IDLE, ACT_IDLE},
-		[ACT_MP_RUN] = {ACT_WALK, ACT_WALK},
-		[ACT_MP_CROUCHWALK] = {ACT_WALK, ACT_WALK},
-		[ACT_MP_WALK] = {ACT_WALK, ACT_WALK},
-		attack = ACT_RANGE_ATTACK1_LOW,
-	},
-	smg = { -- hold type for immolator
-		[ACT_MP_STAND_IDLE] = {ACT_IDLE, ACT_IDLE},
-		[ACT_MP_CROUCH_IDLE] = {ACT_IDLE, ACT_IDLE},
-		[ACT_MP_RUN] = {ACT_WALK, ACT_WALK},
-		[ACT_MP_CROUCHWALK] = {ACT_WALK, ACT_WALK},
-		[ACT_MP_WALK] = {ACT_WALK, ACT_WALK},
-		attack = ACT_RANGE_ATTACK1_LOW,
-	},
-	physgun = { 
-		[ACT_MP_STAND_IDLE] = {ACT_IDLE, ACT_IDLE},
-		[ACT_MP_CROUCH_IDLE] = {ACT_IDLE, ACT_IDLE},
-		[ACT_MP_RUN] = {ACT_WALK, ACT_WALK},
-		[ACT_MP_CROUCHWALK] = {ACT_WALK, ACT_WALK},
-		[ACT_MP_WALK] = {ACT_WALK, ACT_WALK},
-		attack = ACT_RANGE_ATTACK1_LOW,
-	},
-	pistol = {
-		[ACT_MP_STAND_IDLE] = {ACT_IDLE, ACT_IDLE},
-		[ACT_MP_CROUCH_IDLE] = {ACT_IDLE, ACT_IDLE},
-		[ACT_MP_RUN] = {ACT_WALK, ACT_WALK},
-		[ACT_MP_CROUCHWALK] = {ACT_WALK, ACT_WALK},
-		[ACT_MP_WALK] = {ACT_WALK, ACT_WALK},
-		attack = ACT_RANGE_ATTACK1_LOW,
-	},
-}
-
-ix.anim.SetModelClass("models/cremator.mdl", "cremator")
-
+ix.anim.SetModelClass("models/hlvr/characters/combine_captain/combine_captain_hlvr_npc.mdl", "overwatch")
 ix.anim.SetModelClass("models/nemez/combine_soldiers/combine_soldier_beta_h.mdl", "overwatch")
 ix.anim.SetModelClass("models/nemez/combine_soldiers/combine_soldier_border_patrol_h.mdl", "overwatch")
 ix.anim.SetModelClass("models/nemez/combine_soldiers/combine_soldier_coordinator_h.mdl", "overwatch")
@@ -172,6 +136,7 @@ ix.anim.SetModelClass("models/dpfilms/metropolice/tribal_police.mdl", "metrocop"
 ix.anim.SetModelClass("models/dpfilms/metropolice/tron_police.mdl", "metrocop") -- Tron Police 
 ix.anim.SetModelClass("models/dpfilms/metropolice/urban_police.mdl", "metrocop") -- Urban Police 
 ix.anim.SetModelClass("models/dpfilms/metropolice/zombie_police.mdl", "metrocop") -- Zombie/Infected Police
+ix.anim.SetModelClass("models/police_nemez.mdl", "metrocop")
 
 ix.anim.SetModelClass("models/combine_super_soldier.mdl", "overwatch")
 ix.anim.SetModelClass("models/combine_super_a.mdl", "overwatch")

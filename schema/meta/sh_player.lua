@@ -16,10 +16,6 @@ function PLAYER:IsCWU()
 	return (self:Team() == FACTION_CWU)
 end
 
-function PLAYER:IsCremator()
-	return (self:Team() == FACTION_CREMATOR)
-end
-
 function PLAYER:IsCombine()
 	return (self:Team() == FACTION_CCA or self:Team() == FACTION_OTA)
 end

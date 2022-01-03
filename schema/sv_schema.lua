@@ -145,10 +145,6 @@ function Schema:UpdateRelationShip(ent)
 				ent:AddEntityRelationship(v, D_LI, 99)
 			end
 		end
-
-		if ( v:IsCremator() ) and ( combineNPCs[ent:GetClass()] or rebelNPCs[ent:GetClass()] ) then
-			ent:AddEntityRelationship(v, D_LI, 99)
-		end
 	end
 end
 
@@ -237,11 +233,6 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeI
 			char:SetName(char:GetData("ixKnownName", "John Doe"))
 		end
 		char:SetModel(preferedModel or table.Random(factionTable.models))
-	end
-
-	ply:StopSound("litenetwork/hl2rp/cremator/breath.wav")
-	if ( factionTable.index == FACTION_CREMATOR ) then
-		char:SetName("UU:C08-CREMATOR-"..Schema:ZeroNumber(math.random(1, 99999), 5))
 	end
 
 	ply:SetupHands()
