@@ -4,7 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	self:SetModel("models/willardnetworks/combine/ordinal.mdl")
+	self:SetModel("models/nemez/combine_soldiers/combine_soldier_elite_f.mdl")
 	self:SetHullType(HULL_HUMAN)
 	self:SetHullSizeNormal()
 	self:SetSolid(SOLID_BBOX)
@@ -109,9 +109,10 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 			char:SetName(CommandingName)
 			ply:Notify("You are now: "..CommandingName)
 
-			if DivisionInfo.class then
+			if ( DivisionInfo.class ) then
 				char:SetClass(DivisionInfo.class)
 			end
+
 			ply:ResetBodygroups()
 			ply:SetModel(DivisionInfo.model)
 			ply:SetSkin(DivisionInfo.skin)
