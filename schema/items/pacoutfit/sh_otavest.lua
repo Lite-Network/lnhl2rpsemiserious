@@ -6,7 +6,7 @@ ITEM.category = "Armor Items"
 
 -- Item Configuration
 
-ITEM.model = "models/Items/item_item_crate.mdl"
+ITEM.model = "models/nemez/combine_soldiers/combine_soldier_prop_vest.mdl"
 ITEM.skin = 0
 
 -- Item Inventory Size Configuration
@@ -66,7 +66,7 @@ ITEM.pacData = {
 					["ClassName"] = "model2",
 					["IgnoreZ"] = false,
 					["Brightness"] = 1,
-					["Model"] = "models/Items/item_item_crate.mdl",
+					["Model"] = "models/nemez/combine_soldiers/combine_soldier_prop_vest.mdl",
 					["ForceObjUrl"] = false,
 				},
 			},

@@ -1,6 +1,6 @@
 RECIPE.name = "Overwatch Soldier Vest"
 RECIPE.description = "Craft a Overwatch Vest."
-RECIPE.model = "models/Items/item_item_crate.mdl"
+RECIPE.model = "models/nemez/combine_soldiers/combine_soldier_prop_vest.mdl"
 RECIPE.category = "Armor Items"
 
 RECIPE.base = "recipe_base"
