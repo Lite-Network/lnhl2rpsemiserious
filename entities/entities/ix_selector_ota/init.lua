@@ -44,8 +44,8 @@ concommand.Add("ix_selector_ota", function(ply, cmd, args)
 		local RankInfo = ix.ranks.ota[RankID]
 		local DivisionInfo = ix.divisions.ota[DivisionID]
 		local RankInfo = ix.ranks.ota[RankID]
-		local CommandingName = "OTA:C17-"..DivisionInfo.name.."-"..RandomNumbers
-		local StandardName = "OTA:C17-"..DivisionInfo.name.."-"..RankInfo.name.."-"..RandomNumbers
+		local CommandingName = "OTA:C08-"..DivisionInfo.name.."-"..RandomNumbers
+		local StandardName = "OTA:C08-"..DivisionInfo.name.."-"..RankInfo.name.."-"..RandomNumbers
 		local BasicWeapons = {"weapon_physgun", "gmod_tool", "ix_hands", "ix_keys"}
 
 		if not ( DivisionInfo.xp == nil ) then

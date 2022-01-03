@@ -241,7 +241,7 @@ function Schema:SetTeam(ply, factionTable, preferedModel, dontReSpawn, dontWipeI
 
 	ply:StopSound("litenetwork/hl2rp/cremator/breath.wav")
 	if ( factionTable.index == FACTION_CREMATOR ) then
-		char:SetName("UU:C17-CREMATOR-"..Schema:ZeroNumber(math.random(1, 99999), 5))
+		char:SetName("UU:C08-CREMATOR-"..Schema:ZeroNumber(math.random(1, 99999), 5))
 	end
 
 	ply:SetupHands()

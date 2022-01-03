@@ -25,7 +25,7 @@ function PLAYER:IsCombine()
 end
 
 function PLAYER:IsCombineCommand()
-	return (self:IsCombine() and ((self.ixOTARank == 3) or (self.ixCCARank == 7) or (self.ixCCARank == 8) or (self.ixCCARank == 9) or (self.ixCCADivision == 6) or (self.ixOTADivision == 6)))
+	return (self:IsCombine() and ((self.ixOTARank == 3) or (self.ixCCARank == 7) or (self.ixCCARank == 8) or (self.ixCCARank == 9) or (self.ixCCADivision == 5) or (self.ixCCADivision == 6) or (self.ixOTADivision == 6)))
 end
 
 function PLAYER:IsCombineLeader()

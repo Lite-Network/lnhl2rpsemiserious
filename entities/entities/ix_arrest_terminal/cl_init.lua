@@ -21,7 +21,7 @@ function ENT:Draw()
 		surface.DrawOutlinedRect(0, 0, 225, 115, 5)
 
 		draw.DrawText("TERMINAL: "..self:EntIndex(), "ixMenuButtonFontSmall", 8, 4, Color(65, 105, 200), TEXT_ALIGN_LEFT)
-		draw.DrawText("CITY INDEX: 17", "ixMenuButtonFontSmall", 8, 32, Color(65, 105, 200), TEXT_ALIGN_LEFT)
+		draw.DrawText("CITY INDEX: 08", "ixMenuButtonFontSmall", 8, 32, Color(65, 105, 200), TEXT_ALIGN_LEFT)
 		draw.DrawText("PLEASE CONFIRM IDENTITY", "ixSmallFont", 8, 90, color_white, TEXT_ALIGN_LEFT)
 	cam.End3D2D()
 end

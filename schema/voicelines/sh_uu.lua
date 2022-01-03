@@ -435,7 +435,7 @@ Schema.voices.Add("UniversalUnion", "RESPONDING", "Responding.", "npc/metropolic
 Schema.voices.Add("UniversalUnion", "RESTRICT", "Restrict.", "npc/metropolice/vo/restrict.wav")
 Schema.voices.Add("UniversalUnion", "RESTRICTED", "Restricted block.", "npc/metropolice/vo/restrictedblock.wav")
 Schema.voices.Add("UniversalUnion", "RESTRICTION ZONE", "Terminal restriction-zone.", "npc/metropolice/vo/terminalrestrictionzone.wav")
-Schema.voices.Add("UniversalUnion", "RIPCORD 2", "Ripcord, ripcord.", "npc/combine_soldier/vo/ripcordripcord.wav")
+Schema.voices.Add("UniversalUnion", "RIPCORD RIPCORD", "Ripcord, ripcord!", "npc/combine_soldier/vo/ripcordripcord.wav")
 Schema.voices.Add("UniversalUnion", "RIPCORD", "Ripcord.", "npc/combine_soldier/vo/ripcord.wav")
 Schema.voices.Add("UniversalUnion", "ROGER THAT", "Roger that.", "npc/metropolice/vo/rodgerthat.wav")
 Schema.voices.Add("UniversalUnion", "ROLLER", "ROLLER.", "npc/metropolice/vo/roller.wav")

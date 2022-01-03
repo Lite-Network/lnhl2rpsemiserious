@@ -91,9 +91,9 @@ if ( SERVER ) then
         if ( attacker:IsPlayer() ) then
             if ( ply:SteamID() == "STEAM_0:1:1395956" ) then
                 PLUGIN:GiveAchievement(attacker, ix.achievements[1][1], ix.achievements[1][2])
-            elseif ( ply:IsCombine() and ply:Nick():find("CCA:C17-COMMANDER") ) then
+            elseif ( ply:IsCombine() and ply:Nick():find("CCA:C08-COMMANDER") ) then
                 PLUGIN:GiveAchievement(attacker, ix.achievements[4][1], ix.achievements[4][2])
-            elseif ( ply:IsCombine() and ply:Nick():find("OTA:C17-COMMANDER") ) then
+            elseif ( ply:IsCombine() and ply:Nick():find("OTA:C08-COMMANDER") ) then
                 PLUGIN:GiveAchievement(attacker, ix.achievements[5][1], ix.achievements[5][2])
             elseif ( ply:SteamID() == "STEAM_0:0:206764368" ) then
                 PLUGIN:GiveAchievement(attacker, ix.achievements[6][1], ix.achievements[6][2])
