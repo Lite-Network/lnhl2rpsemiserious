@@ -57,35 +57,57 @@ ix.ranks.cca[7] = {
 	id = 7,
 	name = "OfC",
 	description = "Officer",
-	model = "models/dpfilms/metropolice/hl2concept.mdl",
-	sheet = "models/dpfilms/metropolice/elite/metrocop_sheet",
 	xp = nil,
 	health = 0,
 	armor = 40,
+	loadout = function(ply)
+		ply:SetSkin(5) -- Skin
+		ply:SetBodygroup(1, 0) -- Manhack
+		ply:SetBodygroup(2, 3) -- Mask
+		ply:SetBodygroup(3, 1) -- Radio
+		ply:SetBodygroup(4, 0) -- Cloak / Summka
+		ply:SetBodygroup(5, 1) -- Spine Radio
+		ply:SetBodygroup(6, 0) -- Tactical Shit
+		ply:SetBodygroup(7, 0) -- Neck
+	end,
 }
 
 ix.ranks.cca[8] = {
 	id = 8,
 	name = "DvL",
 	description = "Division Leader",
-	model = "models/dpfilms/metropolice/hl2concept.mdl",
-	sheet = "models/dpfilms/metropolice/elite/metrocop_sheet",
-	gasmask = "models/dpfilms/metropolice/elite/gasmask",
-	lens = "models/dpfilms/metropolice/rogue/gasmask_lens",
 	xp = nil,
 	health = 0,
 	armor = 60,
+	loadout = function(ply)
+		ply:SetSkin(5) -- Skin
+		ply:SetBodygroup(1, 1) -- Manhack
+		ply:SetBodygroup(2, 4) -- Mask
+		ply:SetBodygroup(3, 1) -- Radio
+		ply:SetBodygroup(4, 2) -- Cloak / Summka
+		ply:SetBodygroup(5, 1) -- Spine Radio
+		ply:SetBodygroup(6, 0) -- Tactical Shit
+		ply:SetBodygroup(7, 0) -- Neck
+	end,
 }
 
 ix.ranks.cca[9] = {
 	id = 9,
 	name = "DcO",
 	description = "District Control Officer",
-	model = "models/dpfilms/metropolice/elite_police.mdl",
-	sheet = "models/dpfilms/metropolice/elite/metrocop_sheet",
 	xp = nil,
 	health = 0,
 	armor = 80,
+	loadout = function(ply)
+		ply:SetSkin(5) -- Skin
+		ply:SetBodygroup(1, 0) -- Manhack
+		ply:SetBodygroup(2, 7) -- Mask
+		ply:SetBodygroup(3, 1) -- Radio
+		ply:SetBodygroup(4, 0) -- Cloak / Summka
+		ply:SetBodygroup(5, 1) -- Spine Radio
+		ply:SetBodygroup(6, 0) -- Tactical Shit
+		ply:SetBodygroup(7, 0) -- Neck
+	end,
 }
 
 ix.divisions.cca = {}
@@ -93,7 +115,6 @@ ix.divisions.cca[1] = {
     id = 1,
     name = "UNION",
     description = "Patrol Unit",
-	model = "models/dpfilms/metropolice/hdpolice.mdl",
     norank = false,
     skin = 0,
     weapons = {},
@@ -102,6 +123,16 @@ ix.divisions.cca[1] = {
     max = 10,
     xp = 35,
     class = CLASS_CCA_UNION,
+	loadout = function(ply)
+		ply:SetSkin(0) -- Skin
+		ply:SetBodygroup(1, 0) -- Manhack
+		ply:SetBodygroup(2, 0) -- Mask
+		ply:SetBodygroup(3, 0) -- Radio
+		ply:SetBodygroup(4, 0) -- Cloak / Summka
+		ply:SetBodygroup(5, 0) -- Spine Radio
+		ply:SetBodygroup(6, 0) -- Tactical Shit
+		ply:SetBodygroup(7, 0) -- Neck
+	end,
 }
 ix.divisions.cca[1].weapons[1] = {"ix_stunstick"}
 ix.divisions.cca[1].weapons[2] = {"ix_stunstick"}
@@ -117,7 +148,6 @@ ix.divisions.cca[2] = {
 	id = 2,
 	name = "HELIX",
 	description = "Medical Unit",
-	model = "models/dpfilms/metropolice/civil_medic.mdl",
 	norank = false,
 	skin = 0,
 	weapons = {},
@@ -126,6 +156,16 @@ ix.divisions.cca[2] = {
 	max = 10,
 	xp = 200,
 	class = CLASS_CCA_HELIX,
+	loadout = function(ply)
+		ply:SetSkin(1) -- Skin
+		ply:SetBodygroup(1, 0) -- Manhack
+		ply:SetBodygroup(2, 0) -- Mask
+		ply:SetBodygroup(3, 0) -- Radio
+		ply:SetBodygroup(4, 0) -- Cloak / Summka
+		ply:SetBodygroup(5, 0) -- Spine Radio
+		ply:SetBodygroup(6, 0) -- Tactical Shit
+		ply:SetBodygroup(7, 0) -- Neck
+	end,
 }
 ix.divisions.cca[2].weapons[1] = {"ix_medkit", "ix_stunstick"}
 ix.divisions.cca[2].weapons[2] = {"ix_medkit", "ix_stunstick"}
@@ -141,8 +181,6 @@ ix.divisions.cca[3] = {
 	id = 3,
 	name = "GRID",
 	description = "Technician Unit",
-	model = "models/dpfilms/metropolice/c08cop.mdl",
-	gasmask = "models/dpfilms/metropolice/hd_police/gasmask",
 	norank = false,
 	skin = 0,
 	weapons = {},
@@ -151,6 +189,16 @@ ix.divisions.cca[3] = {
 	max = 10,
 	xp = 600,
 	class = CLASS_CCA_GRID,
+	loadout = function(ply)
+		ply:SetSkin(3) -- Skin
+		ply:SetBodygroup(1, 1) -- Manhack
+		ply:SetBodygroup(2, 0) -- Mask
+		ply:SetBodygroup(3, 1) -- Radio
+		ply:SetBodygroup(4, 2) -- Cloak / Summka
+		ply:SetBodygroup(5, 0) -- Spine Radio
+		ply:SetBodygroup(6, 0) -- Tactical Shit
+		ply:SetBodygroup(7, 0) -- Neck
+	end,
 }
 ix.divisions.cca[3].weapons[1] = {"ix_stunstick"}
 ix.divisions.cca[3].weapons[2] = {"ix_stunstick"}
@@ -166,8 +214,6 @@ ix.divisions.cca[4] = {
 	id = 4,
 	name = "JURY",
 	description = "Investigation Unit",
-	model = "models/dpfilms/metropolice/policetrench.mdl",
-	sheet = "models/dpfilms/metropolice/retrocop/metrocop_sheet",
 	norank = false,
 	skin = 0,
 	weapons = {},
@@ -176,6 +222,16 @@ ix.divisions.cca[4] = {
 	max = 10,
 	xp = 1000,
 	class = CLASS_CCA_JURY,
+	loadout = function(ply)
+		ply:SetSkin(2) -- Skin
+		ply:SetBodygroup(1, 0) -- Manhack
+		ply:SetBodygroup(2, 0) -- Mask
+		ply:SetBodygroup(3, 0) -- Radio
+		ply:SetBodygroup(4, 1) -- Cloak / Summka
+		ply:SetBodygroup(5, 0) -- Spine Radio
+		ply:SetBodygroup(6, 0) -- Tactical Shit
+		ply:SetBodygroup(7, 0) -- Neck
+	end,
 }
 ix.divisions.cca[4].weapons[1] = {"ix_stunstick"}
 ix.divisions.cca[4].weapons[2] = {"ix_stunstick"}
@@ -191,7 +247,6 @@ ix.divisions.cca[5] = {
     id = 5,
     name = "VNG",
     description = "Special Operation Unit",
-	model = "models/dpfilms/metropolice/urban_police.mdl",
     norank = true,
     skin = 1,
     weapons = {"ix_mp7", "ix_spas12"},
@@ -200,14 +255,22 @@ ix.divisions.cca[5] = {
     max = 1,
     xp = nil,
     class = CLASS_CCA_VANGUARD,
+	loadout = function(ply)
+		ply:SetSkin(7) -- Skin
+		ply:SetBodygroup(1, 0) -- Manhack
+		ply:SetBodygroup(2, 0) -- Mask
+		ply:SetBodygroup(3, 1) -- Radio
+		ply:SetBodygroup(4, 0) -- Cloak / Summka
+		ply:SetBodygroup(5, 0) -- Spine Radio
+		ply:SetBodygroup(6, 1) -- Tactical Shit
+		ply:SetBodygroup(7, 0) -- Neck
+	end,
 }
 
 ix.divisions.cca[6] = {
 	id = 6,
 	name = "CmD",
 	description = "Overall Civil Protection Commander",
-	model = "models/dpfilms/metropolice/police_bt.mdl",
-	sheet = "models/dpfilms/metropolice/metrold/metrocop_sheet",
 	norank = true,
 	skin = 0,
 	weapons = {"ix_stunstick", "ix_mp7", "ix_357"},
@@ -216,4 +279,14 @@ ix.divisions.cca[6] = {
 	max = 1,
 	xp = nil,
 	class = CLASS_CCA_COMMANDER,
+	loadout = function(ply)
+		ply:SetSkin(10) -- Skin
+		ply:SetBodygroup(1, 0) -- Manhack
+		ply:SetBodygroup(2, 6) -- Mask
+		ply:SetBodygroup(3, 0) -- Radio
+		ply:SetBodygroup(4, 0) -- Cloak / Summka
+		ply:SetBodygroup(5, 0) -- Spine Radio
+		ply:SetBodygroup(6, 0) -- Tactical Shit
+		ply:SetBodygroup(7, 0) -- Neck
+	end,
 }

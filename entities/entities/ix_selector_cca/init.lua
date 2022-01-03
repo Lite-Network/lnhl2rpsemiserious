@@ -4,13 +4,12 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	self:SetModel("models/dpfilms/metropolice/rtb_police.mdl")
+	self:SetModel("models/police_nemez.mdl")
 	self:SetHullType(HULL_HUMAN)
 	self:SetHullSizeNormal()
 	self:SetSolid(SOLID_BBOX)
 	self:SetUseType(SIMPLE_USE)
 	self:DropToFloor()
-	self:SetSubMaterial(4, "models/dpfilms/metropolice/blacop/metrocop_sheet")
 end
 
 function ENT:OnTakeDamage()
@@ -113,30 +112,6 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 				char:SetClass(DivisionInfo.class)
 			end
 
-			if ( DivisionInfo.model ) then
-				ply:SetModel(DivisionInfo.model)
-			else
-				ply:SetModel("models/dpfilms/metropolice/hdpolice.mdl")
-			end
-
-			if ( DivisionInfo.sheet ) then
-				ply:SetSubMaterial(0, DivisionInfo.sheet)
-			else
-				ply:SetSubMaterial(0, "")
-			end
-
-			if ( DivisionInfo.gasmask ) then
-				ply:SetSubMaterial(3, DivisionInfo.gasmask)
-			else
-				ply:SetSubMaterial(3, "")
-			end
-
-			if ( DivisionInfo.lens ) then
-				ply:SetSubMaterial(5, DivisionInfo.lens)
-			else
-				ply:SetSubMaterial(5, "")
-			end
-
 			ply:ResetBodygroups()
 			ply:SetSkin(DivisionInfo.skin)
 			ply:SetMaxHealth(DivisionInfo.health)
@@ -144,6 +119,10 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 			ply:SetArmor(DivisionInfo.armor)
 			ply:SetMaxArmor(DivisionInfo.armor)
 			ply:SetupHands()
+
+			if ( DivisionInfo.loadout ) then
+				DivisionInfo.loadout(ply)
+			end
 
 			char:SetData("brokenLegs", false)
 			char:SetData("ixCombineName", CommandingName)
@@ -191,37 +170,24 @@ concommand.Add("ix_selector_cca", function(ply, cmd, args)
 				char:SetClass(DivisionInfo.class..string.upper(RankInfo.name))
 			end
 
-			if ( RankInfo.model or DivisionInfo.model ) then
-				ply:SetModel(RankInfo.model or DivisionInfo.model)
-			else
-				ply:SetModel("models/dpfilms/metropolice/hdpolice.mdl")
-			end
-
-			if ( RankInfo.sheet or DivisionInfo.sheet ) then
-				ply:SetSubMaterial(0, RankInfo.sheet or DivisionInfo.sheet)
-			else
-				ply:SetSubMaterial(0, "")
-			end
-
-			if ( RankInfo.gasmask or DivisionInfo.gasmask ) then
-				ply:SetSubMaterial(3, RankInfo.gasmask or DivisionInfo.gasmask)
-			else
-				ply:SetSubMaterial(3, "")
-			end
-
-			if ( RankInfo.lens or DivisionInfo.lens ) then
-				ply:SetSubMaterial(5, RankInfo.lens or DivisionInfo.lens)
-			else
-				ply:SetSubMaterial(5, "")
-			end
-
 			ply:ResetBodygroups()
 			ply:SetSkin(DivisionInfo.skin)
 			ply:SetMaxHealth(DivisionInfo.health + RankInfo.health)
 			ply:SetHealth(DivisionInfo.health + RankInfo.health)
 			ply:SetArmor(DivisionInfo.armor + RankInfo.armor)
 			ply:SetMaxArmor(DivisionInfo.armor + RankInfo.armor)
+			ply:SetModel("models/police_nemez.mdl")
 			ply:SetupHands()
+
+			timer.Simple(0.1, function()
+				if not ( RankInfo.loadout ) then
+					if ( DivisionInfo.loadout ) then
+						DivisionInfo.loadout(ply)
+					end
+				else
+					RankInfo.loadout(ply)
+				end
+			end)
 			
 			char:SetData("brokenLegs", false)
 			char:SetData("ixCombineName", StandardName)
