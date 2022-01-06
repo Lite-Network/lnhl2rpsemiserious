@@ -57,9 +57,10 @@ if ( SERVER ) then
 	end
 
 	util.AddNetworkString("ixPlaySound")
-	function PLAYER:PlaySound(sound)
+	function PLAYER:PlaySound(sound, pitch)
 		net.Start("ixPlaySound")
 			net.WriteString(tostring(sound))
+			net.WriteUInt(tonumber(pitch) or 100, 7)
 		net.Send(self)
 	end
 
