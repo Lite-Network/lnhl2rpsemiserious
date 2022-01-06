@@ -34,6 +34,7 @@ function PLUGIN:PlayerUse(ply, ent)
                 end
 
                 timer.Simple(3, function()
+                    ent.attacker:SetNWBool("ixActiveBOL", true)
                     ix.chat.Send(ply, "dispatchradioforce", "Attention, all units BOL for 243 suspect "..tostring(ent.attacker:Nick())..", respond.", false)
                 end)
             end
@@ -46,3 +47,37 @@ function PLUGIN:PlayerUse(ply, ent)
         ent.useCooldown = CurTime() + 3
     end
 end
+
+function PLUGIN:PlayerDeath(ply, inflictor, attacker)
+    ply:SetNWBool("ixActiveBOL", false)
+end
+
+concommand.Add("ix_hl2rp_activate_bol", function(ply, cmd, args)
+	if ( args[1] and ply:IsAdmin() ) then
+		local target = ix.util.FindPlayer(args[1])
+
+        if not ( target and target:IsPlayer() ) then
+            ply:Notify(tostring(args[1]).." is a invalid person!")
+            return false
+        end
+
+		target:SetNWBool("ixActiveBOL", true)
+
+        ply:Notify("You put a BOL on "..target:Nick().."!")
+	end
+end)
+
+concommand.Add("ix_hl2rp_deactivate_bol", function(ply, cmd, args)
+	if ( args[1] and ply:IsAdmin() ) then
+		local target = ix.util.FindPlayer(args[1])
+
+        if not ( target and target:IsPlayer() ) then
+            ply:Notify(tostring(args[1]).." is a invalid person!")
+            return false
+        end
+
+		target:SetNWBool("ixActiveBOL", false)
+
+        ply:Notify("You lifted "..target:Nick().."'s BOL!")
+	end
+end)
