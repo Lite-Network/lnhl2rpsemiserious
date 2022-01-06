@@ -29,6 +29,9 @@ ix.command.Add("shove", {
         end 
 
         ply:ForceSequence("melee_gunhit")
+        timer.Simple(0.3, function()
+            target:SetVelocity(ply:GetAimVector() * 300)
+        end)
         timer.Simple(0.4, function()
             ply:EmitSound("physics/body/body_medium_impact_hard6.wav")
             target:SetRagdolled(true, ix.config.Get("shoveTime", 20))
