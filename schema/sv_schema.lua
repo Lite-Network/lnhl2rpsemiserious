@@ -10,6 +10,7 @@ ix.whitelists.CCA.NoRanks = {
 	["VNG"] = {
 		"STEAM_0:0:102502702", -- universal
 		"STEAM_0:0:138626507", -- John Smith
+		"STEAM_0:1:88481744", -- CPT Winkie
 	},
 }
 ix.whitelists.CCA.Ranks = {
@@ -23,17 +24,21 @@ ix.whitelists.CCA.Ranks = {
 		"STEAM_0:0:57781706", -- Dr.Anon
 		"STEAM_0:0:57794116", -- Mike
 		"STEAM_0:0:95908775", -- Roshe
-	}, 
+		"STEAM_0:1:437332735", -- erky
+	},
+
 	["UNION-DvL"] = {
 		"STEAM_0:1:117769029", -- bonk
 		"STEAM_0:0:10223064", -- xavier
+		"STEAM_0:1:506629560", -- cor
 	},
-	["UNION-DcO"] = "STEAM_0:0:138626507", -- John Smith
+	["UNION-DcO"] = "",
 
 	["HELIX-OfC"] = {
 		"STEAM_0:0:174143741", -- lee west
 		"STEAM_0:0:428839009", -- Yoboy
 		"STEAM_0:1:40787669", -- Apollo
+		"STEAM_0:0:60124797", -- frent
 	},
 	["HELIX-DvL"] = {},
 	["HELIX-DcO"] = "",
@@ -57,7 +62,7 @@ ix.whitelists.CCA.Ranks = {
 	["JURY-DvL"] = {
 		"STEAM_0:0:203267540", -- Overwatch
 	},
-	["JURY-DcO"] = "",
+	["JURY-DcO"] = "STEAM_0:0:138626507", -- John Smith
 }
 ix.whitelists.OTA.NoRanks = {
 	["REAPER"] = {
@@ -70,12 +75,14 @@ ix.whitelists.OTA.NoRanks = {
 		"STEAM_0:0:54754855", -- Diablo
 		"STEAM_0:1:112093491", -- engi
 		"STEAM_0:0:455356942", -- tsukii
-		"STEAM_1:1:104896936", -- phil leotardo
+		"STEAM_0:1:104896936", -- phil leotardo
 		"STEAM_0:1:76725981", -- m3 r88
 		"STEAM_0:1:599186470", -- punished glunch
 		"STEAM_0:0:64132801", -- ovxy
 		"STEAM_0:1:104370902", -- archer
-		"STEAM_1:0:203749017 ", -- detective pat
+		"STEAM_1:0:203749017", -- detective pat
+		"STEAM_0:0:20320092", -- adamski
+		
 	},
 }
 ix.whitelists.OTA.Ranks = {
