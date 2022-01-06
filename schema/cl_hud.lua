@@ -332,12 +332,12 @@ function Schema:Think()
 	end
 end
 
-local combatweapons = {
-	["ix_usp"] = true,
-	["ix_mp7"] = true,
-	["ix_357"] = true,
-	["ix_spas12"] = true,
-	["ix_ar2"] = true,
+local combatWeapons = {
+	["ix_usp"] = "USP MATCH PISTOL",
+	["ix_mp7"] = "MP7",
+	["ix_357"] = "357 REVOLVER",
+	["ix_spas12"] = "SPAS-12 SHOTGUN",
+	["ix_ar2"] = "OSIPR",
 }
 local function DrawCombineHud(ply, char)
 	local ply = LocalPlayer()
@@ -372,70 +372,73 @@ local function DrawCombineHud(ply, char)
 
 	-- Top Right
 	draw.SimpleTextOutlined("// LOCAL ASSET ::>", "BudgetLabel", ScrW() - 10, 5, team.GetColor(ply:Team()), TEXT_ALIGN_RIGHT, nil, 1, color_black)
-	draw.SimpleTextOutlined("VITALS: "..ply:Health().."% ::>", "BudgetLabel", ScrW() - 10, 5 + 16 * 2, color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
-	draw.SimpleTextOutlined("SPS CHARGE: "..ply:Armor().."% ::>", "BudgetLabel", ScrW() - 10, 5 + 16 * 3, color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
-	draw.SimpleTextOutlined("BIOSIGNAL GRID: "..grid.." ::>", "BudgetLabel", ScrW() - 10, 5 + 16 * 4, color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
-	draw.SimpleTextOutlined("BIOSIGNAL ZONE: "..zone.." ::>", "BudgetLabel", ScrW() - 10, 5 + 16 * 5, color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
-	draw.SimpleTextOutlined("AIR FILTER STATUS: 100% ::>", "BudgetLabel", ScrW() - 10, 5 + 16 * 6, color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
+	draw.SimpleTextOutlined("VITALS: "..ply:Health().."% ::>", "BudgetLabel", ScrW() - 10, 42, color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
+	draw.SimpleTextOutlined("SPS CHARGE: "..ply:Armor().."% ::>", "BudgetLabel", ScrW() - 10, 58, color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
+	draw.SimpleTextOutlined("BIOSIGNAL GRID: "..grid.." ::>", "BudgetLabel", ScrW() - 10, 74, color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
+	draw.SimpleTextOutlined("BIOSIGNAL ZONE: "..zone.." ::>", "BudgetLabel", ScrW() - 10, 90, color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
+	draw.SimpleTextOutlined("AIR FILTER STATUS: 100% ::>", "BudgetLabel", ScrW() - 10, 109, color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
+
+	draw.SimpleTextOutlined("// ACTIVE BOLS ::>", "BudgetLabel", ScrW() - 10, 210, team.GetColor(ply:Team()), TEXT_ALIGN_RIGHT, nil, 1, color_black)
+
+	local y = 16
+
+	for k, v in pairs(player.GetAll()) do
+		if ( v:GetNWBool("ixActiveBOL", false) == true ) then
+			draw.SimpleTextOutlined(string.upper(v:Nick()).." ::>", "BudgetLabel", ScrW() - 10, 210 + y, team.GetColor(v:Team()) or color_white, TEXT_ALIGN_RIGHT, nil, 1, color_black)
+			y = y + 16
+		end
+	end
 
 	local y = 16
 
 	if (ix.option.Get("showLocalAssets", true) == true) then
-		draw.SimpleTextOutlined("<:: LOCAL ASSETS //", "BudgetLabel", 10, 5 + 16 * 10, team.GetColor(ply:Team()), nil, nil, 1, color_black)
+		draw.SimpleTextOutlined("<:: LOCAL ASSETS //", "BudgetLabel", 10, 210, team.GetColor(ply:Team()), nil, nil, 1, color_black)
 		for k, v in pairs(player.GetAll()) do
 			if ( v:Team() == FACTION_CCA ) and ( ply:Team() == FACTION_CCA ) then
 				local health = v:Health().."%"
 				if not v:Alive() then
 					health = "<BIOSIGNAL LOST>"
 				end
-				draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-				draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+				draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (210) + y, color_white, nil, nil, 1, color_black)
+				draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (210) + y, color_white, nil, nil, 1, color_black)
 				y = y + 16
 			elseif ( v:Team() == FACTION_OTA ) and ( ply:Team() == FACTION_OTA ) then
 				local health = v:Health().."%"
 				if not v:Alive() then
 					health = "<BIOSIGNAL LOST>"
 				end
-				draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
-				draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (5 + 16 * 10) + y, color_white, nil, nil, 1, color_black)
+				draw.SimpleTextOutlined("<:: UNIT: "..string.upper(v:Nick()), "BudgetLabel", 10, (210) + y, color_white, nil, nil, 1, color_black)
+				draw.SimpleTextOutlined(" | VITALS: "..v:Health(), "BudgetLabel", 250, (210) + y, color_white, nil, nil, 1, color_black)
 				y = y + 16
 			end
 		end
 	end
 
-	if IsValid(ply:GetActiveWeapon()) and combatweapons[ply:GetActiveWeapon():GetClass()] then
+	if IsValid(ply:GetActiveWeapon()) and combatWeapons[ply:GetActiveWeapon():GetClass()] then
 		local weapon = ply:GetActiveWeapon()
-		local weaponname = weapon:GetPrintName()
-		local weaponammo1 = weapon:Clip1()
-		local weaponammo2 = ply:GetAmmoCount(weapon:GetPrimaryAmmoType())
-		local weaponammo3 = ply:GetAmmoCount(weapon:GetSecondaryAmmoType())
+		local weaponName = weapon:GetPrintName()
+		local weaponAmmo1 = weapon:Clip1()
+		local weaponAmmo2 = ply:GetAmmoCount(weapon:GetPrimaryAmmoType())
+		local weaponAmmo3 = ply:GetAmmoCount(weapon:GetSecondaryAmmoType())
 		local weaponprimarycolor = color_white
 
-		if weaponammo1 == 0 then
-			weaponammo1 = "N/A"
+		if ( weaponAmmo1 == 0 ) then
+			weaponAmmo1 = "N/A"
 		end
 
-		if weaponammo2 == 0 then
-			weaponammo2 = "N/A"
+		if ( weaponAmmo2 == 0 ) then
+			weaponAmmo2 = "N/A"
 		end
 
-		if weaponammo3 == 0 then
-			weaponammo3 = "N/A"
+		if ( weaponAmmo3 == 0 ) then
+			weaponAmmo3 = "N/A"
 		end
 
-		if weapon:GetClass() == "ix_mp7" then
-			weaponname = "MP7"
-		elseif weapon:GetClass() == "ix_usp" then
-			weaponname = "USP MATCH"
-		elseif weapon:GetClass() == "ix_357" then
-			weaponname = "357 REVOLVER"
-		elseif weapon:GetClass() == "ix_spas12" then
-			weaponname = "SPAS-12 SHOTGUN"
-		elseif weapon:GetClass() == "ix_ar2" then
-			weaponname = "OSIPR"
+		if ( combatWeapons[weapon:GetClass()] ) then
+			weaponName = combatWeapons[weapon:GetClass()]
 		end
 
-		if (weapon:Clip1() < weapon:GetMaxClip1() / 4) then
+		if ( weapon:Clip1() < weapon:GetMaxClip1() / 4 ) then
 			weaponprimarycolor = Color(255, 0, 0)
 
 			if ((ply.nextAmmoWarn or 0) < CurTime()) then
@@ -446,9 +449,9 @@ local function DrawCombineHud(ply, char)
 		end
 
 		draw.SimpleTextOutlined("<:: LOCAL WEAPONRY //", "BudgetLabel", 10, (5 + 16 * 12) + y, team.GetColor(ply:Team()), nil, nil, 1, color_black)
-		draw.SimpleTextOutlined("<:: FIREARM: "..string.upper(weaponname), "BudgetLabel", 10, (5 + 16 * 13) + y, color_white, nil, nil, 1, color_black)
-		draw.SimpleTextOutlined("<:: AM: [ "..weaponammo1.." ] / [ "..weaponammo2.." ]", "BudgetLabel", 10, (5 + 16 * 14) + y, weaponprimarycolor, nil, nil, 1, color_black)
-		draw.SimpleTextOutlined("<:: SC: [ "..weaponammo3.." ]", "BudgetLabel", 10, (5 + 16 * 15) + y, color_white, nil, nil, 1, color_black)
+		draw.SimpleTextOutlined("<:: FIREARM: "..string.upper(weaponName), "BudgetLabel", 10, (5 + 16 * 13) + y, color_white, nil, nil, 1, color_black)
+		draw.SimpleTextOutlined("<:: AM: [ "..weaponAmmo1.." ] / [ "..weaponAmmo2.." ]", "BudgetLabel", 10, (5 + 16 * 14) + y, weaponprimarycolor, nil, nil, 1, color_black)
+		draw.SimpleTextOutlined("<:: SC: [ "..weaponAmmo3.." ]", "BudgetLabel", 10, (5 + 16 * 15) + y, color_white, nil, nil, 1, color_black)
     end
 end
 
