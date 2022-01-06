@@ -603,32 +603,29 @@ end
 
 function Schema:OnPlayerHitGround(ply, inWater, onFloater, speed)
 	if not ( inWater ) and ply:IsValid() and ( ply:GetCharacter() ) then
-		local vel = ply:GetVelocity()
-		ply:SetVelocity( Vector( - ( vel.x * 0.4 ), - ( vel.y * 0.4 ), 0) )
-
-		local punch = speed * 0.01
-
-		if ( punch * 2 >= 7 ) then
-			ply:EmitSound("npc/combine_soldier/zipline_hitground"..math.random(1,2)..".wav", 60)
-			ply:EmitSound("LiteNetwork/hl2rp/land0"..math.random(1,4)..".ogg", 50, math.random(90, 110), math.random(0.3, 0.4))
-		else
-			ply:EmitSound("LiteNetwork/hl2rp/land0"..math.random(1,4)..".ogg", 50, math.random(90, 110), math.random(0.3, 0.4))
-		end
-
+		local punch = ( speed * 0.01 ) * 2 -- math moment
 		ply:ViewPunch(Angle(punch, 0, 0))
 
-		if (punch * 2 >= 10) and not (ply:Team() == FACTION_OTA or ply:IsDispatch()) then
-			ply:TakeDamage(math.random(10, 20))
-			ply:EmitSound("player/pl_fallpain1.wav", 80)
-
-			if ( ply:GetCharacter():GetData("ixBrokenLegs") ) then
-				ply:ChatNotify("You broke your legs!")
-				ply:GetCharacter():SetData("ixBrokenLegs", true)
-
-				if ( ply:IsCombine() ) then
-					Schema:AddCombineDisplayMessage("WARNING! UNIT "..string.upper(ply:Nick()).." RECEIVED LEG FRACTURE...", Color(200, 50, 0, 255))
+		if ( punch >= 7 ) then
+			ply:EmitSound("npc/combine_soldier/zipline_hitground"..math.random(1,2)..".wav", 60)
+			ply:EmitSound("LiteNetwork/hl2rp/land0"..math.random(1,4)..".ogg", 50, math.random(90, 110), math.random(0.3, 0.4))
+			if ( punch >= 11.0 ) then
+				if not ( ply:Team() == FACTION_OTA or ply:IsDispatch() ) then
+					ply:TakeDamage(math.random(10, 20))
+					ply:EmitSound("player/pl_fallpain1.wav", 80)
+		
+					if ( ply:GetCharacter():GetData("ixBrokenLegs") ) then
+						ply:ChatNotify("You broke your legs!")
+						ply:GetCharacter():SetData("ixBrokenLegs", true)
+		
+						if ( ply:IsCombine() ) then
+							Schema:AddCombineDisplayMessage("WARNING! UNIT "..string.upper(ply:Nick()).." RECEIVED LEG FRACTURE...", Color(200, 50, 0, 255))
+						end
+					end
 				end
 			end
+		else
+			ply:EmitSound("LiteNetwork/hl2rp/land0"..math.random(1,4)..".ogg", 50, math.random(90, 110), math.random(0.3, 0.4))
 		end
 	end
 end
@@ -717,133 +714,51 @@ local radioChatTypes = {
 	["dispatchradio"] = true
 }
 
-local validEnds = {
-	["."] = true,
-	["?"] = true,
-	["!"] = true
-}
 function Schema:PlayerMessageSend(speaker, chatType, text, anonymous, receivers, rawText)
-	local function fixMarkup(a, b)
-		return a.." "..string.upper(b) 
-	end
-
 	if ( chatTypes[chatType] ) then
 		local class = self.voices.GetClass(speaker)
 
-		local textTable = string.Explode("; ?", rawText, true)
-		local voiceList = {}
-
-		for k, v in ipairs(textTable) do
-			local bFound = false
-			local text = string.upper(v)
-
-			local info
-
-			for _, c in ipairs(class) do
-				info = self.voices.Get(c, text)
-
-				if (info) then break end
-			end
+		for k, v in ipairs(class) do
+			local info = self.voices.Get(v, rawText)
 
 			if (info) then
-				bFound = true
+				local volume = 80
 
-				if (info.sound) then
-					voiceList[#voiceList + 1] = {
-						global = info.global,
-						sound = info.sound
-					}
+				if (chatType == "w") then
+					volume = 60
+				elseif (chatType == "y") then
+					volume = 150
 				end
 
-				if (k == 1) then
-					textTable[k] = info.text
-				else
-					textTable[k] = string.lower(info.text)
-				end
-
-				if (k != #textTable) then
-					local endText = string.sub(info.text, -1)
-
-					if (endText == "!" or endText == "?") then
-						textTable[k] = string.gsub(textTable[k], "[!?]$", ",")
-					end
-				end
-			end
-
-			if (bFound == false and k != #textTable) then
-				textTable[k] = v .. "; "
-			end
-		end
-
-		local str
-		str = table.concat(textTable, " ")
-		str = string.gsub(str, " ?([.?!]) (%l?)", fixMarkup)
-
-		if (voiceList[1]) then
-			local volume = 80
-
-			if (chatType == "w") then
-				volume = 60
-			elseif (chatType == "y") then
-				volume = 150
-			end
-
-			local delay = 0
-
-			for k, v in ipairs(voiceList) do
-				local sound = v.sound
-
-				if (istable(sound)) then
-					sound = v.sound[1]
-				end
-
-				if (delay == 0) then
-					speaker:EmitSound(sound, volume)
-				else
-					timer.Simple(delay, function()
-						speaker:EmitSound(sound, volume)
-					end)
-				end
-
-				if (v.global) then
-					if (delay == 0) then
-						for k1, v1 in ipairs(receivers) do
-							if (v1 != speaker) then
-								netstream.Start(v1, "PlaySound", sound)
-							end
-						end
+				if ( info.sound ) then
+					if ( info.global ) then
+						PlayEventSound(info.sound)
 					else
-						timer.Simple(delay, function()
-							for k1, v1 in ipairs(receivers) do
-								if (v1 != speaker) then
-									netstream.Start(v1, "PlaySound", sound)
+
+						if ( radioChatTypes[chatType] ) then
+							for k, v in pairs(player.GetAll()) do
+								if ( v:IsCombine() or v:IsCA() or v:IsDispatch() ) and not ( v == ply ) then
+									v:PlaySound(info.sound)
 								end
 							end
-						end)
+						else
+							local sounds = {info.sound}
+
+							ix.util.EmitQueuedSounds(speaker, sounds, nil, nil, volume)
+						end
 					end
 				end
 
-				delay = delay + SoundDuration(sound) + 0.1
+				if ( speaker:IsCombine() ) then
+					return string.format("<:: %s ::>", info.text)
+				else
+					return info.text
+				end
 			end
 		end
 
-		str = str:sub(1, 1):upper() .. str:sub(2)
-		if (!validEnds[str:sub(-1)]) then
-			str = str .. "."
-		end
-	
-		if ( radioChatTypes[chatType] ) then
-			return "<:: "..str.." ::>"
-		end
-
-		if ( speaker:IsCombine() ) then
-			return "<:: "..str.." ::>"
-		else
-			return str
-		end
-	else
-		if ( speaker:IsCombine() ) and ( chatTypes[chatType] ) then
-			return "<:: "..text.." ::>"
+		if ( speaker:IsCombine() or radioChatTypes[chatType] ) then
+			return string.format("<:: %s ::>", text)
 		end
 	end
 end
