@@ -96,9 +96,6 @@ net.Receive("ixATM_OpenMenu", function(_)
 			net.SendToServer()
 
 			ATM_MENU:Remove()
-
-			net.Start("ixATM_UpdatePage")
-			net.SendToServer()
 		end
 
 		local ATM_WITHDRAW = vgui.Create("ixMenuButton", ATM_MENU)
@@ -119,9 +116,6 @@ net.Receive("ixATM_OpenMenu", function(_)
 			net.SendToServer()
 
 			ATM_MENU:Remove()
-
-			net.Start("ixATM_UpdatePage")
-			net.SendToServer()
 		end
 	end
 end)

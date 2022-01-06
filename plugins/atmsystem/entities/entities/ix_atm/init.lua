@@ -75,10 +75,3 @@ net.Receive("ixATM_Withdraw", function(_, ply)
 		end
 	end
 end)
-
-util.AddNetworkString("ixATM_UpdatePage")
-net.Receive("ixATM_UpdatePage", function(_, ply)
-	net.Start("ixATM_OpenMenu")
-		net.WriteString(tostring( ply:GetCharacter():GetData("ix.ATM.Money", "0") ))
-	net.Send(ply)
-end)
