@@ -22,24 +22,6 @@ local cityCodes = {
 	["gray"] = 4,
 }
 
-local function JudgementWaiverStart()
-	for k, v in pairs(ents.FindByClass("logic_relay")) do
-		if ( v:GetName() == "logic_jw_activate" ) then
-			SetGlobalBool("ixJWStatus", true)
-			v:Fire("trigger")
-		end
-	end
-end
-
-local function JudgementWaiverStop()
-	for k, v in pairs(ents.FindByClass("logic_relay")) do
-		if ( v:GetName() == "logic_jw_deactivate" ) then
-			SetGlobalBool("ixJWStatus", false)
-			v:Fire("trigger")
-		end
-	end
-end
-
 ix.command.Add("ChangeCityCode", {
 	description = "Change the current sociostatus. (green, yellow, orange, red, gray)",
 	syntax = ix.type.string,
@@ -57,7 +39,7 @@ ix.command.Add("ChangeCityCode", {
 
 		if (status[1] == "red") then -- Judgement Waiver
 			if not ( GetGlobalBool("ixJWStatus") == true ) then
-				JudgementWaiverStart()
+				PLUGIN:JudgementWaiverStart()
 
 				if ( GetGlobalBool("ixCTStatus") == true ) then
 					PLUGIN:CityTurmoilStop()
@@ -71,7 +53,7 @@ ix.command.Add("ChangeCityCode", {
 			end
 		elseif (status[1] == "gray") then -- Autonomous Judgement
 			if ( GetGlobalBool("ixJWStatus") == true ) then
-				JudgementWaiverStopSilent()
+				PLUGIN:JudgementWaiverStopSilent()
 			end
 
 			if ( GetGlobalBool("ixCTStatus") == true ) then
@@ -86,7 +68,7 @@ ix.command.Add("ChangeCityCode", {
 				PLUGIN:CityTurmoilStart()
 				
 				if ( GetGlobalBool("ixJWStatus") == true ) then
-					JudgementWaiverStop()
+					PLUGIN:JudgementWaiverStop()
 				end
 				
 				if ( GetGlobalBool("ixAJStatus") == true ) then
@@ -97,7 +79,7 @@ ix.command.Add("ChangeCityCode", {
 			end
 		else -- Disable Everything if it is on..
 			if ( GetGlobalBool("ixJWStatus") == true ) then
-				JudgementWaiverStop()
+				PLUGIN:JudgementWaiverStop()
 			end
 
 			if ( GetGlobalBool("ixAJStatus") == true ) then

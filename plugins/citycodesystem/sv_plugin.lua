@@ -109,6 +109,20 @@ end
 function PLUGIN:JudgementWaiverStart()
 	SetGlobalBool("ixJWStatus", true)
 
+	PlayEventSound("city8/city8-citadel.wav")
+	EmitShake()
+	EmitTimedShake(11.5)
+	EmitTimedShake(16)
+	EmitTimedShake(32)
+	EmitTimedShake(36)
+	PlayTimedEventSound(36, "ambient/levels/citadel/citadel_drone_loop2.wav")
+
+	timer.Create("ixJWBuzz", 20, 0, function()
+		PlayEventSound("city8/city8-jwbuzzer.wav")
+		PlayTimedEventSound(math.random(3,15), "ambient/levels/city/citadeloutsidefx0"..math.random(1,9)..".wav")
+	end)
+
+	--[[
 	PlayEventSound("ambient/levels/streetwar/building_rubble"..math.random(1,5)..".wav")
     PlayEventSound("ambient/levels/streetwar/building_rubble"..math.random(1,5)..".wav")
     PlayEventSound("ambient/levels/streetwar/building_rubble"..math.random(1,5)..".wav")
@@ -274,11 +288,16 @@ function PLUGIN:JudgementWaiverStart()
 
 	timer.Simple(14, function()
 		PlayEventSound("ambient/levels/streetwar/marching_distant2.wav")
-	end)
+	end)]]
 end
 
 function PLUGIN:JudgementWaiverStopSilent()
-	for _, v in pairs(ents.FindByName("citadel")) do
+	SetGlobalBool("ixJWStatus", false)
+
+	StopEventSound("ambient/levels/citadel/citadel_drone_loop2.wav")
+	timer.Remove("ixJWBuzz")
+
+	--[[for _, v in pairs(ents.FindByName("citadel")) do
 		v:Fire("SetAnimation", "idle")
 	end
 
@@ -290,13 +309,32 @@ function PLUGIN:JudgementWaiverStopSilent()
 	SetGlobalBool("ixJWStatus", false)
 	timer.Destroy("ixJudgementWaiverAlarm")
 	timer.Destroy("ixJudgementWaiverAmbience")
-	timer.Destroy("ixJudgementWaiverReminder")
+	timer.Destroy("ixJudgementWaiverReminder")]]
 end
 
 function PLUGIN:JudgementWaiverStop()
 	SetGlobalBool("ixJWStatus", false)
+	
+	PlayEventSound("ambient/levels/citadel/citadel_5sirens3.wav")
+	PlayEventSound("ambient/levels/city/citadeloutsidefx0"..math.random(1,9)..".wav")
+	PlayEventSound("ambient/machines/wall_ambient1.wav")
+	PlayTimedEventSound(4, "ambient/machines/wall_move2.wav")
+	PlayTimedEventSound(10, "ambient/machines/wall_crash1.wav")
+	StopTimedEventSound(10, "ambient/levels/citadel/citadel_drone_loop2.wav")
+	EmitTimedShake(10)
 
-    PlayEventSound("ambient/levels/streetwar/building_rubble"..math.random(1,5)..".wav")
+	PlayTimedEventSound(12, "ambient/machines/wall_move5.wav")
+	StopTimedEventSound(15, "ambient/machines/wall_move5.wav")
+	PlayTimedEventSound(15, "doors/door_metal_large_chamber_close1.wav")
+	EmitTimedSlightShake(15)
+
+	PlayTimedEventSound(17, "ambient/machines/wall_move5.wav")
+	StopTimedEventSound(20, "ambient/machines/wall_move5.wav")
+	PlayTimedEventSound(20, "doors/door_metal_large_chamber_close1.wav")
+	EmitTimedSlightShake(20)
+
+	timer.Remove("ixJWBuzz")
+    --[[PlayEventSound("ambient/levels/streetwar/building_rubble"..math.random(1,5)..".wav")
     PlayEventSound("ambient/levels/streetwar/building_rubble"..math.random(1,5)..".wav")
     PlayEventSound("ambient/levels/streetwar/building_rubble"..math.random(1,5)..".wav")
     PlayEventSound("ambient/levels/streetwar/building_rubble"..math.random(1,5)..".wav")
@@ -359,7 +397,7 @@ function PLUGIN:JudgementWaiverStop()
 	PlayTimedEventSound(10, "ambient/levels/streetwar/marching_distant2.wav")
 	PlayTimedEventSound(10, "LiteNetwork/hl2rp/event/battle/city_chant1.wav")
 	PlayTimedEventSound(15, "npc/overwatch/cityvoice/f_innactionisconspiracy_spkr.wav")
-	PlayTimedEventSound(15, "ambient/levels/streetwar/marching_distant1.wav")
+	PlayTimedEventSound(15, "ambient/levels/streetwar/marching_distant1.wav")]]
 end
 
 --[[---------------------------------------------------------------------------
