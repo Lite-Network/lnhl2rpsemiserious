@@ -207,7 +207,8 @@ net.Receive("ixAddCombineDisplayMessage", function()
 end)
 
 net.Receive("ixPlaySound", function(len, ply)
-	surface.PlaySound(tostring(net.ReadString()))
+	--surface.PlaySound(tostring(net.ReadString()))
+	LocalPlayer():EmitSound(tostring(net.ReadString()), tonumber(net.ReadUInt(7)) or 100)
 end)
 
 net.Receive("ixCreateVGUI", function(len, ply)
