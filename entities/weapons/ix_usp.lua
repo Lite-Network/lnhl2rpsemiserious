@@ -63,9 +63,9 @@ SWEP.Spread.VelocityMod = 1.025
 
 SWEP.UseIronsightsRecoil = false
 
-SWEP.IronsightsPos = Vector(-2.36, -5, 2.68)
-SWEP.IronsightsAng = Angle(1.71, 1.855, -8.058)
-SWEP.IronsightsFOV = 0.8
+SWEP.IronsightsPos = Vector(-4.862, -10, 2.546)
+SWEP.IronsightsAng = Angle(0, 0, 5.184)
+SWEP.IronsightsFOV = 0.9
 SWEP.IronsightsSensitivity = 0.8
 SWEP.IronsightsCrosshair = false
 SWEP.IronsightsRecoilVisualMultiplier = 2

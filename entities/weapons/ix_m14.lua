@@ -38,13 +38,15 @@ SWEP.Primary.Recoil = 1
 SWEP.Primary.Damage = 25
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.03
-SWEP.Primary.Delay = RPM(170)
+SWEP.Primary.Delay = RPM(150)
 SWEP.Primary.PenetrationScale = 2
 
 SWEP.Primary.Ammo = "ixRifleAmmo"
 SWEP.Primary.Automatic = false
 SWEP.Primary.ClipSize = 20
 SWEP.Primary.DefaultClip = 20
+
+SWEP.DoEmptyReloadAnim = true
 
 SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.Automatic = false

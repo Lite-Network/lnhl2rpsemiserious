@@ -49,12 +49,12 @@ SWEP.Spread.AirMod = 1.4
 SWEP.Spread.RecoilMod = 0.1
 SWEP.Spread.VelocityMod = 0.16
 
-SWEP.UseIronsightsRecoil = false
+SWEP.UseIronsightsRecoil = true
 
-SWEP.IronsightsPos = Vector(-2.201, 0, 1)
-SWEP.IronsightsAng = Angle(1.615, 2.507, -7.7)
+SWEP.IronsightsPos = Vector(-5.105, -5, 2.079)
+SWEP.IronsightsAng = Angle(0, 0, -25)
 SWEP.IronsightsFOV = 0.7
 SWEP.IronsightsSensitivity = 0.6
 SWEP.IronsightsCrosshair = true
-SWEP.IronsightsRecoilVisualMultiplier = 4
+SWEP.IronsightsRecoilVisualMultiplier = 1
 SWEP.IronsightsMuzzleFlash = "AirboatMuzzleFlash"

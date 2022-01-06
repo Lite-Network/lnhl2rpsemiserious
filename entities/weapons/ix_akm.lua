@@ -136,6 +136,8 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = 30
 
+SWEP.DoEmptyReloadAnim = true
+
 SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.ClipSize = -1
