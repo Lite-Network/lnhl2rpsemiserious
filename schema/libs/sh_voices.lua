@@ -53,6 +53,7 @@ if (CLIENT) then
 		"citizenmale",
 		"citizenfemale",
 		"universalunion",
+		"universalunionez2",
 		"dispatchradio",
 		"dispatch",
 	}
@@ -69,6 +70,10 @@ Schema.voices.AddClass("UniversalUnion", function(ply)
 	return ply:IsCombine()
 end)
 
+Schema.voices.AddClass("UniversalUnionEZ2", function(ply)
+	return ply:IsCombine() and ply:IsSuperAdmin() -- fuck you lol :)
+end)
+
 Schema.voices.AddClass("Dispatch", function(ply)
 	return ply:IsDispatch() or ply:IsCombineCommand() or ply:IsAdmin()
 end)
@@ -83,14 +88,14 @@ end)
 
 Schema.voices.AddClass("CitizenMale", function(ply)
 	local factionTable = ix.faction.Get(ply:Team())
-	if (factionTable and factionTable.voicelinesHuman) and not ply:IsFemale() then
+	if ( ( ply:IsCitizen() or ply:IsCWU() ) and not ply:IsFemale() ) and ( ply:IsDonator() or ply:IsAdmin() ) then
 		return true
 	end
 end)
 
 Schema.voices.AddClass("CitizenFemale", function(ply)
 	local factionTable = ix.faction.Get(ply:Team())
-	if (factionTable and factionTable.voicelinesHuman) and ply:IsFemale() then
+	if ( ( ply:IsCitizen() or ply:IsCWU() ) and ply:IsFemale() ) and ( ply:IsDonator() or ply:IsAdmin() ) then
 		return true
 	end
 end)
