@@ -202,7 +202,7 @@ local allowedPlayersContainers = {
 	["STEAM_0:0:206764368"] = true,
 }
 function Schema:CanPlayerSpawnContainer(ply)
-	if allowedPlayersContainers[ply:SteamID()] then
+	if ( allowedPlayersContainers[ply:SteamID()] ) then
 		MsgAll(ply:Nick(), " allowed to spawn container!")
 		return true
 	else
@@ -242,14 +242,27 @@ local cwuCombineDoors = {
 	[4366] = true,
 	[4365] = true,
 }
+local blacklistedDoorNames = {
+	["door_airlock_comb_"] = true,
+	["lift_doors_"] = true,
+	["shutters"] = true,
+	["shutters"] = true,
+	["elevator"] = true,
+}
 function Schema:PlayerUseDoor(ply, door)
 	if ( ply:IsCombine() or ply:IsCA() or ply:IsDispatch() ) then
-		if (!door:HasSpawnFlags(256) and !door:HasSpawnFlags(1024)) and not (door:GetName():find("door_airlock_comb_") or door:GetName():find("lift_doors_") or door:GetName():find("shutters")) then
-			door:Fire("open")
+		if ( not ( door:HasSpawnFlags(256) and door:HasSpawnFlags(1024) ) and ( blacklistedDoorNames[door:GetName()] ) ) then
+			ply:SetAction("Opening...", 1)
+			ply:DoStaredAction(door, function()
+				door:Fire("open")
+			end, 1)
 		end
-	elseif ((ply:IsCWU() or ply:IsCombine()) and cwuCombineDoors[door:MapCreationID()]) then
-		if (!door:HasSpawnFlags(256) and !door:HasSpawnFlags(1024)) then
-			door:Fire("open")
+	elseif ( ( ply:IsCWU() or ply:IsCombine() ) and cwuCombineDoors[door:MapCreationID()] ) then
+		if not ( door:HasSpawnFlags(256) and door:HasSpawnFlags(1024) ) then
+			ply:SetAction("Opening...", 1)
+			ply:DoStaredAction(door, function()
+				door:Fire("open")
+			end, 1)
 		end
 	end
 end
