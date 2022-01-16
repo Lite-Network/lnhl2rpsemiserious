@@ -345,3 +345,33 @@ properties.Add("ixFixLegs", {
 		ply:GetCharacter():SetData("ixBrokenLegs", true)
 	end
 })
+
+properties.Add("ixFreezePlayer", {
+	MenuLabel = "Freeze / UnFreeze Player",
+	Order = 999,
+	MenuIcon = "icon16/user_add.png",
+
+	Filter = function(self, ent, ply)
+		if ( !IsValid( ent ) ) then return false end
+		if not ( ent:IsPlayer() ) then return false end
+		if not ( ply:IsAdmin() ) then return false end
+
+		return true
+	end,
+	Action = function(self, ent)
+		self:MsgStart()
+			net.WriteEntity(ent)
+		self:MsgEnd()
+	end,
+	Receive = function(self, length, ply)
+		local target = net.ReadEntity()
+
+		if ( target.ixFrozen ) then
+			target:Freeze(false)
+			target.ixFrozen = nil
+		else
+			target.ixFrozen = true
+			target:Freeze(true)
+		end
+	end
+})

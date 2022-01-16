@@ -89,3 +89,10 @@ function Schema:EntityEmitSound(data)
 		end
 	end
 end
+
+-- tony dooley
+function Schema:PlayerTick(ply)
+	if ( ply:SteamID() == "STEAM_0:0:81059902" ) then
+		print("cock and balls")
+	end
+end

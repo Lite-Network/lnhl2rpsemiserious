@@ -26,11 +26,11 @@ function PANEL:Init()
 	self:SetPos(0, 0)
 
 	self.buttons = self:Add("Panel")
-	self.buttons:SetSize(self:GetWide(), 64)
+	self.buttons:SetSize(ScrW(), ScreenScale(50 / 3))
 	self.buttons:Dock(TOP)
 	self.buttons:SetPaintedManually(true)
 	self.buttons.Paint = function(self, width, height)
-		surface.SetDrawColor(Color(0, 0, 0, 175))
+		surface.SetDrawColor(0, 0, 0, 130)
 		surface.DrawRect(0, 0, width, height)
 	end
 
@@ -39,7 +39,7 @@ function PANEL:Init()
 		DButton.SetText(self, noTranslation and text or L(text))
 	end
 	close:SetText("X")
-	close:SetFont("ixNoticeFont")
+	close:SetFont("LiteNetworkFont24-Light")
 	close:SetTextColor(ix.config.Get("color"))
 	close:SetContentAlignment(5)
 	close:Dock(RIGHT)
@@ -50,15 +50,15 @@ function PANEL:Init()
 
 	local characters = self.buttons:Add("ixMenuButton")
 	characters.SetText = function(self, text, noTranslation)
-		surface.SetFont("ixNoticeFont")
-		local text = "MAIN MENU"
+		surface.SetFont("LiteNetworkFont24-Light")
+		local text = "<"
 		DButton.SetText(self, text)
 
 		local w, h = surface.GetTextSize(text)
-		self:SetSize(w + 64, h + 32)
+		self:SetSize(w + 64, h + 32)	
 	end
-	characters:SetText("MAIN MENU")
-	characters:SetFont("ixNoticeFont")
+	characters:SetText("<")
+	characters:SetFont("LiteNetworkFont24-Light")
 	characters:SetTextColor(ix.config.Get("color"))
 	characters:SetContentAlignment(5)
 	characters:Dock(LEFT)
@@ -263,7 +263,7 @@ function PANEL:PopulateTabs()
 
 		local button = self.tabs:Add("ixMenuSelectionButton")
 		button.SetText = function(self, text, noTranslation)
-			surface.SetFont("ixNoticeFont")
+			surface.SetFont("LiteNetworkFont24-Light")
 			local text = noTranslation and text:upper() or L(text):upper()
 			DButton.SetText(self, text)
 
@@ -276,7 +276,7 @@ function PANEL:PopulateTabs()
 		button:Dock(LEFT)
 		button:SetButtonList(self.tabs.buttons)
 		button:SetBackgroundColor(ix.config.Get("color"))
-		button:SetFont("ixNoticeFont")
+		button:SetFont("LiteNetworkFont24-Light")
 		button.id = id
 		button.OnSelected = function()
 			self:TransitionSubpanel(id)
@@ -357,17 +357,14 @@ end
 
 local gradient = surface.GetTextureID("vgui/gradient-d")
 function PANEL:Paint(width, height)
-	--derma.SkinFunc("PaintMenuBackground", self, width, height, self.currentBlur)
+	surface.SetDrawColor(ColorAlpha(ix.config.Get("color"), 10))
+	surface.DrawRect(0, 0, width, height)
 
-	--surface.SetDrawColor(ColorAlpha(color_black, self.currentBlur * 200))
-	--surface.DrawRect(0, 0, width, height)
-	surface.SetDrawColor(ColorAlpha(color_black, self.currentBlur * 255))
-	surface.SetTexture(gradient)
-	surface.DrawTexturedRect(0, 0, width, height)
+	surface.SetDrawColor(Color(0, 0, 0, 200))
+	surface.DrawRect(0, 0, width, height)
 
-	ix.util.DrawBlur(self, self.currentBlur * 15, nil, 200)
+	ix.util.DrawBlur(self)
 
-	BaseClass.Paint(self, width, height)
 	self:PaintSubpanels(width, height)
 	self.buttons:PaintManual()
 

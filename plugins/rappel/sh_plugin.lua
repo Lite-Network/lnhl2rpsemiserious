@@ -1,5 +1,6 @@
 local PLUGIN = PLUGIN
 
+-- use this plugin at your own risk, don't really wanna be bothered to fix or remake this..
 PLUGIN.name = "Rappel"
 PLUGIN.author = "Riggs Mackay"
 PLUGIN.description = "Allows Combine to rappel down from ledges."
@@ -13,19 +14,17 @@ if ( SERVER ) then
 		trace.endpos = pos - Vector(0, 0, 1000)
 		trace.filter = {ply}
 		local traceLine = util.TraceLine(trace)
-		if traceLine.HitPos.z <= ply:GetPos().z then
+		if ( traceLine.HitPos.z <= ply:GetPos().z ) then
 			local ent = ents.Create("npc_metropolice")
-			if (ply:Team() == FACTION_OTA) then
+			if ( ply:Team() == FACTION_OTA ) then
 				ent = ents.Create("npc_combine_s")
-				ent:SetModel(ply:GetModel())
-				ent:SetSkin(ply:GetSkin())
-				ent:SetBodyGroups(ply:GetBodyGroups())
 			else
 				ent = ents.Create("npc_metropolice")
-				ent:SetModel(ply:GetModel())
-				ent:SetSkin(ply:GetSkin())
-				ent:SetBodyGroups(ply:GetBodyGroups())
 			end
+
+			ent:SetModel(ply:GetModel())
+			ent:SetSkin(ply:GetSkin())
+			ent:SetBodyGroups(ply:GetBodyGroups())
 
 			ent:SetKeyValue("waitingtorappel", 1) 
 			ent:SetPos(pos)

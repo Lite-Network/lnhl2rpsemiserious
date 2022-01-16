@@ -55,29 +55,57 @@ function PANEL:SetupDealer()
         surface.DrawRect(0, 0, w, h)
     end
 
-    for k, v in SortedPairs(self.dealerTable.buying) do
-        local itemTable = ix.item.Get(k)
-        self.buyButton = self.panelBuy:Add("ixMenuButton")
-        self.buyButton:SetText("      "..itemTable.name)
-        self.buyButton:SetFont("ixMediumFont")
-        self.buyButton:Dock(TOP)
-        self.buyButton:SetTall(40)
-        self.buyButton.DoClick = function()
+    if ( self.dealerTable.buying ) then
+        for k, v in SortedPairs(self.dealerTable.buying) do
+            local itemTable = ix.item.Get(k)
+            self.buyButton = self.panelBuy:Add("ixMenuButton")
+            self.buyButton:SetText("      "..itemTable.name)
+            self.buyButton:SetFont("ixMediumFont")
+            self.buyButton:Dock(TOP)
+            self.buyButton:SetTall(40)
+            self.buyButton.DoClick = function()
+                net.Start("LiteNetworkDealerBuy")
+                    net.WriteString(k)
+                    net.WriteUInt(v.Cost, 16)
+                net.SendToServer()
+            end
+            
+            self.buyButtonIcon = self.buyButton:Add("SpawnIcon")
+            self.buyButtonIcon:SetModel(itemTable.model)
+            self.buyButtonIcon:SetSize(40, 40)
+            self.buyButtonIcon:Dock(LEFT)
         end
-        
-        self.buyButtonIcon = self.buyButton:Add("SpawnIcon")
-        self.buyButtonIcon:SetModel(itemTable.model)
-        self.buyButtonIcon:SetSize(40, 40)
-        self.buyButtonIcon:Dock(LEFT)
     end
 
-    self.panelSell = self:Add("DScrollPanel")
-    self.panelSell:SetSize(self:GetWide() / 2 - 15, 0)
-    self.panelSell:Dock(RIGHT)
-    self.panelSell:DockMargin(5, 5, 5, 5)
-    self.panelSell.Paint = function(self, w, h)
-        surface.SetDrawColor(20, 20, 20, 100)
-        surface.DrawRect(0, 0, w, h)
+    if ( self.dealerTable.selling ) then
+        self.panelSell = self:Add("DScrollPanel")
+        self.panelSell:SetSize(self:GetWide() / 2 - 15, 0)
+        self.panelSell:Dock(RIGHT)
+        self.panelSell:DockMargin(5, 5, 5, 5)
+        self.panelSell.Paint = function(self, w, h)
+            surface.SetDrawColor(20, 20, 20, 100)
+            surface.DrawRect(0, 0, w, h)
+        end
+
+        for k, v in SortedPairs(self.dealerTable.selling) do
+            local itemTable = ix.item.Get(k)
+            self.sellButton = self.panelSell:Add("ixMenuButton")
+            self.sellButton:SetText("      "..itemTable.name)
+            self.sellButton:SetFont("ixMediumFont")
+            self.sellButton:Dock(TOP)
+            self.sellButton:SetTall(40)
+            self.sellButton.DoClick = function()
+                net.Start("LiteNetworkDealerSell")
+                    net.WriteString(k)
+                    net.WriteUInt(v.Cost, 16)
+                net.SendToServer()
+            end
+            
+            self.sellButtonIcon = self.sellButton:Add("SpawnIcon")
+            self.sellButtonIcon:SetModel(itemTable.model)
+            self.sellButtonIcon:SetSize(40, 40)
+            self.sellButtonIcon:Dock(LEFT)
+        end
     end
 
     self.dealerNick = self.panelTop:Add("ixLabel")

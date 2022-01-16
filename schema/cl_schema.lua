@@ -149,11 +149,11 @@ function Schema:PopulateHelpMenu(tabs)
 					for command, info in SortedPairs(self.voices.stored[class]) do
 						if filter == nil or (command:lower():find(filter:lower()) or info.text:lower():find(filter:lower())) then
 							local title = container:Add("ixMenuButton")
-							title:SetFont("ixMediumLightFont")
+							title:SetFont("LiteNetworkFont16-Light")
 							title:SetText(command:upper())
 							title:Dock(TOP)
 							title:SetTextColor(ix.config.Get("color"))
-							title:SizeToContents()
+							title:SetSize(container:GetWide(), 18)
 							title.DoClick = function()
 								ix.util.Notify("You have copied: "..tostring(command:upper()))
 								SetClipboardText(tostring(command:upper()))

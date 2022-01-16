@@ -10,7 +10,7 @@ function PANEL:Init()
         if ( v:IsValid() ) then
             local playerBox = self:Add("ixMenuButton")
             playerBox:SetText("")
-            playerBox:SetSize(self:GetWide(), 70)
+            playerBox:SetSize(self:GetWide(), 55)
             playerBox:Dock(TOP)
             playerBox:DockMargin(0, 0, 0, 5)
             playerBox.DoClick = function()
@@ -35,20 +35,17 @@ function PANEL:Init()
             end
             playerBox.Paint = function(self)
                 local teamColor = team.GetColor(v:Team()) or color_white
-                draw.RoundedBox(5, 0, 0, playerBox:GetWide(), playerBox:GetTall(), ColorAlpha(teamColor, 100))
+                draw.RoundedBox(0, 0, 0, playerBox:GetWide(), playerBox:GetTall(), ColorAlpha(teamColor, 100))
 
-                draw.SimpleText(v:SteamName(), "LiteNetworkFont32", 80, playerBox:GetTall() / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-                draw.SimpleText(team.GetName(v:Team()), "LiteNetworkFont32", playerBox:GetWide() / 2, playerBox:GetTall() / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText(v:SteamName(), "LiteNetworkFont24-Light", 65, playerBox:GetTall() / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+                draw.SimpleText(team.GetName(v:Team()), "LiteNetworkFont24-Light", playerBox:GetWide() / 2, playerBox:GetTall() / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-                if ( LocalPlayer():IsAdmin() ) then
-                    draw.SimpleText(v:Nick(), "LiteNetworkFont32", playerBox:GetWide() - 20, playerBox:GetTall() / 2, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-                end
+                draw.SimpleText(v:Nick(), "LiteNetworkFont24-Light", playerBox:GetWide() - 20, playerBox:GetTall() / 2, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
             end
 
             local playerIcon = playerBox:Add("ixSpawnIcon")
-            playerIcon:SetSize(playerBox:GetTall() - 10, playerBox:GetTall() - 10)
+            playerIcon:SetSize(playerBox:GetTall(), playerBox:GetTall())
             playerIcon:Dock(LEFT)
-            playerIcon:DockMargin(5, 5, 5, 5)
             playerIcon:SetModel(v:GetModel(), v:GetSkin())
 
             for k2, v2 in pairs(v:GetBodyGroups()) do

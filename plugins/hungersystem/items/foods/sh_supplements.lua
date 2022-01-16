@@ -20,4 +20,3 @@ ITEM.height = 1
 ITEM.useTime = 20
 ITEM.useSound = "LiteNetwork/hl2rp/eat.ogg"
 ITEM.RestoreHunger = 100
-ITEM.spoil = false

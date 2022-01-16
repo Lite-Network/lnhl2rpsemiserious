@@ -1,9 +1,10 @@
 local PLUGIN = PLUGIN
 
+-- messy but idc.
 function PLUGIN:SearchLootContainer(ent, ply)
-    if not ( ply:IsCombine() or ply:IsCA() or ply:IsDispatch() ) then
+    if not ( ply:IsCombine() or ply:IsDispatch() ) then
         if not ent.containerAlreadyUsed or ent.containerAlreadyUsed <= CurTime() then
-            if not ( ply.isEatingConsumeable == true ) then
+            if not ( ply.isEatingConsumeable == true ) then -- support for my plugin
                 local randomChance = math.random(1,20)
                 local randomAmountChance = math.random(1,3)
                 local lootAmount = 1
@@ -32,8 +33,10 @@ function PLUGIN:SearchLootContainer(ent, ply)
                 end)
                 ent.containerAlreadyUsed = CurTime() + 180
             else
-                ply:Notify("You cannot loot anything while you are eating!")
-                ent.ixContainerNothingInItCooldown = CurTime() + 1
+                if not ent.ixContainerNotAllowedEat or ent.ixContainerNotAllowedEat <= CurTime() then
+                    ply:Notify("You cannot loot anything while you are eating!")
+                    ent.ixContainerNotAllowedEat = CurTime() + 1
+                end
             end
         else
             if not ent.ixContainerNothingInItCooldown or ent.ixContainerNothingInItCooldown <= CurTime() then

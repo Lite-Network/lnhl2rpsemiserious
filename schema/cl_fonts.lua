@@ -33,29 +33,23 @@ surface.CreateFont("lnAkbarFontBig", {
 	size = ScreenScale(20),
 })
 
-surface.CreateFont("LiteNetworkFont24", {
-	font = "Segoe Ui",
-	size = 24,
-	weight = 400,
-	antialias = true,
-	shadow = false,
-})
+for value = 8, 64 do
+	surface.CreateFont("LiteNetworkFont"..tostring(value), {
+		font = "Segoe Ui",
+		size = tonumber(value),
+		weight = 400,
+		antialias = true,
+		shadow = false,
+	})
 
-surface.CreateFont("LiteNetworkFont28", {
-	font = "Segoe Ui",
-	size = 28,
-	weight = 400,
-	antialias = true,
-	shadow = false,
-})
-
-surface.CreateFont("LiteNetworkFont32", {
-	font = "Segoe Ui",
-	size = 32,
-	weight = 800,
-	antialias = true,
-	shadow = false,
-})
+	surface.CreateFont("LiteNetworkFont"..tostring(value).."-Light", {
+		font = "Segoe Ui Light",
+		size = tonumber(value),
+		weight = 100,
+		antialias = true,
+		shadow = false,
+	})
+end
 
 surface.CreateFont("ixCustomChatFont", {
 	font = "Segoe Ui",

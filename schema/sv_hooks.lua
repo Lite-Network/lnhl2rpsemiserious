@@ -13,6 +13,14 @@ function Schema:OnReloaded()
 	end
 end
 
+function Schema:PlayerConnect(name, ip)
+	for k, v in pairs(player.GetAll()) do
+		v:PlaySound("garrysmod/content_downloaded.wav")
+		v:ChatNotify(tostring(name).." is joining the Server!")
+	end
+	print(tostring(name).." is joining the Server! - ["..tostring(ip).."]")
+end
+
 local pickupAbleEntities = {
 	["grenade_helicopter"] = true,
 	["npc_grenade_frag"] = true,
@@ -98,6 +106,12 @@ local blacklistedEntities = {
 }
 
 function Schema:OnEntityCreated(ent)
+	if ( ent:GetClass() == "prop_physics" ) and not ( ent:GetOwner() ) then
+		timer.Simple(0, function()
+			ent:Remove()
+		end)
+	end
+
     timer.Simple(0, function()
         if ent:IsValid() then
 			ent:DrawShadow(false)
@@ -789,4 +803,18 @@ function Schema:PlayerSpawnRagdoll(ply, model)
 		ply:Notify("You cannot spawn ragdolls!")
 		return false
 	end
+end
+
+function Schema:PlayerSpawnSENT(ply)
+    if not ( ply:IsAdmin() ) then
+        ply:Notify("You are not a admin!")
+        return false
+    end
+end
+
+function Schema:PlayerSpawnVehicle(ply)
+    if not ( ply:IsAdmin() ) then
+        ply:Notify("You are not a admin!")
+        return false
+    end
 end

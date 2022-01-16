@@ -743,7 +743,7 @@ hook.Add("CreateMenuButtons", "ixInventory", function(tabs)
 		return
 	end
 
-	tabs["inv"] = {
+	tabs["character"] = {
 		bDefault = true,
 		Create = function(info, container)
 			local playermodel = container:Add("ixModelPanel")
@@ -785,6 +785,22 @@ hook.Add("CreateMenuButtons", "ixInventory", function(tabs)
 				end
 			end)
 
+			container.characterInfo = container:Add("Panel")
+			container.characterInfo.list = {}
+			container.characterInfo:Dock(TOP) -- no dock margin because this is handled by ixListRow
+			container.characterInfo.SizeToContents = function(this)
+				local height = 0
+		
+				for _, v in ipairs(this:GetChildren()) do
+					if (IsValid(v) and v:IsVisible()) then
+						local _, top, _, bottom = v:GetDockMargin()
+						height = height + v:GetTall() + top + bottom
+					end
+				end
+		
+				this:SetTall(height)
+			end
+
 			local canvas = container:Add("DTileLayout")
 			local canvasLayout = canvas.PerformLayout
 			canvas.PerformLayout = nil -- we'll layout after we add the panels instead of each time one is added
@@ -823,6 +839,78 @@ hook.Add("CreateMenuButtons", "ixInventory", function(tabs)
 
 			canvas.PerformLayout = canvasLayout
 			canvas:Layout()
+		
+			container.faction = container.characterInfo:Add("ixListRow")
+			container.faction:SetList(container.characterInfo.list)
+			container.faction:Dock(TOP)
+		
+			container.class = container.characterInfo:Add("ixListRow")
+			container.class:SetList(container.characterInfo.list)
+			container.class:Dock(TOP)
+		
+			container.money = container.characterInfo:Add("ixListRow")
+			container.money:SetList(container.characterInfo.list)
+			container.money:Dock(TOP)
+			container.money:SizeToContents()
+		
+			hook.Run("CreateCharacterInfo", container.characterInfo)
+			container.characterInfo:SizeToContents()
+
+			function container:Update(character)
+				if (!character) then
+					return
+				end
+			
+				local faction = ix.faction.indices[character:GetFaction()]
+				local class = ix.class.list[character:GetClass()]
+			
+				if (self.name) then
+					self.name:SetText(character:GetName())
+			
+					if (faction) then
+						self.name.backgroundColor = ColorAlpha(faction.color, 150) or Color(0, 0, 0, 150)
+					end
+			
+					self.name:SizeToContents()
+				end
+			
+				if (self.description) then
+					self.description:SetText(character:GetDescription())
+					self.description:SizeToContents()
+				end
+			
+				if (self.faction) then
+					self.faction:SetLabelText(L("faction"))
+					self.faction:SetText(L(faction.name))
+					self.faction:SizeToContents()
+				end
+			
+				if (self.class) then
+					-- don't show class label if the class is the same name as the faction
+					if (class and class.name != faction.name) then
+						self.class:SetLabelText(L("class"))
+						self.class:SetText(L(class.name))
+						self.class:SizeToContents()
+					else
+						self.class:SetVisible(false)
+					end
+				end
+			
+				if (self.money) then
+					self.money:SetLabelText(L("money"))
+					self.money:SetText(ix.currency.Get(character:GetMoney()))
+					self.money:SizeToContents()
+				end
+			
+				hook.Run("UpdateCharacterInfo", self.characterInfo, character)
+			
+				self.characterInfo:SizeToContents()
+			
+				hook.Run("UpdateCharacterInfoCategory", self, character)
+			end
+		end,
+		OnSelected = function(info, container)
+			container:Update(LocalPlayer():GetCharacter())
 		end
 	}
 end)
