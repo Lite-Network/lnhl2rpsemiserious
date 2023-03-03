@@ -18,7 +18,6 @@ function Schema:PlayerConnect(name, ip)
 		v:PlaySound("garrysmod/content_downloaded.wav")
 		v:ChatNotify(tostring(name).." is joining the Server!")
 	end
-	print(tostring(name).." is joining the Server! - ["..tostring(ip).."]")
 end
 
 local pickupAbleEntities = {
@@ -52,8 +51,6 @@ end
 function Schema:OnCharacterCreated(ply, char)
 	char:SetData("ixKnownName", char:GetName())
 	char:SetData("ixPreferedModel", char:GetModel())
-
-	print(ply:IPAddress(), " ", ply:SteamName(), " [", ply:Nick(), "] - ", ply:SteamID(), " | OnCharacterCreated")
 end
 
 function Schema:PlayerFootstep(ply, pos, foot, sound, volume)
@@ -331,8 +328,6 @@ function Schema:PlayerLoadout(ply)
 			Schema:UpdateRelationShip(v)
 		end
 	end
-
-	print(ply:IPAddress(), " ", ply:SteamName(), " [", ply:Nick(), "] - ", ply:SteamID(), " | PlayerLoadout")
 end
 
 function Schema:PlayerLoadedCharacter(ply, char, oldChar)
